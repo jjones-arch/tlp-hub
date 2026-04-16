@@ -210,6 +210,14 @@
               "date": "2026-03-26"
             }
           ]
+        },
+        {
+          "id": "dt3q23ry",
+          "text": "[additional scope] Define process for integrations and Chrome extensions",
+          "complete": false,
+          "tasks": [],
+          "risks": [],
+          "decisions": []
         }
       ],
       "tasks": [
