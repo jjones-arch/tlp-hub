@@ -1,0 +1,889 @@
+{
+  "settings": {
+    "apiKey": "",
+    "model": "claude-sonnet-4-6"
+  },
+  "chat": {
+    "messages": []
+  },
+  "artifacts": [],
+  "transcripts": [],
+  "ui": {
+    "currentView": "settings",
+    "focusContent": null,
+    "objectiveView": null,
+    "sboDetail": null,
+    "sboView": "list",
+    "sboCalYear": 2026,
+    "sboCalMonth": 3
+  },
+  "initiatives": {
+    "sbo": {
+      "id": "sbo",
+      "name": "SBO Program Governance & Documentation",
+      "subtitle": "Making the SBO program durable, clear, and accountable",
+      "quarter": "Q2 2026",
+      "status": "on-track",
+      "progress": 30,
+      "owners": [
+        "JoJo Jones",
+        "Melissa Boud"
+      ],
+      "description": "Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable — establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.",
+      "objectives": [
+        {
+          "id": "o1",
+          "text": "Establish the Enterprise Software Committee with Dave Petersen as chair",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Prepare Enterprise Software Committee communications for Dave to use with C-suite",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "in-progress",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Dave to review SBO training draft",
+              "owner": "Dave Petersen",
+              "due": "",
+              "status": "not-started",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t3",
+              "text": "Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Leadership Summit may be canceled",
+              "desc": "If summit is canceled, program loses its planned broad communication vehicle.",
+              "likelihood": "medium",
+              "impact": "medium",
+              "mitigation": "JoJo to follow up with Dave and identify alternative communication path."
+            },
+            {
+              "id": "r2",
+              "title": "Enterprise Software Committee scope creep",
+              "desc": "Risk that the committee takes on decisions outside enterprise-level scope.",
+              "likelihood": "low",
+              "impact": "medium",
+              "mitigation": "Document clear decision criteria before committee launches."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "Committee renamed to \"Enterprise Software Committee\" — better reflects function than \"Steering Committee\"",
+              "date": "2026-03-26"
+            },
+            {
+              "id": "d2",
+              "text": "Dave Petersen will chair the Enterprise Software Committee",
+              "date": "2026-03-26"
+            },
+            {
+              "id": "d3",
+              "text": "Committee representation varies by division; not all SBOs will serve",
+              "date": "2026-03-26"
+            }
+          ]
+        },
+        {
+          "id": "o2",
+          "text": "Complete vendor-to-SBO mapping from 95% to 100% (~15 orphan systems remaining)",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Identify remaining ~15 orphan software systems and assign SBO owners",
+              "owner": "JoJo Jones, Melissa Boud",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Share SBO reporting snapshot with leadership (Ryan Packer)",
+              "owner": "JoJo Jones, Melissa Boud, Dave Petersen",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win",
+              "date": "2026-04-09"
+            }
+          ]
+        },
+        {
+          "id": "o3",
+          "text": "Document SBO processes with division-level specificity (Revenue: monthly; Finance: case-by-case; BI: twice/year)",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Record SBO training video after Dave's feedback",
+              "owner": "Melissa Boud",
+              "due": "",
+              "status": "blocked",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [],
+          "decisions": []
+        },
+        {
+          "id": "o4",
+          "text": "Define and document PIR integration criteria with Fadi so SBO guidance can be finalized",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)",
+              "owner": "JoJo Jones",
+              "due": "2026-04-15",
+              "status": "in-progress",
+              "priority": "high",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "PIR/TLP boundaries still undefined",
+              "desc": "Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.",
+              "likelihood": "medium",
+              "impact": "high",
+              "mitigation": "Meeting with Fadi in progress. JoJo to document criteria after meeting."
+            }
+          ],
+          "decisions": []
+        },
+        {
+          "id": "o5",
+          "text": "Every SBO knows their budget and receives alerts when approaching or exceeding it",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Alan Roper to develop budget visibility approach for SBOs",
+              "owner": "Alan Roper",
+              "due": "",
+              "status": "in-progress",
+              "priority": "high",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "SBO budget visibility incomplete",
+              "desc": "SBOs held accountable for portfolio spend without knowing their true budget position.",
+              "likelihood": "high",
+              "impact": "medium",
+              "mitigation": "Alan Roper developing approach to surface budget and forecast numbers."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "TLP's budget role is visibility and accountability — not promising spend reduction targets",
+              "date": "2026-03-26"
+            }
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "text": "Prepare Enterprise Software Committee communications for Dave to use with C-suite",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "in-progress",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t2",
+          "text": "Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)",
+          "owner": "JoJo Jones",
+          "due": "2026-04-15",
+          "status": "in-progress",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t3",
+          "text": "Identify remaining ~15 orphan software systems and assign SBO owners",
+          "owner": "JoJo Jones, Melissa Boud",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t4",
+          "text": "Dave to review SBO training draft",
+          "owner": "Dave Petersen",
+          "due": "",
+          "status": "not-started",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t5",
+          "text": "Record SBO training video after Dave's feedback",
+          "owner": "Melissa Boud",
+          "due": "",
+          "status": "blocked",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t6",
+          "text": "Alan Roper to develop budget visibility approach for SBOs",
+          "owner": "Alan Roper",
+          "due": "",
+          "status": "in-progress",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t7",
+          "text": "Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t8",
+          "text": "Share SBO reporting snapshot with leadership (Ryan Packer)",
+          "owner": "JoJo Jones, Melissa Boud, Dave Petersen",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        }
+      ],
+      "risks": [
+        {
+          "id": "r1",
+          "title": "PIR/TLP boundaries still undefined",
+          "desc": "Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Meeting with Fadi in progress. JoJo to document criteria after meeting."
+        },
+        {
+          "id": "r2",
+          "title": "SBO budget visibility incomplete",
+          "desc": "SBOs held accountable for portfolio spend without knowing their true budget position.",
+          "likelihood": "high",
+          "impact": "medium",
+          "mitigation": "Alan Roper developing approach to surface budget and forecast numbers."
+        },
+        {
+          "id": "r3",
+          "title": "Leadership Summit may be canceled",
+          "desc": "If summit is canceled, program loses its planned broad communication vehicle.",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "JoJo to follow up with Dave and identify alternative communication path."
+        },
+        {
+          "id": "r4",
+          "title": "Enterprise Software Committee scope creep",
+          "desc": "Risk that the committee takes on decisions outside enterprise-level scope.",
+          "likelihood": "low",
+          "impact": "medium",
+          "mitigation": "Document clear decision criteria before committee launches."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "d1",
+          "text": "Committee renamed to \"Enterprise Software Committee\" — better reflects function than \"Steering Committee\"",
+          "date": "2026-03-26"
+        },
+        {
+          "id": "d2",
+          "text": "Dave Petersen will chair the Enterprise Software Committee",
+          "date": "2026-03-26"
+        },
+        {
+          "id": "d3",
+          "text": "Committee representation varies by division; not all SBOs will serve",
+          "date": "2026-03-26"
+        },
+        {
+          "id": "d4",
+          "text": "95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win",
+          "date": "2026-04-09"
+        },
+        {
+          "id": "d5",
+          "text": "TLP's budget role is visibility and accountability — not promising spend reduction targets",
+          "date": "2026-03-26"
+        }
+      ],
+      "notes": "Ryan Ostler's final SBO kickoff was March 30, 2026 — all SBO kickoffs are now complete.\n\nAlways use 'PIR' not 'PER' in meetings and documentation.\n\nEmbedded partners are managed by Todd Grierson in Finance (not JR) — coordinate with Todd for Q4 planning."
+    },
+    "reporting": {
+      "id": "reporting",
+      "name": "Reporting & Accountability",
+      "subtitle": "Establishing consistent, repeatable data collection and accountability structures",
+      "quarter": "Q2 2026",
+      "status": "at-risk",
+      "progress": 10,
+      "owners": [
+        "Jessi Duffin"
+      ],
+      "description": "Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now — even before automation — and build toward SLA tracking.",
+      "objectives": [
+        {
+          "id": "o1",
+          "text": "Establish consistent manual data collection habits by mid-Q2",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Manually collect and track technology request data throughout Q2",
+              "owner": "Jessi Duffin",
+              "due": "2026-06-30",
+              "status": "in-progress",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Document current manual data collection process so it can be automated in Zipped later",
+              "owner": "Jessi Duffin",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Q1 pattern may repeat",
+              "desc": "Reporting was not achieved in Q1; without structural change the same result is possible in Q2.",
+              "likelihood": "medium",
+              "impact": "high",
+              "mitigation": "Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system",
+              "date": "2026-04-09"
+            }
+          ]
+        },
+        {
+          "id": "o2",
+          "text": "Define and align on the Q2 metrics that matter most",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Align with JoJo and Dave on which Q2 metrics matter most",
+              "owner": "Jessi Duffin, JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "high",
+              "updates": []
+            }
+          ],
+          "risks": [],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "Moving away from one giant aggregate report; focus on concrete SBO program outcomes first",
+              "date": "2026-03-26"
+            }
+          ]
+        },
+        {
+          "id": "o3",
+          "text": "Build toward SLA tracking and the ability to identify areas for improvement",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Continue routing tech requests through intake; send to SBOs for approval when needed",
+              "owner": "Jessi Duffin",
+              "due": "",
+              "status": "in-progress",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Jira lacks reporting capability",
+              "desc": "Jira does not provide the reporting quality needed to track SLAs or identify patterns.",
+              "likelihood": "high",
+              "impact": "high",
+              "mitigation": "Manual collection in Q2; Zipped will replace Jira for reporting in Q3+."
+            },
+            {
+              "id": "r2",
+              "title": "Jira and Coupa data not connected",
+              "desc": "Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.",
+              "likelihood": "high",
+              "impact": "medium",
+              "mitigation": "Zipped prototype will eventually bridge or replace both."
+            }
+          ],
+          "decisions": []
+        },
+        {
+          "id": "o4",
+          "text": "Establish accountability structures before automation exists",
+          "complete": false,
+          "tasks": [],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Accountability without data",
+              "desc": "Cannot meaningfully enforce SLAs until reliable, consistent data exists.",
+              "likelihood": "medium",
+              "impact": "high",
+              "mitigation": "Q2 focus is building the data foundation; enforcement follows in Q3."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "Reporting will not drive accountability until reliable, consistent data exists",
+              "date": "2026-04-09"
+            }
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "text": "Manually collect and track technology request data throughout Q2",
+          "owner": "Jessi Duffin",
+          "due": "2026-06-30",
+          "status": "in-progress",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t2",
+          "text": "Align with JoJo and Dave on which Q2 metrics matter most",
+          "owner": "Jessi Duffin, JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t3",
+          "text": "Continue routing tech requests through intake; send to SBOs for approval when needed",
+          "owner": "Jessi Duffin",
+          "due": "",
+          "status": "in-progress",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t4",
+          "text": "Document current manual data collection process so it can be automated in Zipped later",
+          "owner": "Jessi Duffin",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        }
+      ],
+      "risks": [
+        {
+          "id": "r1",
+          "title": "Q1 pattern may repeat",
+          "desc": "Reporting was not achieved in Q1; without structural change the same result is possible in Q2.",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully."
+        },
+        {
+          "id": "r2",
+          "title": "Jira lacks reporting capability",
+          "desc": "Jira does not provide the reporting quality needed to track SLAs or identify patterns.",
+          "likelihood": "high",
+          "impact": "high",
+          "mitigation": "Manual collection in Q2; Zipped will replace Jira for reporting in Q3+."
+        },
+        {
+          "id": "r3",
+          "title": "Jira and Coupa data not connected",
+          "desc": "Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.",
+          "likelihood": "high",
+          "impact": "medium",
+          "mitigation": "Zipped prototype will eventually bridge or replace both."
+        },
+        {
+          "id": "r4",
+          "title": "Accountability without data",
+          "desc": "Cannot meaningfully enforce SLAs until reliable, consistent data exists.",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Q2 focus is building the data foundation; enforcement follows in Q3."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "d1",
+          "text": "Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system",
+          "date": "2026-04-09"
+        },
+        {
+          "id": "d2",
+          "text": "Reporting will not drive accountability until reliable, consistent data exists",
+          "date": "2026-04-09"
+        },
+        {
+          "id": "d3",
+          "text": "Moving away from one giant aggregate report; focus on concrete SBO program outcomes first",
+          "date": "2026-03-26"
+        }
+      ],
+      "notes": "The two biggest blockers are: (1) Jira's lack of reporting quality, and (2) inability to tie Jira data to Coupa data. Zipped is the long-term solution to both.\n\nJessi owns this initiative end-to-end in Q2."
+    },
+    "zipped": {
+      "id": "zipped",
+      "name": "Zipped — Workflow Automation Prototype",
+      "subtitle": "Building an AI-powered intake and document collection prototype",
+      "quarter": "Q2 2026",
+      "status": "on-track",
+      "progress": 25,
+      "owners": [
+        "JoJo Jones",
+        "Jessi Duffin"
+      ],
+      "description": "The Jira rebuild was stalled by Ryan's departure. Zipped is an AI-built prototype for automation, reporting, and improved workflows. Q2 commitment: deliver a working prototype for document collection by end of Q2. If it proves valuable, it gets handed to engineering for production.",
+      "objectives": [
+        {
+          "id": "o1",
+          "text": "Deliver working prototype for document collection by end of Q2",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Resolve database and hosting needs for the prototype",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Add MNDA / trust-center first step before deeper document collection",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "No production infrastructure defined",
+              "desc": "Database, hosting, email flow, and legal storage details are unresolved for the prototype.",
+              "likelihood": "high",
+              "impact": "high",
+              "mitigation": "Prioritize resolving database and hosting decisions early in Q2."
+            },
+            {
+              "id": "r2",
+              "title": "Scope could exceed Q2 capacity",
+              "desc": "Neither JoJo nor Jessi has built a production app before; scope risk is real.",
+              "likelihood": "medium",
+              "impact": "high",
+              "mitigation": "Commit to document collection prototype only for Q2; defer to Q3."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "Q2 commitment is document collection prototype only — not the full Zipped vision",
+              "date": "2026-04-09"
+            },
+            {
+              "id": "d2",
+              "text": "Prototype should capture MNDA / trust-center step before deeper document collection",
+              "date": "2026-03-26"
+            }
+          ]
+        },
+        {
+          "id": "o2",
+          "text": "Build basic intake process with vendor request portal",
+          "complete": true,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Continue building vendor request portal (current primary focus)",
+              "owner": "JoJo Jones, Jessi Duffin",
+              "due": "",
+              "status": "in-progress",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Restore business owner field in the intake form",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "medium",
+              "updates": []
+            }
+          ],
+          "risks": [],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "First build focus is vendor request portal (external-facing document collection)",
+              "date": "2026-03-26"
+            }
+          ]
+        },
+        {
+          "id": "o3",
+          "text": "Automate workflows for security, privacy/AI, and legal review",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Build automated security, privacy/AI, and legal workflows",
+              "owner": "JoJo Jones, Jessi Duffin",
+              "due": "2026-06-30",
+              "status": "not-started",
+              "priority": "high",
+              "updates": []
+            },
+            {
+              "id": "t2",
+              "text": "Explore connection between Zipped and Melissa's AI workflow",
+              "owner": "Melissa Boud, JoJo Jones, Jessi Duffin",
+              "due": "",
+              "status": "not-started",
+              "priority": "low",
+              "updates": []
+            }
+          ],
+          "risks": [],
+          "decisions": []
+        },
+        {
+          "id": "o4",
+          "text": "Build transition logic into Coupa for evaluation decisions",
+          "complete": false,
+          "tasks": [],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Engineering handoff path undefined",
+              "desc": "Path from prototype to production handoff not scoped or approved.",
+              "likelihood": "medium",
+              "impact": "medium",
+              "mitigation": "Frame Q2 as \"validate the concept\" — engineering conversation is Q3."
+            }
+          ],
+          "decisions": [
+            {
+              "id": "d1",
+              "text": "If prototype proves valuable, will be handed to engineering for production development",
+              "date": "2026-04-09"
+            }
+          ]
+        },
+        {
+          "id": "o5",
+          "text": "Add timestamps for reporting and process-state tracking",
+          "complete": false,
+          "tasks": [
+            {
+              "id": "t1",
+              "text": "Add timestamps for reporting and activity tracking",
+              "owner": "JoJo Jones",
+              "due": "",
+              "status": "not-started",
+              "priority": "high",
+              "updates": []
+            }
+          ],
+          "risks": [
+            {
+              "id": "r1",
+              "title": "Prototype reporting incomplete",
+              "desc": "Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.",
+              "likelihood": "high",
+              "impact": "medium",
+              "mitigation": "Add timestamps before building more complex workflows."
+            }
+          ],
+          "decisions": []
+        }
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "text": "Continue building vendor request portal (current primary focus)",
+          "owner": "JoJo Jones, Jessi Duffin",
+          "due": "",
+          "status": "in-progress",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t2",
+          "text": "Add timestamps for reporting and activity tracking",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t3",
+          "text": "Restore business owner field in the intake form",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t4",
+          "text": "Resolve database and hosting needs for the prototype",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "high",
+          "updates": []
+        },
+        {
+          "id": "t5",
+          "text": "Explore connection between Zipped and Melissa's AI workflow",
+          "owner": "Melissa Boud, JoJo Jones, Jessi Duffin",
+          "due": "",
+          "status": "not-started",
+          "priority": "low",
+          "updates": []
+        },
+        {
+          "id": "t6",
+          "text": "Add MNDA / trust-center first step before deeper document collection",
+          "owner": "JoJo Jones",
+          "due": "",
+          "status": "not-started",
+          "priority": "medium",
+          "updates": []
+        },
+        {
+          "id": "t7",
+          "text": "Build automated security, privacy/AI, and legal workflows",
+          "owner": "JoJo Jones, Jessi Duffin",
+          "due": "2026-06-30",
+          "status": "not-started",
+          "priority": "high",
+          "updates": []
+        }
+      ],
+      "risks": [
+        {
+          "id": "r1",
+          "title": "No production infrastructure defined",
+          "desc": "Database, hosting, email flow, and legal storage details are unresolved for the prototype.",
+          "likelihood": "high",
+          "impact": "high",
+          "mitigation": "Prioritize resolving database and hosting decisions early in Q2."
+        },
+        {
+          "id": "r2",
+          "title": "Prototype reporting incomplete",
+          "desc": "Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.",
+          "likelihood": "high",
+          "impact": "medium",
+          "mitigation": "Add timestamps before building more complex workflows."
+        },
+        {
+          "id": "r3",
+          "title": "Scope could exceed Q2 capacity",
+          "desc": "Neither JoJo nor Jessi has built a production app before; scope risk is real.",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Commit to document collection prototype only for Q2; defer to Q3."
+        },
+        {
+          "id": "r4",
+          "title": "Engineering handoff path undefined",
+          "desc": "Path from prototype to production handoff not scoped or approved.",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "Frame Q2 as \"validate the concept\" — engineering conversation is Q3."
+        }
+      ],
+      "decisions": [
+        {
+          "id": "d1",
+          "text": "Zipped replaces the Jira rebuild as the primary engineering initiative after Ryan's departure",
+          "date": "2026-04-09"
+        },
+        {
+          "id": "d2",
+          "text": "Q2 commitment is document collection prototype only — not the full Zipped vision",
+          "date": "2026-04-09"
+        },
+        {
+          "id": "d3",
+          "text": "First build focus is vendor request portal (external-facing document collection)",
+          "date": "2026-03-26"
+        },
+        {
+          "id": "d4",
+          "text": "Prototype should capture MNDA / trust-center step before deeper document collection",
+          "date": "2026-03-26"
+        },
+        {
+          "id": "d5",
+          "text": "If prototype proves valuable, will be handed to engineering for production development",
+          "date": "2026-04-09"
+        }
+      ],
+      "notes": "\"Zipped\" is the working title (previously called \"Zip-like experience\" or \"vibe-coded prototype\").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies — consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins."
+    }
+  },
+  "sbos": {}
+}
