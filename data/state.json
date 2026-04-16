@@ -11,7 +11,10 @@
   "ui": {
     "currentView": "reporting",
     "focusContent": null,
-    "objectiveView": null,
+    "objectiveView": {
+      "initId": "reporting",
+      "objId": "o1"
+    },
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
