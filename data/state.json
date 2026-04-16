@@ -224,7 +224,16 @@
           "text": "[added scope] Determine process for integrations and Chrome extensions",
           "description": "Josh from the help desk said that they are getting a lot of requests for integrations like integrating Claude with Slack and we need to determine the process so that the Help Desk can do their job.",
           "complete": false,
-          "tasks": [],
+          "tasks": [
+            {
+              "id": "dirsn1cd",
+              "text": "Reach out to Dave for direction",
+              "owner": "Jordan Jones",
+              "due": "2026-04-17",
+              "status": "not-started",
+              "priority": "high"
+            }
+          ],
           "risks": [],
           "decisions": []
         }
