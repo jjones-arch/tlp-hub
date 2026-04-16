@@ -918,5 +918,18 @@
       "notes": "\"Zipped\" is the working title (previously called \"Zip-like experience\" or \"vibe-coded prototype\").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies — consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins."
     }
   },
-  "sbos": {}
+  "sbos": {
+    "10b7h5fa": {
+      "id": "10b7h5fa",
+      "name": "Business Technology",
+      "owner": "Dave Petersen",
+      "division": "IT",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 0,
+      "tasks": [],
+      "meetings": []
+    }
+  }
 }
