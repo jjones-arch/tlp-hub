@@ -810,7 +810,7 @@ async function ghLoad() {
     const resp = await ghApiFetch(`/repos/${GH_REPO}/contents/${GH_DATA_PATH}`);
     const data = await resp.json();
     _ghSha = data.sha;
-    const decoded = atob(data.content.replace(/\n/g, ''));
+    const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
     return JSON.parse(decoded);
   } catch (e) {
     if (e.message && e.message.includes('404')) {
