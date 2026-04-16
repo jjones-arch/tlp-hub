@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Initiative {
+  id          String   @id
+  name        String
+  subtitle    String   @default("")
+  quarter     String   @default("")
+  status      String   @default("on-track")
+  progress    Int      @default(0)
+  description String   @default("")
+  notes       String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owners     InitiativeOwner[]
+  objectives Objective[]
+  tasks      Task[]
+  risks      Risk[]
+  decisions  Decision[]
+  artifacts  Artifact[]
+}
+
+model InitiativeOwner {
+  id           String     @id @default(uuid())
+  name         String
+  initiativeId String
+  initiative   Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+}
+
+model Objective {
+  id           String     @id @default(uuid())
+  text         String
+  complete     Boolean    @default(false)
+  sortOrder    Int        @default(0)
+  initiativeId String
+  initiative   Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id           String       @id @default(uuid())
+  text         String
+  owner        String       @default("")
+  due          String       @default("")
+  status       String       @default("not-started")
+  priority     String       @default("medium")
+  sortOrder    Int          @default(0)
+  createdAt    DateTime     @default(now())
+  initiativeId String
+  initiative   Initiative   @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  updates      TaskUpdate[]
+}
+
+model TaskUpdate {
+  id        String   @id @default(uuid())
+  text      String
+  author    String   @default("")
+  createdAt DateTime @default(now())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  attachments TaskAttachment[]
+}
+
+model TaskAttachment {
+  id           String     @id @default(uuid())
+  filename     String
+  storedName   String
+  mimeType     String     @default("")
+  size         Int        @default(0)
+  createdAt    DateTime   @default(now())
+  taskUpdateId String
+  taskUpdate   TaskUpdate @relation(fields: [taskUpdateId], references: [id], onDelete: Cascade)
+}
+
+model Risk {
+  id           String     @id @default(uuid())
+  title        String
+  description  String     @default("")
+  likelihood   String     @default("medium")
+  impact       String     @default("medium")
+  mitigation   String     @default("")
+  initiativeId String
+  initiative   Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+}
+
+model Decision {
+  id           String     @id @default(uuid())
+  text         String
+  date         String     @default("")
+  createdAt    DateTime   @default(now())
+  initiativeId String
+  initiative   Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+}
+
+model Artifact {
+  id           String     @id @default(uuid())
+  type         String
+  title        String
+  content      String
+  createdAt    DateTime   @default(now())
+  initiativeId String?
+  initiative   Initiative? @relation(fields: [initiativeId], references: [id], onDelete: SetNull)
+}
+
+model Transcript {
+  id        String   @id @default(uuid())
+  name      String
+  content   String
+  lineCount Int      @default(0)
+  extracted String?
+  createdAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String @default("")
+}
+
+// ── SBO Tracker ──
+
+model Sbo {
+  id          String   @id @default(uuid())
+  name        String
+  owner       String   @default("")
+  division    String   @default("")
+  status      String   @default("on-track")
+  description String   @default("")
+  notes       String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tasks    SboTask[]
+  meetings SboMeeting[]
+}
+
+model SboTask {
+  id        String   @id @default(uuid())
+  text      String
+  owner     String   @default("")
+  due       String   @default("")
+  endDate   String   @default("")
+  status    String   @default("not-started")
+  priority  String   @default("medium")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  sboId     String
+  sbo       Sbo      @relation(fields: [sboId], references: [id], onDelete: Cascade)
+}
+
+model SboMeeting {
+  id            String   @id @default(uuid())
+  title         String
+  description   String   @default("")
+  date          String   @default("")
+  endDate       String   @default("")
+  attendees     String   @default("")
+  agenda        String   @default("")
+  notes         String   @default("")
+  actionItems   String   @default("")
+  recurrence    String   @default("none")
+  recurrenceEnd String   @default("")
+  createdAt     DateTime @default(now())
+  sboId         String
+  sbo           Sbo      @relation(fields: [sboId], references: [id], onDelete: Cascade)
+}

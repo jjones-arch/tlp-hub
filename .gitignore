@@ -15,7 +15,13 @@ tlp-hub/src/generated/
 
 # SQLite databases
 *.db
+*.db-shm
+*.db-wal
+*.db-journal
 *.sqlite
+
+# Uploaded files
+tlp-hub/public/uploads/
 
 # OS files
 .DS_Store
