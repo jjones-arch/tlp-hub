@@ -100,6 +100,9 @@ export default function InitiativeDetailPage() {
   const [data, setData] = useState<Initiative | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [showAddObjective, setShowAddObjective] = useState(false);
+  const [newObjectiveText, setNewObjectiveText] = useState("");
+
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTask, setNewTask] = useState({ text: "", owner: "", due: "", status: "not-started", priority: "medium" });
 
@@ -165,6 +168,24 @@ export default function InitiativeDetailPage() {
       await fetchData();
     } catch {
       toast("Failed to update objective", "err");
+    }
+  }
+
+  async function addObjective() {
+    if (!newObjectiveText.trim()) return;
+    try {
+      const res = await fetch(`/api/initiatives/${id}/objectives`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: newObjectiveText }),
+      });
+      if (!res.ok) throw new Error();
+      toast("Objective added.");
+      setNewObjectiveText("");
+      setShowAddObjective(false);
+      await fetchData();
+    } catch {
+      toast("Failed to add objective", "err");
     }
   }
 
@@ -394,10 +415,33 @@ export default function InitiativeDetailPage() {
           <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-serif text-[15px] font-bold text-text">Objectives</h2>
-              <span className="text-[12px] text-text-3">
-                {objectivesComplete} of {data.objectives.length} complete
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-[12px] text-text-3">
+                  {objectivesComplete} of {data.objectives.length} complete
+                </span>
+                <button onClick={() => setShowAddObjective(!showAddObjective)} className={btnPrimary}>
+                  + Add
+                </button>
+              </div>
             </div>
+
+            {showAddObjective && (
+              <div className="mb-4 p-3 rounded border border-border bg-surface-2 space-y-2">
+                <input
+                  placeholder="Objective description"
+                  value={newObjectiveText}
+                  onChange={(e) => setNewObjectiveText(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") addObjective(); }}
+                  className={inputCls}
+                  autoFocus
+                />
+                <div className="flex gap-2 justify-end pt-1">
+                  <button onClick={() => { setShowAddObjective(false); setNewObjectiveText(""); }} className={btnGhost}>Cancel</button>
+                  <button onClick={addObjective} className={btnPrimary}>Save</button>
+                </div>
+              </div>
+            )}
+
             <ul className="space-y-2">
               {data.objectives
                 .sort((a, b) => a.sortOrder - b.sortOrder)

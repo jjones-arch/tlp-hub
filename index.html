@@ -1246,6 +1246,14 @@ function renderInitiative(id) {
     <div class="card" style="max-width:720px">
       <div class="card-hd">
         <div><div class="card-title">Objectives</div><div class="card-sub">${objDone} of ${i.objectives.length} complete</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="toggleAddObjective('${id}')">+ Add</button>
+      </div>
+      <div class="add-form" id="add-obj-form-${id}">
+        <input type="text" id="new-obj-text-${id}" placeholder="Objective description…" onkeydown="if(event.key==='Enter')saveNewObjective('${id}')">
+        <div class="add-form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="toggleAddObjective('${id}')">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="saveNewObjective('${id}')">Save Objective</button>
+        </div>
       </div>
       <ul class="task-list" id="obj-list-${id}">
         ${i.objectives.map(o => renderObjItem(id, o)).join('')}
@@ -1500,6 +1508,32 @@ function toggleObjective(initId, objId) {
 function toggleObjectiveFromDetail(initId, objId) {
   const o = S.initiatives[initId].objectives.find(x => x.id === objId);
   if (o) { o.complete = !o.complete; saveState(); renderObjectiveDetail(initId, objId); }
+}
+
+function toggleAddObjective(initId) {
+  const form = document.getElementById(`add-obj-form-${initId}`);
+  form.classList.toggle('open');
+  if (form.classList.contains('open')) {
+    document.getElementById(`new-obj-text-${initId}`).focus();
+  }
+}
+
+function saveNewObjective(initId) {
+  const text = document.getElementById(`new-obj-text-${initId}`).value.trim();
+  if (!text) { toast('Please enter an objective description.', 'err'); return; }
+  const objective = {
+    id: genId(),
+    text,
+    complete: false,
+    tasks: [],
+    risks: [],
+    decisions: []
+  };
+  S.initiatives[initId].objectives.push(objective);
+  saveState();
+  toggleAddObjective(initId);
+  renderInitiative(initId);
+  toast('Objective added.');
 }
 
 function toggleTask(initId, taskId) {
