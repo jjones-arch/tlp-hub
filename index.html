@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TLP Hub — Technology Lifecycle Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+:root{
+  --bg:#FAFAF8;--surface:#fff;--surface-2:#F5F3EF;
+  --border:#E8E4DC;--border-lt:#F0ECE5;
+  --navy:#1C2B3A;--navy-h:#243547;--navy-a:#2D4259;
+  --cream:#C8C4BC;--cream-d:#7A8A99;
+  --text:#1C2B3A;--text-2:#5A6B7A;--text-3:#96A0AB;
+  --accent:#D4693C;--accent-bg:#FDF1EB;
+  --green:#2E7D52;--green-bg:#EAF5EF;
+  --amber:#B8730D;--amber-bg:#FEF3E0;
+  --red:#B03A2E;--red-bg:#FDEBEA;
+  --blue:#2C5F8A;--blue-bg:#E8F0F8;
+  --font-s:'Playfair Display',Georgia,serif;
+  --font-b:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --sw:260px;--r:8px;--r-sm:4px;--r-lg:14px;
+  --shadow:0 2px 6px rgba(28,43,58,.07),0 1px 2px rgba(28,43,58,.04);
+  --shadow-lg:0 8px 24px rgba(28,43,58,.1),0 2px 6px rgba(28,43,58,.06);
+}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:hidden}
+
+/* ── LAYOUT ── */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:var(--sw);min-width:var(--sw);background:var(--navy);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg)}
+.view{display:none;min-height:100vh}
+.view.active{display:block}
+.view-pad{max-width:1000px;margin:0 auto;padding:48px 44px}
+
+/* ── SIDEBAR ── */
+.brand{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:11px}
+.brand-logo{width:34px;height:34px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--font-s);font-weight:700;font-size:13px;color:#fff;flex-shrink:0;letter-spacing:.3px}
+.brand-name{font-family:var(--font-s);font-size:15px;font-weight:600;color:#E8E4DC;line-height:1.2}
+.brand-sub{font-size:9.5px;color:var(--cream-d);text-transform:uppercase;letter-spacing:.7px;margin-top:1px}
+.nav{flex:1;padding:14px 10px}
+.nav-label{font-size:9.5px;font-weight:600;color:var(--cream-d);text-transform:uppercase;letter-spacing:.9px;padding:12px 8px 5px;display:block}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:5px;color:var(--cream);font-size:13px;font-weight:400;cursor:pointer;transition:background .14s,color .14s;user-select:none;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--navy-h);color:#E8E4DC}
+.nav-item.active{background:var(--navy-a);color:#fff}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sidebar-footer{padding:10px;border-top:1px solid rgba(255,255,255,.06)}
+.sidebar-meta{text-align:center;font-size:9.5px;color:var(--cream-d);padding:7px 0 0;letter-spacing:.5px}
+
+/* ── SEARCH ── */
+.search-wrap{padding:10px 10px 6px;position:relative}
+.search-input{width:100%;padding:7px 10px 7px 30px;border:1px solid rgba(255,255,255,.1);border-radius:5px;background:rgba(255,255,255,.06);color:#E8E4DC;font-family:var(--font-b);font-size:12.5px;outline:none;transition:border-color .14s,background .14s}
+.search-input::placeholder{color:var(--cream-d)}
+.search-input:focus{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.1)}
+.search-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--cream-d);pointer-events:none;display:flex}
+.search-results{position:absolute;left:10px;right:10px;top:100%;margin-top:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);max-height:340px;overflow-y:auto;z-index:100;display:none}
+.search-results.open{display:block}
+.search-result{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border-lt);transition:background .1s}
+.search-result:last-child{border-bottom:none}
+.search-result:hover{background:var(--surface-2)}
+.search-result-text{font-size:13px;color:var(--text);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-result-meta{font-size:11px;color:var(--text-3);margin-top:2px;display:flex;gap:6px}
+.search-result-type{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;padding:1px 5px;border-radius:3px;background:var(--surface-2);color:var(--text-3)}
+.search-empty{padding:16px;text-align:center;font-size:13px;color:var(--text-3)}
+
+/* ── PAGE HEADER ── */
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;gap:16px;flex-wrap:wrap}
+.page-title{font-family:var(--font-s);font-size:26px;font-weight:700;color:var(--text);line-height:1.2}
+.page-sub{font-size:13px;color:var(--text-3);margin-top:4px}
+.page-actions{display:flex;gap:8px;flex-shrink:0;align-items:center;margin-top:4px}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px 28px;box-shadow:var(--shadow)}
+.card+.card{margin-top:20px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.card-title{font-family:var(--font-s);font-size:15px;font-weight:600;color:var(--text)}
+.card-sub{font-size:11.5px;color:var(--text-3);margin-top:2px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:start}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.badge-dot{width:5px;height:5px;border-radius:50%}
+.b-green{background:var(--green-bg);color:var(--green)}.b-green .badge-dot{background:var(--green)}
+.b-amber{background:var(--amber-bg);color:var(--amber)}.b-amber .badge-dot{background:var(--amber)}
+.b-red{background:var(--red-bg);color:var(--red)}.b-red .badge-dot{background:var(--red)}
+.b-blue{background:var(--blue-bg);color:var(--blue)}.b-blue .badge-dot{background:var(--blue)}
+.b-gray{background:var(--surface-2);color:var(--text-2)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-sm);font-family:var(--font-b);font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all .14s;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy-h)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{background:#C05928}
+.btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface-2);color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── PROGRESS ── */
+.progress{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.pf-green{background:var(--green)}.pf-amber{background:var(--amber)}.pf-red{background:var(--red)}.pf-accent{background:var(--accent)}
+
+/* ── TASKS ── */
+.task-list{list-style:none}
+.task-item{display:flex;align-items:flex-start;gap:9px;padding:12px 0;border-bottom:1px solid var(--border-lt)}
+.task-item:last-child{border-bottom:none}
+.task-check{width:15px;height:15px;border:1.5px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .14s;display:flex;align-items:center;justify-content:center;background:#fff}
+.task-check.ck{background:var(--green);border-color:var(--green)}
+.task-check.ck::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
+.task-body{flex:1;min-width:0}
+.task-text{font-size:13px;color:var(--text);line-height:1.4}
+.task-text.done{text-decoration:line-through;color:var(--text-3)}
+.task-meta{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap}
+.task-owner{font-size:11px;color:var(--text-3)}
+.task-status{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.ts-ip{color:var(--blue)}.ts-ns{color:var(--text-3)}.ts-bl{color:var(--red)}.ts-dn{color:var(--green)}
+.prio-high{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.3px}
+.prio-med{font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.3px}
+.prio-low{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.3px}
+.task-actions{display:flex;gap:4px;opacity:0;transition:opacity .14s;flex-shrink:0}
+.task-item:hover .task-actions{opacity:1}
+.icon-btn{width:22px;height:22px;border:none;background:none;cursor:pointer;color:var(--text-3);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .14s,color .14s}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+
+/* ── RISKS ── */
+.risk-item{padding:14px 16px;background:var(--surface-2);border-radius:var(--r-sm);border-left:3px solid;margin-bottom:12px}
+.risk-item:last-child{margin-bottom:0}
+.risk-h{border-color:var(--red)}.risk-m{border-color:var(--amber)}.risk-l{border-color:var(--text-3)}
+.risk-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.risk-desc{font-size:12.5px;color:var(--text-2);line-height:1.5;margin-bottom:6px}
+.risk-mit{font-size:12px;color:var(--text-3)}.risk-mit strong{color:var(--text-2)}
+
+/* ── DECISIONS ── */
+.decision-item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--border-lt)}
+.decision-item:last-child{border-bottom:none}
+.decision-date{font-size:11px;color:var(--text-3);white-space:nowrap;padding-top:1px;min-width:62px}
+.decision-text{font-size:13px;color:var(--text);line-height:1.5}
+
+/* ── OBJECTIVES ── */
+.obj-item{display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--border-lt);cursor:pointer;border-radius:var(--r-sm);transition:background .12s;margin:0 -8px;padding-left:8px;padding-right:8px}
+.obj-item:last-child{border-bottom:none}
+.obj-item:hover{background:var(--surface-2)}
+.obj-check{width:17px;height:17px;border:1.5px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:1px;cursor:pointer;transition:all .14s;display:flex;align-items:center;justify-content:center;background:#fff}
+.obj-check.ck{background:var(--green);border-color:var(--green)}
+.obj-check.ck::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
+.obj-body{flex:1;min-width:0}
+.obj-text{font-size:13px;color:var(--text);line-height:1.4}
+.obj-text.done{text-decoration:line-through;color:var(--text-3)}
+.obj-meta{display:flex;align-items:center;gap:8px;margin-top:4px}
+.obj-meta-count{font-size:10.5px;color:var(--text-3);display:flex;align-items:center;gap:3px}
+.obj-arrow{color:var(--text-3);flex-shrink:0;transition:transform .14s}
+.obj-item:hover .obj-arrow{transform:translateX(2px);color:var(--text-2)}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:20px;font-size:13px}
+.breadcrumb-link{color:var(--text-2);cursor:pointer;text-decoration:none;transition:color .14s;background:none;border:none;font-family:var(--font-b);font-size:13px;padding:0}
+.breadcrumb-link:hover{color:var(--accent)}
+.breadcrumb-sep{color:var(--text-3);font-size:11px}
+.breadcrumb-current{color:var(--text);font-weight:500}
+.back-btn{display:inline-flex;align-items:center;gap:5px;color:var(--text-2);font-size:13px;cursor:pointer;background:none;border:none;font-family:var(--font-b);padding:4px 0;transition:color .14s;margin-bottom:8px}
+.back-btn:hover{color:var(--accent)}
+
+/* ── INIT HEADER ── */
+.init-header{display:flex;flex-direction:column;gap:10px;margin-bottom:34px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.init-title{font-family:var(--font-s);font-size:24px;font-weight:700;color:var(--text);line-height:1.2}
+.init-subtitle{font-size:13px;color:var(--text-2);margin-top:2px}
+.init-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.init-owner{font-size:12px;color:var(--text-3)}
+.init-progress{display:flex;align-items:center;gap:10px}
+.init-pct{font-size:12px;font-weight:600;color:var(--text-2)}
+
+/* ── NOTES TEXTAREA ── */
+.notes-area{width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-family:var(--font-b);font-size:12.5px;color:var(--text);background:var(--bg);resize:vertical;min-height:90px;outline:none;transition:border-color .14s;line-height:1.5}
+.notes-area:focus{border-color:var(--navy)}
+
+/* ── INLINE ADD FORM ── */
+.add-form{display:none;background:var(--surface-2);border:1px solid var(--border-lt);border-radius:var(--r-sm);padding:12px;margin-top:8px;gap:8px;flex-direction:column}
+.add-form.open{display:flex}
+.add-form input,.add-form select{border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;color:var(--text);background:#fff;outline:none;width:100%}
+.add-form input:focus,.add-form select:focus{border-color:var(--navy)}
+.add-form-row{display:flex;gap:8px}
+.add-form-row>*{flex:1}
+.add-form-actions{display:flex;gap:6px;justify-content:flex-end}
+
+/* ── DASHBOARD INIT CARD ── */
+.init-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;cursor:pointer;transition:all .18s;box-shadow:var(--shadow)}
+.init-card:hover{border-color:var(--navy);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.init-card-name{font-family:var(--font-s);font-size:14.5px;font-weight:600;color:var(--text);margin:10px 0 6px;line-height:1.3}
+.init-card-desc{font-size:13px;color:var(--text-2);line-height:1.5;margin-bottom:14px}
+.init-card-stats{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.init-card-pct{font-size:11.5px;font-weight:600;color:var(--text-2)}
+
+/* ── CHAT ── */
+.chat-wrap{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.chat-hd{padding:22px 32px 18px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.chat-title{font-family:var(--font-s);font-size:20px;font-weight:700}
+.chat-sub{font-size:12px;color:var(--text-3);margin-top:3px}
+.chat-msgs{flex:1;overflow-y:auto;padding:24px 32px;display:flex;flex-direction:column;gap:18px}
+.chat-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px 32px;text-align:center}
+.ce-title{font-family:var(--font-s);font-size:20px;font-weight:600;color:var(--text)}
+.ce-sub{font-size:13px;color:var(--text-2);max-width:380px;line-height:1.5}
+.starters{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;max-width:580px}
+.starter{padding:7px 13px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:12.5px;color:var(--text-2);cursor:pointer;transition:all .14s}
+.starter:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.msg{display:flex;gap:8px;max-width:82%}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg.assistant{align-self:flex-start}
+.msg-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.msg.user .msg-av{background:var(--navy);color:#fff}
+.msg.assistant .msg-av{background:var(--accent-bg);color:var(--accent)}
+.msg-bub{padding:10px 13px;border-radius:var(--r);font-size:13px;line-height:1.6}
+.msg.user .msg-bub{background:var(--navy);color:#fff;border-radius:var(--r) var(--r-sm) var(--r) var(--r)}
+.msg.assistant .msg-bub{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--r-sm) var(--r) var(--r) var(--r)}
+.msg-bub p{margin-bottom:6px}.msg-bub p:last-child{margin-bottom:0}
+.msg-bub ul{padding-left:18px;margin:6px 0}
+.msg-bub li{margin-bottom:3px}
+.msg-bub strong{font-weight:600}
+.msg-bub code{background:rgba(0,0,0,.08);padding:1px 4px;border-radius:3px;font-size:11.5px}
+.msg.user .msg-bub code{background:rgba(255,255,255,.15)}
+.chat-bar{padding:14px 24px;border-top:1px solid var(--border);background:var(--surface);display:flex;gap:9px;align-items:flex-end;flex-shrink:0}
+.chat-input{flex:1;resize:none;border:1px solid var(--border);border-radius:var(--r);padding:9px 13px;font-family:var(--font-b);font-size:13px;color:var(--text);background:var(--bg);outline:none;max-height:110px;line-height:1.5;transition:border-color .14s}
+.chat-input:focus{border-color:var(--navy)}
+.chat-send{width:34px;height:34px;background:var(--navy);border:none;border-radius:var(--r-sm);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .14s;flex-shrink:0}
+.chat-send:hover{background:var(--navy-h)}.chat-send:disabled{background:var(--text-3);cursor:not-allowed}
+.typing-indicator{display:flex;gap:4px;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm) var(--r) var(--r) var(--r);align-self:flex-start}
+.typing-dot{width:6px;height:6px;background:var(--text-3);border-radius:50%;animation:bounce 1.2s ease-in-out infinite}
+.typing-dot:nth-child(1){animation-delay:0s}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* ── ARTIFACTS ── */
+.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:28px}
+.art-type{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;cursor:pointer;transition:all .16s}
+.art-type:hover{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.art-icon{width:34px;height:34px;background:var(--accent-bg);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;margin-bottom:9px}
+.art-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.art-desc{font-size:12.5px;color:var(--text-3);line-height:1.5}
+.art-list-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.art-list-name{font-size:13px;font-weight:500;color:var(--text)}
+.art-list-meta{font-size:11px;color:var(--text-3)}
+
+/* ── TRANSCRIPTS ── */
+.drop-zone{border:2px dashed var(--border);border-radius:var(--r-lg);padding:44px 28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface);margin-bottom:24px}
+.drop-zone:hover,.drop-zone.over{border-color:var(--accent);background:var(--accent-bg)}
+.dz-icon{font-size:30px;color:var(--text-3);margin-bottom:10px}
+.dz-title{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:3px}
+.dz-sub{font-size:12px;color:var(--text-3)}
+.tx-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.tx-item-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:10px}
+.tx-name{font-size:13.5px;font-weight:600;color:var(--text)}
+.tx-date{font-size:11px;color:var(--text-3)}
+.tx-actions{display:flex;gap:6px}
+.extracted-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-lt)}
+.extracted-title{font-size:11.5px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.extracted-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border-lt)}
+.extracted-item:last-child{border-bottom:none}
+.extracted-text{font-size:12.5px;color:var(--text);flex:1;line-height:1.4}
+.add-to-init{display:flex;align-items:center;gap:5px}
+.add-to-init select{border:1px solid var(--border);border-radius:var(--r-sm);padding:3px 7px;font-size:11px;color:var(--text-2);background:#fff;cursor:pointer;outline:none}
+.add-to-init button{padding:3px 8px;font-size:11px;background:var(--navy);color:#fff;border:none;border-radius:var(--r-sm);cursor:pointer;font-family:var(--font-b);font-weight:500}
+
+/* ── SETTINGS ── */
+.settings-section{margin-bottom:28px}
+.settings-title{font-family:var(--font-s);font-size:16px;font-weight:600;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.field input,.field select{width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 12px;font-family:var(--font-b);font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color .14s}
+.field input:focus,.field select:focus{border-color:var(--navy)}
+.field-note{font-size:11.5px;color:var(--text-3);margin-top:4px;line-height:1.4}
+.api-key-wrap{position:relative}
+.api-key-wrap input{padding-right:42px}
+.api-key-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(28,43,58,.45);z-index:999;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-ov.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--r-lg);max-width:700px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:var(--font-s);font-size:17px;font-weight:700}
+.modal-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-3);line-height:1;padding:2px}
+.modal-body{padding:20px 24px}
+.modal-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.modal-art-content{font-family:var(--font-b);font-size:12.5px;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface-2);padding:16px;border-radius:var(--r-sm);border:1px solid var(--border-lt)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{padding:10px 16px;border-radius:var(--r-sm);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);animation:slideup .2s ease;pointer-events:auto}
+.toast-ok{background:var(--navy);color:#fff}
+.toast-err{background:var(--red);color:#fff}
+.toast-info{background:var(--accent);color:#fff}
+@keyframes slideup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FOCUS BOX ── */
+.focus-box{background:linear-gradient(135deg,#1C2B3A 0%,#2D4259 100%);border-radius:var(--r);padding:22px 24px;color:#fff;margin-bottom:20px}
+.focus-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.focus-title{font-family:var(--font-s);font-size:16px;font-weight:600;color:#E8E4DC}
+.focus-content{font-size:13px;line-height:1.6;color:#C8C4BC}
+.focus-content ul{padding-left:18px;margin-top:6px}
+.focus-content li{margin-bottom:4px}
+.focus-content strong{color:#fff}
+.focus-gen-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#E8E4DC;padding:6px 12px;border-radius:var(--r-sm);font-family:var(--font-b);font-size:12px;font-weight:500;cursor:pointer;transition:background .14s}
+.focus-gen-btn:hover{background:rgba(255,255,255,.2)}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:16px 0}
+.empty-state{text-align:center;padding:32px 16px;color:var(--text-3)}
+.empty-state p{font-size:13px;margin-top:6px}
+.section-label{font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.flex-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mt-4{margin-top:16px}
+.mt-2{margin-top:8px}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+.spinner-dark{border-color:rgba(28,43,58,.2);border-top-color:var(--navy)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-row{display:flex;align-items:center;gap:8px;color:var(--text-3);font-size:13px;padding:10px 0}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">TLP</div>
+      <div>
+        <div class="brand-name">TLP Hub</div>
+        <div class="brand-sub">Technology Lifecycle</div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      <input class="search-input" id="global-search" type="text" placeholder="Search tasks, risks, decisions…" autocomplete="off">
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-view="focus">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".7"/><circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".7"/><circle cx="8" cy="8" r="1.5" fill="currentColor" opacity=".8"/></svg>
+        My Focus
+      </button>
+      <span class="nav-label">Q2 2026 Initiatives</span>
+      <button class="nav-item" data-view="sbo">
+        <span class="nav-dot" id="dot-sbo" style="background:var(--green)"></span>
+        SBO Governance
+      </button>
+      <button class="nav-item" data-view="reporting">
+        <span class="nav-dot" id="dot-reporting" style="background:var(--amber)"></span>
+        Reporting
+      </button>
+      <button class="nav-item" data-view="zipped">
+        <span class="nav-dot" id="dot-zipped" style="background:var(--green)"></span>
+        Zipped Prototype
+      </button>
+      <span class="nav-label">Tools</span>
+      <button class="nav-item" data-view="assistant">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.5 4.5H14l-3.6 2.6 1.4 4.4L8 10l-3.8 2.5 1.4-4.4L2 5.5h4.5L8 1z" fill="currentColor" opacity=".75"/></svg>
+        AI Assistant
+      </button>
+      <button class="nav-item" data-view="artifacts">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2h7l3 3v9H3V2z" stroke="currentColor" stroke-width="1.4" fill="none" opacity=".75"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.4" fill="none" opacity=".75"/></svg>
+        Artifacts
+      </button>
+      <button class="nav-item" data-view="transcripts">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".75"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".75"/></svg>
+        Transcripts
+      </button>
+      <span class="nav-label">Config</span>
+      <button class="nav-item" data-view="settings">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.4" fill="none" opacity=".75"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".75"/></svg>
+        Settings
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-meta">Q2 2026 · BambooHR IT</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div id="view-dashboard" class="view active"></div>
+    <div id="view-focus" class="view"></div>
+    <div id="view-sbo" class="view"></div>
+    <div id="view-reporting" class="view"></div>
+    <div id="view-zipped" class="view"></div>
+    <div id="view-assistant" class="view"></div>
+    <div id="view-artifacts" class="view"></div>
+    <div id="view-transcripts" class="view"></div>
+    <div id="view-settings" class="view"></div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal-ov">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ============================================================
+// 1. DEFAULT DATA
+// ============================================================
+const DEFAULTS = {
+  settings: { apiKey: '', model: 'claude-sonnet-4-6' },
+  chat: { messages: [] },
+  artifacts: [],
+  transcripts: [],
+  ui: { currentView: 'dashboard', focusContent: null, objectiveView: null },
+  initiatives: {
+    sbo: {
+      id: 'sbo', name: 'SBO Program Governance & Documentation',
+      subtitle: 'Making the SBO program durable, clear, and accountable',
+      quarter: 'Q2 2026', status: 'on-track', progress: 30,
+      owners: ['JoJo Jones', 'Melissa Boud'],
+      description: 'Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable — establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.',
+      objectives: [
+        {id:'o1',text:'Establish the Enterprise Software Committee with Dave Petersen as chair',complete:false,
+          tasks:[
+            {id:'t1',text:'Prepare Enterprise Software Committee communications for Dave to use with C-suite',owner:'JoJo Jones',due:'',status:'in-progress',priority:'high'},
+            {id:'t2',text:'Dave to review SBO training draft',owner:'Dave Petersen',due:'',status:'not-started',priority:'high'},
+            {id:'t3',text:'Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'}
+          ],
+          risks:[
+            {id:'r1',title:'Leadership Summit may be canceled',desc:'If summit is canceled, program loses its planned broad communication vehicle.',likelihood:'medium',impact:'medium',mitigation:'JoJo to follow up with Dave and identify alternative communication path.'},
+            {id:'r2',title:'Enterprise Software Committee scope creep',desc:'Risk that the committee takes on decisions outside enterprise-level scope.',likelihood:'low',impact:'medium',mitigation:'Document clear decision criteria before committee launches.'}
+          ],
+          decisions:[
+            {id:'d1',text:'Committee renamed to "Enterprise Software Committee" — better reflects function than "Steering Committee"',date:'2026-03-26'},
+            {id:'d2',text:'Dave Petersen will chair the Enterprise Software Committee',date:'2026-03-26'},
+            {id:'d3',text:'Committee representation varies by division; not all SBOs will serve',date:'2026-03-26'}
+          ]
+        },
+        {id:'o2',text:'Complete vendor-to-SBO mapping from 95% to 100% (~15 orphan systems remaining)',complete:false,
+          tasks:[
+            {id:'t1',text:'Identify remaining ~15 orphan software systems and assign SBO owners',owner:'JoJo Jones, Melissa Boud',due:'',status:'not-started',priority:'medium'},
+            {id:'t2',text:'Share SBO reporting snapshot with leadership (Ryan Packer)',owner:'JoJo Jones, Melissa Boud, Dave Petersen',due:'',status:'not-started',priority:'medium'}
+          ],
+          risks:[],
+          decisions:[
+            {id:'d1',text:'95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win',date:'2026-04-09'}
+          ]
+        },
+        {id:'o3',text:'Document SBO processes with division-level specificity (Revenue: monthly; Finance: case-by-case; BI: twice/year)',complete:false,
+          tasks:[
+            {id:'t1',text:'Record SBO training video after Dave\'s feedback',owner:'Melissa Boud',due:'',status:'blocked',priority:'medium'}
+          ],
+          risks:[],
+          decisions:[]
+        },
+        {id:'o4',text:'Define and document PIR integration criteria with Fadi so SBO guidance can be finalized',complete:false,
+          tasks:[
+            {id:'t1',text:'Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)',owner:'JoJo Jones',due:'2026-04-15',status:'in-progress',priority:'high'}
+          ],
+          risks:[
+            {id:'r1',title:'PIR/TLP boundaries still undefined',desc:'Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.',likelihood:'medium',impact:'high',mitigation:'Meeting with Fadi in progress. JoJo to document criteria after meeting.'}
+          ],
+          decisions:[]
+        },
+        {id:'o5',text:'Every SBO knows their budget and receives alerts when approaching or exceeding it',complete:false,
+          tasks:[
+            {id:'t1',text:'Alan Roper to develop budget visibility approach for SBOs',owner:'Alan Roper',due:'',status:'in-progress',priority:'high'}
+          ],
+          risks:[
+            {id:'r1',title:'SBO budget visibility incomplete',desc:'SBOs held accountable for portfolio spend without knowing their true budget position.',likelihood:'high',impact:'medium',mitigation:'Alan Roper developing approach to surface budget and forecast numbers.'}
+          ],
+          decisions:[
+            {id:'d1',text:'TLP\'s budget role is visibility and accountability — not promising spend reduction targets',date:'2026-03-26'}
+          ]
+        }
+      ],
+      tasks: [
+        {id:'t1',text:'Prepare Enterprise Software Committee communications for Dave to use with C-suite',owner:'JoJo Jones',due:'',status:'in-progress',priority:'high'},
+        {id:'t2',text:'Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)',owner:'JoJo Jones',due:'2026-04-15',status:'in-progress',priority:'high'},
+        {id:'t3',text:'Identify remaining ~15 orphan software systems and assign SBO owners',owner:'JoJo Jones, Melissa Boud',due:'',status:'not-started',priority:'medium'},
+        {id:'t4',text:'Dave to review SBO training draft',owner:'Dave Petersen',due:'',status:'not-started',priority:'high'},
+        {id:'t5',text:'Record SBO training video after Dave\'s feedback',owner:'Melissa Boud',due:'',status:'blocked',priority:'medium'},
+        {id:'t6',text:'Alan Roper to develop budget visibility approach for SBOs',owner:'Alan Roper',due:'',status:'in-progress',priority:'high'},
+        {id:'t7',text:'Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'},
+        {id:'t8',text:'Share SBO reporting snapshot with leadership (Ryan Packer)',owner:'JoJo Jones, Melissa Boud, Dave Petersen',due:'',status:'not-started',priority:'medium'}
+      ],
+      risks: [
+        {id:'r1',title:'PIR/TLP boundaries still undefined',desc:'Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.',likelihood:'medium',impact:'high',mitigation:'Meeting with Fadi in progress. JoJo to document criteria after meeting.'},
+        {id:'r2',title:'SBO budget visibility incomplete',desc:'SBOs held accountable for portfolio spend without knowing their true budget position.',likelihood:'high',impact:'medium',mitigation:'Alan Roper developing approach to surface budget and forecast numbers.'},
+        {id:'r3',title:'Leadership Summit may be canceled',desc:'If summit is canceled, program loses its planned broad communication vehicle.',likelihood:'medium',impact:'medium',mitigation:'JoJo to follow up with Dave and identify alternative communication path.'},
+        {id:'r4',title:'Enterprise Software Committee scope creep',desc:'Risk that the committee takes on decisions outside enterprise-level scope.',likelihood:'low',impact:'medium',mitigation:'Document clear decision criteria before committee launches.'}
+      ],
+      decisions: [
+        {id:'d1',text:'Committee renamed to "Enterprise Software Committee" — better reflects function than "Steering Committee"',date:'2026-03-26'},
+        {id:'d2',text:'Dave Petersen will chair the Enterprise Software Committee',date:'2026-03-26'},
+        {id:'d3',text:'Committee representation varies by division; not all SBOs will serve',date:'2026-03-26'},
+        {id:'d4',text:'95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win',date:'2026-04-09'},
+        {id:'d5',text:'TLP\'s budget role is visibility and accountability — not promising spend reduction targets',date:'2026-03-26'}
+      ],
+      notes: "Ryan Ostler's final SBO kickoff was March 30, 2026 — all SBO kickoffs are now complete.\n\nAlways use 'PIR' not 'PER' in meetings and documentation.\n\nEmbedded partners are managed by Todd Grierson in Finance (not JR) — coordinate with Todd for Q4 planning."
+    },
+    reporting: {
+      id: 'reporting', name: 'Reporting & Accountability',
+      subtitle: 'Establishing consistent, repeatable data collection and accountability structures',
+      quarter: 'Q2 2026', status: 'at-risk', progress: 10,
+      owners: ['Jessi Duffin'],
+      description: 'Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now — even before automation — and build toward SLA tracking.',
+      objectives: [
+        {id:'o1',text:'Establish consistent manual data collection habits by mid-Q2',complete:false,
+          tasks:[
+            {id:'t1',text:'Manually collect and track technology request data throughout Q2',owner:'Jessi Duffin',due:'2026-06-30',status:'in-progress',priority:'high'},
+            {id:'t2',text:'Document current manual data collection process so it can be automated in Zipped later',owner:'Jessi Duffin',due:'',status:'not-started',priority:'medium'}
+          ],
+          risks:[
+            {id:'r1',title:'Q1 pattern may repeat',desc:'Reporting was not achieved in Q1; without structural change the same result is possible in Q2.',likelihood:'medium',impact:'high',mitigation:'Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully.'}
+          ],
+          decisions:[
+            {id:'d1',text:'Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system',date:'2026-04-09'}
+          ]
+        },
+        {id:'o2',text:'Define and align on the Q2 metrics that matter most',complete:false,
+          tasks:[
+            {id:'t1',text:'Align with JoJo and Dave on which Q2 metrics matter most',owner:'Jessi Duffin, JoJo Jones',due:'',status:'not-started',priority:'high'}
+          ],
+          risks:[],
+          decisions:[
+            {id:'d1',text:'Moving away from one giant aggregate report; focus on concrete SBO program outcomes first',date:'2026-03-26'}
+          ]
+        },
+        {id:'o3',text:'Build toward SLA tracking and the ability to identify areas for improvement',complete:false,
+          tasks:[
+            {id:'t1',text:'Continue routing tech requests through intake; send to SBOs for approval when needed',owner:'Jessi Duffin',due:'',status:'in-progress',priority:'medium'}
+          ],
+          risks:[
+            {id:'r1',title:'Jira lacks reporting capability',desc:'Jira does not provide the reporting quality needed to track SLAs or identify patterns.',likelihood:'high',impact:'high',mitigation:'Manual collection in Q2; Zipped will replace Jira for reporting in Q3+.'},
+            {id:'r2',title:'Jira and Coupa data not connected',desc:'Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.',likelihood:'high',impact:'medium',mitigation:'Zipped prototype will eventually bridge or replace both.'}
+          ],
+          decisions:[]
+        },
+        {id:'o4',text:'Establish accountability structures before automation exists',complete:false,
+          tasks:[],
+          risks:[
+            {id:'r1',title:'Accountability without data',desc:'Cannot meaningfully enforce SLAs until reliable, consistent data exists.',likelihood:'medium',impact:'high',mitigation:'Q2 focus is building the data foundation; enforcement follows in Q3.'}
+          ],
+          decisions:[
+            {id:'d1',text:'Reporting will not drive accountability until reliable, consistent data exists',date:'2026-04-09'}
+          ]
+        }
+      ],
+      tasks: [
+        {id:'t1',text:'Manually collect and track technology request data throughout Q2',owner:'Jessi Duffin',due:'2026-06-30',status:'in-progress',priority:'high'},
+        {id:'t2',text:'Align with JoJo and Dave on which Q2 metrics matter most',owner:'Jessi Duffin, JoJo Jones',due:'',status:'not-started',priority:'high'},
+        {id:'t3',text:'Continue routing tech requests through intake; send to SBOs for approval when needed',owner:'Jessi Duffin',due:'',status:'in-progress',priority:'medium'},
+        {id:'t4',text:'Document current manual data collection process so it can be automated in Zipped later',owner:'Jessi Duffin',due:'',status:'not-started',priority:'medium'}
+      ],
+      risks: [
+        {id:'r1',title:'Q1 pattern may repeat',desc:'Reporting was not achieved in Q1; without structural change the same result is possible in Q2.',likelihood:'medium',impact:'high',mitigation:'Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully.'},
+        {id:'r2',title:'Jira lacks reporting capability',desc:'Jira does not provide the reporting quality needed to track SLAs or identify patterns.',likelihood:'high',impact:'high',mitigation:'Manual collection in Q2; Zipped will replace Jira for reporting in Q3+.'},
+        {id:'r3',title:'Jira and Coupa data not connected',desc:'Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.',likelihood:'high',impact:'medium',mitigation:'Zipped prototype will eventually bridge or replace both.'},
+        {id:'r4',title:'Accountability without data',desc:'Cannot meaningfully enforce SLAs until reliable, consistent data exists.',likelihood:'medium',impact:'high',mitigation:'Q2 focus is building the data foundation; enforcement follows in Q3.'}
+      ],
+      decisions: [
+        {id:'d1',text:'Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system',date:'2026-04-09'},
+        {id:'d2',text:'Reporting will not drive accountability until reliable, consistent data exists',date:'2026-04-09'},
+        {id:'d3',text:'Moving away from one giant aggregate report; focus on concrete SBO program outcomes first',date:'2026-03-26'}
+      ],
+      notes: "The two biggest blockers are: (1) Jira's lack of reporting quality, and (2) inability to tie Jira data to Coupa data. Zipped is the long-term solution to both.\n\nJessi owns this initiative end-to-end in Q2."
+    },
+    zipped: {
+      id: 'zipped', name: 'Zipped — Workflow Automation Prototype',
+      subtitle: 'Building an AI-powered intake and document collection prototype',
+      quarter: 'Q2 2026', status: 'on-track', progress: 25,
+      owners: ['JoJo Jones', 'Jessi Duffin'],
+      description: 'The Jira rebuild was stalled by Ryan\'s departure. Zipped is an AI-built prototype for automation, reporting, and improved workflows. Q2 commitment: deliver a working prototype for document collection by end of Q2. If it proves valuable, it gets handed to engineering for production.',
+      objectives: [
+        {id:'o1',text:'Deliver working prototype for document collection by end of Q2',complete:false,
+          tasks:[
+            {id:'t1',text:'Resolve database and hosting needs for the prototype',owner:'JoJo Jones',due:'',status:'not-started',priority:'high'},
+            {id:'t2',text:'Add MNDA / trust-center first step before deeper document collection',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'}
+          ],
+          risks:[
+            {id:'r1',title:'No production infrastructure defined',desc:'Database, hosting, email flow, and legal storage details are unresolved for the prototype.',likelihood:'high',impact:'high',mitigation:'Prioritize resolving database and hosting decisions early in Q2.'},
+            {id:'r2',title:'Scope could exceed Q2 capacity',desc:'Neither JoJo nor Jessi has built a production app before; scope risk is real.',likelihood:'medium',impact:'high',mitigation:'Commit to document collection prototype only for Q2; defer to Q3.'}
+          ],
+          decisions:[
+            {id:'d1',text:'Q2 commitment is document collection prototype only — not the full Zipped vision',date:'2026-04-09'},
+            {id:'d2',text:'Prototype should capture MNDA / trust-center step before deeper document collection',date:'2026-03-26'}
+          ]
+        },
+        {id:'o2',text:'Build basic intake process with vendor request portal',complete:true,
+          tasks:[
+            {id:'t1',text:'Continue building vendor request portal (current primary focus)',owner:'JoJo Jones, Jessi Duffin',due:'',status:'in-progress',priority:'high'},
+            {id:'t2',text:'Restore business owner field in the intake form',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'}
+          ],
+          risks:[],
+          decisions:[
+            {id:'d1',text:'First build focus is vendor request portal (external-facing document collection)',date:'2026-03-26'}
+          ]
+        },
+        {id:'o3',text:'Automate workflows for security, privacy/AI, and legal review',complete:false,
+          tasks:[
+            {id:'t1',text:'Build automated security, privacy/AI, and legal workflows',owner:'JoJo Jones, Jessi Duffin',due:'2026-06-30',status:'not-started',priority:'high'},
+            {id:'t2',text:'Explore connection between Zipped and Melissa\'s AI workflow',owner:'Melissa Boud, JoJo Jones, Jessi Duffin',due:'',status:'not-started',priority:'low'}
+          ],
+          risks:[],
+          decisions:[]
+        },
+        {id:'o4',text:'Build transition logic into Coupa for evaluation decisions',complete:false,
+          tasks:[],
+          risks:[
+            {id:'r1',title:'Engineering handoff path undefined',desc:'Path from prototype to production handoff not scoped or approved.',likelihood:'medium',impact:'medium',mitigation:'Frame Q2 as "validate the concept" — engineering conversation is Q3.'}
+          ],
+          decisions:[
+            {id:'d1',text:'If prototype proves valuable, will be handed to engineering for production development',date:'2026-04-09'}
+          ]
+        },
+        {id:'o5',text:'Add timestamps for reporting and process-state tracking',complete:false,
+          tasks:[
+            {id:'t1',text:'Add timestamps for reporting and activity tracking',owner:'JoJo Jones',due:'',status:'not-started',priority:'high'}
+          ],
+          risks:[
+            {id:'r1',title:'Prototype reporting incomplete',desc:'Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.',likelihood:'high',impact:'medium',mitigation:'Add timestamps before building more complex workflows.'}
+          ],
+          decisions:[]
+        }
+      ],
+      tasks: [
+        {id:'t1',text:'Continue building vendor request portal (current primary focus)',owner:'JoJo Jones, Jessi Duffin',due:'',status:'in-progress',priority:'high'},
+        {id:'t2',text:'Add timestamps for reporting and activity tracking',owner:'JoJo Jones',due:'',status:'not-started',priority:'high'},
+        {id:'t3',text:'Restore business owner field in the intake form',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'},
+        {id:'t4',text:'Resolve database and hosting needs for the prototype',owner:'JoJo Jones',due:'',status:'not-started',priority:'high'},
+        {id:'t5',text:'Explore connection between Zipped and Melissa\'s AI workflow',owner:'Melissa Boud, JoJo Jones, Jessi Duffin',due:'',status:'not-started',priority:'low'},
+        {id:'t6',text:'Add MNDA / trust-center first step before deeper document collection',owner:'JoJo Jones',due:'',status:'not-started',priority:'medium'},
+        {id:'t7',text:'Build automated security, privacy/AI, and legal workflows',owner:'JoJo Jones, Jessi Duffin',due:'2026-06-30',status:'not-started',priority:'high'}
+      ],
+      risks: [
+        {id:'r1',title:'No production infrastructure defined',desc:'Database, hosting, email flow, and legal storage details are unresolved for the prototype.',likelihood:'high',impact:'high',mitigation:'Prioritize resolving database and hosting decisions early in Q2.'},
+        {id:'r2',title:'Prototype reporting incomplete',desc:'Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.',likelihood:'high',impact:'medium',mitigation:'Add timestamps before building more complex workflows.'},
+        {id:'r3',title:'Scope could exceed Q2 capacity',desc:'Neither JoJo nor Jessi has built a production app before; scope risk is real.',likelihood:'medium',impact:'high',mitigation:'Commit to document collection prototype only for Q2; defer to Q3.'},
+        {id:'r4',title:'Engineering handoff path undefined',desc:'Path from prototype to production handoff not scoped or approved.',likelihood:'medium',impact:'medium',mitigation:'Frame Q2 as "validate the concept" — engineering conversation is Q3.'}
+      ],
+      decisions: [
+        {id:'d1',text:'Zipped replaces the Jira rebuild as the primary engineering initiative after Ryan\'s departure',date:'2026-04-09'},
+        {id:'d2',text:'Q2 commitment is document collection prototype only — not the full Zipped vision',date:'2026-04-09'},
+        {id:'d3',text:'First build focus is vendor request portal (external-facing document collection)',date:'2026-03-26'},
+        {id:'d4',text:'Prototype should capture MNDA / trust-center step before deeper document collection',date:'2026-03-26'},
+        {id:'d5',text:'If prototype proves valuable, will be handed to engineering for production development',date:'2026-04-09'}
+      ],
+      notes: '"Zipped" is the working title (previously called "Zip-like experience" or "vibe-coded prototype").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies — consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins.'
+    }
+  }
+};
+
+// ============================================================
+// 2. STATE
+// ============================================================
+let S;
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('tlp-hub-v2') || 'null');
+    if (saved) {
+      S = saved;
+      migrateObjectives();
+    } else {
+      S = JSON.parse(JSON.stringify(DEFAULTS));
+    }
+  } catch(e) {
+    S = JSON.parse(JSON.stringify(DEFAULTS));
+  }
+}
+function migrateObjectives() {
+  const defs = JSON.parse(JSON.stringify(DEFAULTS));
+  Object.entries(S.initiatives).forEach(([initId, init]) => {
+    const defInit = defs.initiatives[initId];
+    init.objectives.forEach(o => {
+      if (!o.tasks || !o.risks || !o.decisions) {
+        const defObj = defInit && defInit.objectives.find(d => d.id === o.id);
+        if (!o.tasks) o.tasks = defObj ? defObj.tasks : [];
+        if (!o.risks) o.risks = defObj ? defObj.risks : [];
+        if (!o.decisions) o.decisions = defObj ? defObj.decisions : [];
+      }
+    });
+  });
+  if (!S.ui.objectiveView) S.ui.objectiveView = null;
+  saveState();
+}
+function saveState() {
+  try { localStorage.setItem('tlp-hub-v2', JSON.stringify(S)); } catch(e) {}
+}
+
+// ============================================================
+// 3. ROUTING
+// ============================================================
+function navigate(view) {
+  S.ui.currentView = view;
+  if (S.ui.objectiveView && S.ui.objectiveView.initId !== view) {
+    S.ui.objectiveView = null;
+  }
+  saveState();
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.view === view);
+  });
+  render(view);
+  document.getElementById('main').scrollTop = 0;
+}
+
+function render(view) {
+  const map = {
+    dashboard: renderDashboard,
+    focus: renderFocus,
+    sbo: () => renderInitiative('sbo'),
+    reporting: () => renderInitiative('reporting'),
+    zipped: () => renderInitiative('zipped'),
+    assistant: renderAssistant,
+    artifacts: renderArtifacts,
+    transcripts: renderTranscripts,
+    settings: renderSettings
+  };
+  if (map[view]) map[view]();
+  // Update nav dots
+  ['sbo','reporting','zipped'].forEach(id => {
+    const dot = document.getElementById('dot-' + id);
+    if (dot) dot.style.background = statusColor(S.initiatives[id].status);
+  });
+}
+
+// ============================================================
+// 4. DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const el = document.getElementById('view-dashboard');
+  const inits = S.initiatives;
+  const totalTasks = Object.values(inits).reduce((s, i) => s + allObjTasks(i).length, 0);
+  const doneTasks = Object.values(inits).reduce((s, i) => s + allObjTasks(i).filter(t => t.status === 'complete').length, 0);
+  const highRisks = Object.values(inits).reduce((s, i) => s + allObjRisks(i).filter(r => r.impact === 'high').length, 0);
+  const totalDecisions = Object.values(inits).reduce((s,i)=>s+allObjDecisions(i).length,0);
+
+  el.innerHTML = `
+  <div class="view-pad" style="max-width:860px">
+    <div class="page-hd" style="margin-bottom:40px">
+      <div>
+        <h1 class="page-title">Technology Lifecycle Program</h1>
+        <p class="page-sub" style="margin-top:6px">Q2 2026 &nbsp;·&nbsp; BambooHR IT</p>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:14px;font-size:11.5px">Initiatives</div>
+    <div class="grid-3" style="margin-bottom:28px">
+      ${Object.values(inits).map(i => `
+      <div class="init-card" onclick="navigate('${i.id}')">
+        <div class="flex-row" style="justify-content:space-between">
+          ${statusBadge(i.status)}
+          <span class="b-gray badge" style="font-size:10px">${i.quarter}</span>
+        </div>
+        <div class="init-card-name">${i.name}</div>
+        <div class="init-card-desc">${i.description.substring(0,110)}…</div>
+        <div class="progress"><div class="progress-fill ${progressClass(i.status)}" style="width:${i.progress}%"></div></div>
+        <div class="init-card-stats">
+          <span class="init-card-pct">${i.progress}% complete</span>
+          <span style="font-size:11px;color:var(--text-3)">${i.owners.join(', ')}</span>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <div style="text-align:center;font-size:13px;color:var(--text-3);padding:8px 0;letter-spacing:.2px">
+      ${totalTasks} tasks &nbsp;·&nbsp; ${doneTasks} complete &nbsp;·&nbsp; ${highRisks} high-impact risks &nbsp;·&nbsp; ${totalDecisions} decisions logged
+    </div>
+  </div>`;
+}
+
+function defaultFocusContent() {
+  const hp = [];
+  Object.values(S.initiatives).forEach(i => {
+    allObjTasks(i).filter(t => t.priority === 'high' && t.status !== 'complete').forEach(t => {
+      hp.push(`<li><strong>${i.name.split(' ')[0]}:</strong> ${t.text}</li>`);
+    });
+  });
+  return `<ul>${hp.slice(0,5).join('')}</ul><p style="margin-top:8px;font-size:12px;opacity:.7">Click "Generate with AI" for personalized weekly guidance.</p>`;
+}
+
+function renderHighPriorityTasks() {
+  const items = [];
+  Object.values(S.initiatives).forEach(i => {
+    allObjTasks(i).filter(t => t.priority === 'high' && t.status !== 'complete').forEach(t => {
+      items.push({...t, initName: i.name.split(' ').slice(0,2).join(' '), initId: i.id});
+    });
+  });
+  if (!items.length) return '<div class="empty-state"><p>No open high-priority tasks.</p></div>';
+  return items.slice(0,8).map(t => `
+    <li class="task-item">
+      <div class="task-body">
+        <div class="task-text ${t.status==='complete'?'done':''}">${esc(t.text)}</div>
+        <div class="task-meta">
+          <span style="font-size:10.5px;background:var(--surface-2);padding:1px 6px;border-radius:3px;color:var(--text-3)">${t.initName}</span>
+          <span class="task-owner">${esc(t.owner)}</span>
+        </div>
+      </div>
+    </li>`).join('');
+}
+
+function statRow(label, val) {
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border-lt);font-size:13px"><span style="color:var(--text-2)">${label}</span><span style="font-weight:600;color:var(--text)">${val}</span></div>`;
+}
+
+function pendingDecisions() {
+  const pending = [];
+  Object.values(S.initiatives).forEach(i => {
+    allObjTasks(i).filter(t => t.status === 'not-started' && t.priority === 'high').slice(0,2).forEach(t => {
+      pending.push({text: t.text, init: i.name.split(' ').slice(0,2).join(' ')});
+    });
+  });
+  if (!pending.length) return '<div class="empty-state"><p>Nothing pending.</p></div>';
+  return pending.slice(0,4).map(p => `
+    <div style="padding:7px 0;border-bottom:1px solid var(--border-lt)">
+      <div style="font-size:12.5px;color:var(--text);line-height:1.4">${esc(p.text)}</div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:2px">${p.init}</div>
+    </div>`).join('');
+}
+
+// ============================================================
+// 4b. MY FOCUS
+// ============================================================
+function renderFocus() {
+  const el = document.getElementById('view-focus');
+  const priorityTasks = [];
+  Object.values(S.initiatives).forEach(i => {
+    allObjTasks(i).filter(t => t.status !== 'complete').forEach(t => {
+      priorityTasks.push({...t, initName: i.name.split(' ').slice(0,2).join(' '), initId: i.id});
+    });
+  });
+  const statusOrder = {'blocked':0,'in-progress':1,'not-started':2};
+  const prioOrder = {'high':0,'medium':1,'low':2};
+  priorityTasks.sort((a,b) => {
+    const pd = prioOrder[a.priority] - prioOrder[b.priority];
+    if (pd !== 0) return pd;
+    return (statusOrder[a.status]||3) - (statusOrder[b.status]||3);
+  });
+  const topTasks = priorityTasks.slice(0, 5);
+
+  const highRisks = [];
+  Object.values(S.initiatives).forEach(i => {
+    allObjRisks(i).filter(r => r.impact === 'high').forEach(r => {
+      highRisks.push({...r, initName: i.name.split(' ').slice(0,2).join(' '), initId: i.id});
+    });
+  });
+
+  el.innerHTML = `
+  <div class="view-pad" style="max-width:760px">
+    <div class="page-hd" style="margin-bottom:36px">
+      <div>
+        <h1 class="page-title">My Focus</h1>
+        <p class="page-sub" style="margin-top:6px">What needs your attention right now</p>
+      </div>
+    </div>
+
+    <div class="focus-box" id="focus-box" style="margin-bottom:32px">
+      <div class="focus-hd">
+        <span class="focus-title">This Week</span>
+        <button class="focus-gen-btn" onclick="generateFocus()" id="focus-gen-btn">Generate with AI</button>
+      </div>
+      <div class="focus-content" id="focus-content">
+        ${S.ui.focusContent || defaultFocusContent()}
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <div class="card-hd">
+        <div><div class="card-title">Top Priority Items</div><div class="card-sub">Highest-priority incomplete tasks across all initiatives</div></div>
+      </div>
+      ${topTasks.length ? `<ul class="task-list">${topTasks.map(t => `
+        <li class="task-item">
+          <div class="task-check" onclick="focusToggleTask('${t.initId}','${t.id}')"></div>
+          <div class="task-body">
+            <div class="task-text">${esc(t.text)}</div>
+            <div class="task-meta">
+              <span style="font-size:11px;background:var(--surface-2);padding:2px 7px;border-radius:3px;color:var(--text-3)">${t.initName}</span>
+              ${t.owner ? `<span class="task-owner">${esc(t.owner)}</span>` : ''}
+              <span class="task-status ${{
+                'not-started':'ts-ns','in-progress':'ts-ip','blocked':'ts-bl'
+              }[t.status]||''}">${{
+                'not-started':'Not Started','in-progress':'In Progress','blocked':'Blocked'
+              }[t.status]||t.status}</span>
+              ${t.priority ? `<span class="${{'high':'prio-high','medium':'prio-med','low':'prio-low'}[t.priority]||''}">${t.priority}</span>` : ''}
+            </div>
+          </div>
+        </li>`).join('')}</ul>` : '<div class="empty-state"><p>All caught up — no open tasks.</p></div>'}
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <div><div class="card-title">Risks Needing Attention</div><div class="card-sub">High-impact risks across initiatives</div></div>
+      </div>
+      ${highRisks.length ? highRisks.slice(0,4).map(r => `
+        <div class="risk-item ${{high:'risk-h',medium:'risk-m',low:'risk-l'}[r.impact]||'risk-m'}">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <div class="risk-title" style="margin-bottom:0">${esc(r.title)}</div>
+            <span style="font-size:10px;background:var(--surface-2);padding:1px 6px;border-radius:3px;color:var(--text-3)">${r.initName}</span>
+          </div>
+          <div class="risk-desc">${esc(r.desc)}</div>
+          <div class="risk-mit"><strong>Mitigation:</strong> ${esc(r.mitigation)}</div>
+        </div>`).join('') : '<div class="empty-state"><p>No high-impact risks flagged.</p></div>'}
+    </div>
+  </div>`;
+}
+
+function focusToggleTask(initId, taskId) {
+  const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
+  if (t) { t.status = t.status === 'complete' ? 'not-started' : 'complete'; saveState(); renderFocus(); }
+}
+
+// ============================================================
+// 5. INITIATIVE PAGE
+// ============================================================
+function renderInitiative(id) {
+  if (S.ui.objectiveView && S.ui.objectiveView.initId === id) {
+    return renderObjectiveDetail(id, S.ui.objectiveView.objId);
+  }
+  const i = S.initiatives[id];
+  const el = document.getElementById('view-' + id);
+  const objDone = i.objectives.filter(o => o.complete).length;
+
+  el.innerHTML = `
+  <div class="view-pad">
+    <div class="init-header">
+      <div class="flex-row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="init-title">${i.name}</div>
+          <div class="init-subtitle">${i.subtitle}</div>
+        </div>
+        <div class="flex-row" style="gap:8px;flex-shrink:0">
+          ${statusBadge(i.status)}
+          <span class="badge b-gray">${i.quarter}</span>
+        </div>
+      </div>
+      <div class="flex-row" style="gap:16px;flex-wrap:wrap">
+        <span class="init-owner">Owner: ${i.owners.join(', ')}</span>
+        <div class="init-progress" style="flex:1;min-width:180px">
+          <div style="flex:1"><div class="progress"><div class="progress-fill ${progressClass(i.status)}" style="width:${i.progress}%"></div></div></div>
+          <span class="init-pct">${i.progress}%</span>
+        </div>
+        <div class="flex-row" style="gap:6px">
+          <input type="range" min="0" max="100" value="${i.progress}" style="width:80px;cursor:pointer" oninput="updateProgress('${id}',this.value)">
+          <button class="btn btn-accent btn-sm" onclick="openArtifactFor('${id}')">Generate Artifact</button>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-2);line-height:1.5;margin-top:4px">${i.description}</p>
+    </div>
+
+    <!-- OBJECTIVES -->
+    <div class="card" style="max-width:720px">
+      <div class="card-hd">
+        <div><div class="card-title">Objectives</div><div class="card-sub">${objDone} of ${i.objectives.length} complete</div></div>
+      </div>
+      <ul class="task-list" id="obj-list-${id}">
+        ${i.objectives.map(o => renderObjItem(id, o)).join('')}
+      </ul>
+    </div>
+
+    <!-- NOTES -->
+    <div class="card" style="max-width:720px;margin-top:20px">
+      <div class="card-hd"><div class="card-title">Notes</div></div>
+      <textarea class="notes-area" id="notes-${id}" onblur="saveNotes('${id}')" placeholder="Add notes, context, or reminders…">${esc(i.notes)}</textarea>
+    </div>
+  </div>`;
+}
+
+function renderObjItem(initId, o) {
+  const tCount = (o.tasks||[]).length;
+  const rCount = (o.risks||[]).length;
+  const dCount = (o.decisions||[]).length;
+  const metaParts = [];
+  if (tCount) metaParts.push(`${tCount} task${tCount>1?'s':''}`);
+  if (rCount) metaParts.push(`${rCount} risk${rCount>1?'s':''}`);
+  if (dCount) metaParts.push(`${dCount} decision${dCount>1?'s':''}`);
+  return `<li class="obj-item" onclick="viewObjective('${initId}','${o.id}')">
+    <div class="obj-check ${o.complete?'ck':''}" onclick="event.stopPropagation();toggleObjective('${initId}','${o.id}')"></div>
+    <div class="obj-body">
+      <span class="obj-text ${o.complete?'done':''}">${esc(o.text)}</span>
+      ${metaParts.length ? `<div class="obj-meta">${metaParts.map(p => `<span class="obj-meta-count">${p}</span>`).join('<span style="color:var(--border)">·</span>')}</div>` : ''}
+    </div>
+    <span class="obj-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </li>`;
+}
+
+function renderTaskItem(initId, t) {
+  const isDone = t.status === 'complete';
+  const statusLabel = {
+    'not-started':'Not Started','in-progress':'In Progress',
+    'blocked':'Blocked','complete':'Complete'
+  }[t.status] || t.status;
+  const statusCls = {'not-started':'ts-ns','in-progress':'ts-ip','blocked':'ts-bl','complete':'ts-dn'}[t.status]||'';
+  const prioCls = {'high':'prio-high','medium':'prio-med','low':'prio-low'}[t.priority]||'';
+
+  return `<li class="task-item">
+    <div class="task-check ${isDone?'ck':''}" onclick="toggleTask('${initId}','${t.id}')"></div>
+    <div class="task-body">
+      <div class="task-text ${isDone?'done':''}">${esc(t.text)}</div>
+      <div class="task-meta">
+        ${t.owner ? `<span class="task-owner">${esc(t.owner)}</span>` : ''}
+        <span class="task-status ${statusCls}">${statusLabel}</span>
+        ${t.priority ? `<span class="${prioCls}">${t.priority}</span>` : ''}
+        ${t.due ? `<span style="font-size:11px;color:var(--text-3)">${t.due}</span>` : ''}
+      </div>
+    </div>
+    <div class="task-actions">
+      <button class="icon-btn" onclick="editTask('${initId}','${t.id}')" title="Edit">✎</button>
+      <button class="icon-btn" onclick="deleteTask('${initId}','${t.id}')" title="Delete" style="color:var(--red-bg)">✕</button>
+    </div>
+  </li>`;
+}
+
+function renderRiskItem(initId, r) {
+  const rCls = {high:'risk-h',medium:'risk-m',low:'risk-l'}[r.impact]||'risk-m';
+  return `<div class="risk-item ${rCls}" id="risk-${initId}-${r.id}">
+    <div class="risk-title">${esc(r.title)}</div>
+    <div class="risk-desc">${esc(r.desc)}</div>
+    <div class="risk-mit"><strong>Mitigation:</strong> ${esc(r.mitigation)}</div>
+  </div>`;
+}
+
+function renderDecisionItem(d) {
+  return `<div class="decision-item">
+    <span class="decision-date">${d.date}</span>
+    <span class="decision-text">${esc(d.text)}</span>
+  </div>`;
+}
+
+// ============================================================
+// 5b. OBJECTIVE DETAIL PAGE
+// ============================================================
+function viewObjective(initId, objId) {
+  S.ui.objectiveView = {initId, objId};
+  saveState();
+  renderInitiative(initId);
+  document.getElementById('main').scrollTop = 0;
+}
+
+function backToInitiative(initId) {
+  S.ui.objectiveView = null;
+  saveState();
+  renderInitiative(initId);
+  document.getElementById('main').scrollTop = 0;
+}
+
+function renderObjectiveDetail(initId, objId) {
+  const i = S.initiatives[initId];
+  const o = i.objectives.find(x => x.id === objId);
+  if (!o) { backToInitiative(initId); return; }
+  const el = document.getElementById('view-' + initId);
+  const tasks = o.tasks || [];
+  const risks = o.risks || [];
+  const decisions = o.decisions || [];
+  const doneTasks = tasks.filter(t => t.status === 'complete').length;
+  const highRisks = risks.filter(r => r.impact === 'high').length;
+
+  el.innerHTML = `
+  <div class="view-pad">
+    <button class="back-btn" onclick="backToInitiative('${initId}')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to ${esc(i.name)}
+    </button>
+    <div class="breadcrumb">
+      <button class="breadcrumb-link" onclick="backToInitiative('${initId}')">${esc(i.name)}</button>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Objective</span>
+    </div>
+
+    <div class="init-header" style="padding-bottom:20px;margin-bottom:28px">
+      <div class="flex-row" style="gap:10px;align-items:flex-start">
+        <div class="obj-check ${o.complete?'ck':''}" onclick="toggleObjectiveFromDetail('${initId}','${objId}')" style="margin-top:4px;width:20px;height:20px"></div>
+        <div style="flex:1">
+          <div class="init-title" style="font-size:20px;${o.complete?'text-decoration:line-through;color:var(--text-3)':''}">${esc(o.text)}</div>
+          <div class="flex-row" style="gap:10px;margin-top:8px">
+            ${statusBadge(o.complete ? 'complete' : 'on-track')}
+            <span style="font-size:12px;color:var(--text-3)">${tasks.length} tasks · ${risks.length} risks · ${decisions.length} decisions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <!-- TASKS -->
+        <div class="card">
+          <div class="card-hd">
+            <div><div class="card-title">Tasks</div><div class="card-sub">${doneTasks} of ${tasks.length} done</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAddObjTask('${initId}','${objId}')">+ Add Task</button>
+          </div>
+          <div class="add-form" id="add-obj-task-form-${initId}-${objId}">
+            <input type="text" id="new-obj-task-text-${initId}-${objId}" placeholder="Task description…">
+            <div class="add-form-row">
+              <input type="text" id="new-obj-task-owner-${initId}-${objId}" placeholder="Owner">
+              <input type="date" id="new-obj-task-due-${initId}-${objId}">
+            </div>
+            <div class="add-form-row">
+              <select id="new-obj-task-status-${initId}-${objId}">
+                <option value="not-started">Not Started</option>
+                <option value="in-progress">In Progress</option>
+                <option value="blocked">Blocked</option>
+                <option value="complete">Complete</option>
+              </select>
+              <select id="new-obj-task-prio-${initId}-${objId}">
+                <option value="high">High Priority</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="add-form-actions">
+              <button class="btn btn-ghost btn-sm" onclick="toggleAddObjTask('${initId}','${objId}')">Cancel</button>
+              <button class="btn btn-primary btn-sm" onclick="saveNewObjTask('${initId}','${objId}')">Save Task</button>
+            </div>
+          </div>
+          <ul class="task-list" id="obj-task-list-${initId}-${objId}">
+            ${tasks.length ? tasks.map(t => renderObjTaskItem(initId, objId, t)).join('') : '<li class="empty-state" style="padding:18px 0"><p>No tasks yet</p></li>'}
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <!-- RISKS -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-hd">
+            <div><div class="card-title">Risks</div><div class="card-sub">${highRisks} high-impact</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAddObjRisk('${initId}','${objId}')">+ Add</button>
+          </div>
+          <div class="add-form" id="add-obj-risk-form-${initId}-${objId}">
+            <input type="text" id="new-obj-risk-title-${initId}-${objId}" placeholder="Risk title…">
+            <input type="text" id="new-obj-risk-desc-${initId}-${objId}" placeholder="Description…">
+            <div class="add-form-row">
+              <select id="new-obj-risk-like-${initId}-${objId}"><option value="high">High likelihood</option><option value="medium" selected>Medium</option><option value="low">Low</option></select>
+              <select id="new-obj-risk-impact-${initId}-${objId}"><option value="high">High impact</option><option value="medium" selected>Medium</option><option value="low">Low</option></select>
+            </div>
+            <input type="text" id="new-obj-risk-mit-${initId}-${objId}" placeholder="Mitigation plan…">
+            <div class="add-form-actions">
+              <button class="btn btn-ghost btn-sm" onclick="toggleAddObjRisk('${initId}','${objId}')">Cancel</button>
+              <button class="btn btn-primary btn-sm" onclick="saveNewObjRisk('${initId}','${objId}')">Save Risk</button>
+            </div>
+          </div>
+          <div id="obj-risk-list-${initId}-${objId}">
+            ${risks.length ? risks.map(r => renderObjRiskItem(initId, objId, r)).join('') : '<div class="empty-state" style="padding:18px 0"><p>No risks identified</p></div>'}
+          </div>
+        </div>
+
+        <!-- DECISIONS -->
+        <div class="card">
+          <div class="card-hd">
+            <div><div class="card-title">Key Decisions</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="addObjDecision('${initId}','${objId}')">+ Add</button>
+          </div>
+          <div id="obj-decision-list-${initId}-${objId}">
+            ${decisions.length ? decisions.map(d => renderDecisionItem(d)).join('') : '<div class="empty-state" style="padding:18px 0"><p>No decisions logged</p></div>'}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderObjTaskItem(initId, objId, t) {
+  const isDone = t.status === 'complete';
+  const statusLabel = {
+    'not-started':'Not Started','in-progress':'In Progress',
+    'blocked':'Blocked','complete':'Complete'
+  }[t.status] || t.status;
+  const statusCls = {'not-started':'ts-ns','in-progress':'ts-ip','blocked':'ts-bl','complete':'ts-dn'}[t.status]||'';
+  const prioCls = {'high':'prio-high','medium':'prio-med','low':'prio-low'}[t.priority]||'';
+
+  return `<li class="task-item">
+    <div class="task-check ${isDone?'ck':''}" onclick="toggleObjTask('${initId}','${objId}','${t.id}')"></div>
+    <div class="task-body">
+      <div class="task-text ${isDone?'done':''}">${esc(t.text)}</div>
+      <div class="task-meta">
+        ${t.owner ? `<span class="task-owner">${esc(t.owner)}</span>` : ''}
+        <span class="task-status ${statusCls}">${statusLabel}</span>
+        ${t.priority ? `<span class="${prioCls}">${t.priority}</span>` : ''}
+        ${t.due ? `<span style="font-size:11px;color:var(--text-3)">${t.due}</span>` : ''}
+      </div>
+    </div>
+    <div class="task-actions">
+      <button class="icon-btn" onclick="editObjTask('${initId}','${objId}','${t.id}')" title="Edit">✎</button>
+      <button class="icon-btn" onclick="deleteObjTask('${initId}','${objId}','${t.id}')" title="Delete" style="color:var(--red-bg)">✕</button>
+    </div>
+  </li>`;
+}
+
+function renderObjRiskItem(initId, objId, r) {
+  const rCls = {high:'risk-h',medium:'risk-m',low:'risk-l'}[r.impact]||'risk-m';
+  return `<div class="risk-item ${rCls}">
+    <div class="risk-title">${esc(r.title)}</div>
+    <div class="risk-desc">${esc(r.desc)}</div>
+    <div class="risk-mit"><strong>Mitigation:</strong> ${esc(r.mitigation)}</div>
+  </div>`;
+}
+
+// ============================================================
+// 6. INITIATIVE INTERACTIONS
+// ============================================================
+function toggleObjective(initId, objId) {
+  const o = S.initiatives[initId].objectives.find(x => x.id === objId);
+  if (o) { o.complete = !o.complete; saveState(); renderInitiative(initId); }
+}
+
+function toggleObjectiveFromDetail(initId, objId) {
+  const o = S.initiatives[initId].objectives.find(x => x.id === objId);
+  if (o) { o.complete = !o.complete; saveState(); renderObjectiveDetail(initId, objId); }
+}
+
+function toggleTask(initId, taskId) {
+  const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
+  if (t) { t.status = t.status === 'complete' ? 'not-started' : 'complete'; saveState(); renderInitiative(initId); }
+}
+
+function quickToggleTask(initId, taskId) {
+  toggleTask(initId, taskId);
+  renderDashboard();
+}
+
+function toggleAddTask(initId) {
+  const form = document.getElementById(`add-task-form-${initId}`);
+  form.classList.toggle('open');
+}
+
+function toggleAddRisk(initId) {
+  const form = document.getElementById(`add-risk-form-${initId}`);
+  form.classList.toggle('open');
+}
+
+function saveNewTask(initId) {
+  const text = document.getElementById(`new-task-text-${initId}`).value.trim();
+  if (!text) { toast('Please enter a task description.', 'err'); return; }
+  const task = {
+    id: genId(),
+    text,
+    owner: document.getElementById(`new-task-owner-${initId}`).value.trim(),
+    due: document.getElementById(`new-task-due-${initId}`).value,
+    status: document.getElementById(`new-task-status-${initId}`).value,
+    priority: document.getElementById(`new-task-prio-${initId}`).value
+  };
+  S.initiatives[initId].tasks.push(task);
+  saveState();
+  toggleAddTask(initId);
+  renderInitiative(initId);
+  toast('Task added.');
+}
+
+function saveNewRisk(initId) {
+  const title = document.getElementById(`new-risk-title-${initId}`).value.trim();
+  if (!title) { toast('Please enter a risk title.', 'err'); return; }
+  const risk = {
+    id: genId(),
+    title,
+    desc: document.getElementById(`new-risk-desc-${initId}`).value.trim(),
+    likelihood: document.getElementById(`new-risk-like-${initId}`).value,
+    impact: document.getElementById(`new-risk-impact-${initId}`).value,
+    mitigation: document.getElementById(`new-risk-mit-${initId}`).value.trim()
+  };
+  S.initiatives[initId].risks.push(risk);
+  saveState();
+  toggleAddRisk(initId);
+  renderInitiative(initId);
+  toast('Risk added.');
+}
+
+function deleteTask(initId, taskId) {
+  S.initiatives[initId].tasks = S.initiatives[initId].tasks.filter(t => t.id !== taskId);
+  saveState();
+  renderInitiative(initId);
+}
+
+function editTask(initId, taskId) {
+  const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
+  if (!t) return;
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Edit Task</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Task</label><input type="text" id="et-text" value="${esc(t.text)}"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><label>Owner</label><input type="text" id="et-owner" value="${esc(t.owner)}"></div>
+        <div class="field"><label>Due Date</label><input type="date" id="et-due" value="${t.due||''}"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><label>Status</label>
+          <select id="et-status">
+            ${['not-started','in-progress','blocked','complete'].map(s => `<option value="${s}" ${t.status===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Priority</label>
+          <select id="et-prio">
+            ${['high','medium','low'].map(p => `<option value="${p}" ${t.priority===p?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditTask('${initId}','${taskId}')">Save Changes</button>
+    </div>`);
+}
+
+function saveEditTask(initId, taskId) {
+  const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
+  if (!t) return;
+  t.text = document.getElementById('et-text').value.trim();
+  t.owner = document.getElementById('et-owner').value.trim();
+  t.due = document.getElementById('et-due').value;
+  t.status = document.getElementById('et-status').value;
+  t.priority = document.getElementById('et-prio').value;
+  saveState();
+  closeModal();
+  renderInitiative(initId);
+  toast('Task updated.');
+}
+
+function addDecision(initId) {
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Log a Decision</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Decision</label><input type="text" id="nd-text" placeholder="What was decided?"></div>
+      <div class="field"><label>Date</label><input type="date" id="nd-date" value="${new Date().toISOString().slice(0,10)}"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDecision('${initId}')">Save</button>
+    </div>`);
+}
+
+function saveDecision(initId) {
+  const text = document.getElementById('nd-text').value.trim();
+  if (!text) { toast('Please enter a decision.', 'err'); return; }
+  S.initiatives[initId].decisions.unshift({id:genId(), text, date:document.getElementById('nd-date').value});
+  saveState();
+  closeModal();
+  renderInitiative(initId);
+  toast('Decision logged.');
+}
+
+function updateProgress(initId, val) {
+  S.initiatives[initId].progress = parseInt(val);
+  saveState();
+  // live update pct display only
+  const pct = document.querySelector(`#view-${initId} .init-pct`);
+  if (pct) pct.textContent = val + '%';
+  const fill = document.querySelector(`#view-${initId} .progress-fill`);
+  if (fill) fill.style.width = val + '%';
+}
+
+function saveNotes(initId) {
+  const ta = document.getElementById(`notes-${initId}`);
+  if (ta) { S.initiatives[initId].notes = ta.value; saveState(); }
+}
+
+// ============================================================
+// 6b. OBJECTIVE-LEVEL INTERACTIONS
+// ============================================================
+function getObjective(initId, objId) {
+  return S.initiatives[initId].objectives.find(x => x.id === objId);
+}
+
+function toggleAddObjTask(initId, objId) {
+  const form = document.getElementById(`add-obj-task-form-${initId}-${objId}`);
+  form.classList.toggle('open');
+}
+
+function saveNewObjTask(initId, objId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const text = document.getElementById(`new-obj-task-text-${initId}-${objId}`).value.trim();
+  if (!text) { toast('Please enter a task description.', 'err'); return; }
+  const task = {
+    id: genId(),
+    text,
+    owner: document.getElementById(`new-obj-task-owner-${initId}-${objId}`).value.trim(),
+    due: document.getElementById(`new-obj-task-due-${initId}-${objId}`).value,
+    status: document.getElementById(`new-obj-task-status-${initId}-${objId}`).value,
+    priority: document.getElementById(`new-obj-task-prio-${initId}-${objId}`).value
+  };
+  o.tasks.push(task);
+  saveState();
+  renderObjectiveDetail(initId, objId);
+  toast('Task added.');
+}
+
+function toggleObjTask(initId, objId, taskId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const t = o.tasks.find(x => x.id === taskId);
+  if (t) { t.status = t.status === 'complete' ? 'not-started' : 'complete'; saveState(); renderObjectiveDetail(initId, objId); }
+}
+
+function deleteObjTask(initId, objId, taskId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  o.tasks = o.tasks.filter(t => t.id !== taskId);
+  saveState();
+  renderObjectiveDetail(initId, objId);
+}
+
+function editObjTask(initId, objId, taskId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const t = o.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Edit Task</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Description</label><input id="eot-text" value="${esc(t.text)}"></div>
+      <div class="field"><label>Owner</label><input id="eot-owner" value="${esc(t.owner)}"></div>
+      <div class="field"><label>Due Date</label><input type="date" id="eot-due" value="${t.due}"></div>
+      <div class="field"><label>Status</label><select id="eot-status">
+        <option value="not-started" ${t.status==='not-started'?'selected':''}>Not Started</option>
+        <option value="in-progress" ${t.status==='in-progress'?'selected':''}>In Progress</option>
+        <option value="blocked" ${t.status==='blocked'?'selected':''}>Blocked</option>
+        <option value="complete" ${t.status==='complete'?'selected':''}>Complete</option>
+      </select></div>
+      <div class="field"><label>Priority</label><select id="eot-prio">
+        <option value="high" ${t.priority==='high'?'selected':''}>High</option>
+        <option value="medium" ${t.priority==='medium'?'selected':''}>Medium</option>
+        <option value="low" ${t.priority==='low'?'selected':''}>Low</option>
+      </select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveEditObjTask('${initId}','${objId}','${taskId}')">Save</button>
+    </div>`);
+}
+
+function saveEditObjTask(initId, objId, taskId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const t = o.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  t.text = document.getElementById('eot-text').value.trim();
+  t.owner = document.getElementById('eot-owner').value.trim();
+  t.due = document.getElementById('eot-due').value;
+  t.status = document.getElementById('eot-status').value;
+  t.priority = document.getElementById('eot-prio').value;
+  saveState();
+  closeModal();
+  renderObjectiveDetail(initId, objId);
+  toast('Task updated.');
+}
+
+function toggleAddObjRisk(initId, objId) {
+  const form = document.getElementById(`add-obj-risk-form-${initId}-${objId}`);
+  form.classList.toggle('open');
+}
+
+function saveNewObjRisk(initId, objId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const title = document.getElementById(`new-obj-risk-title-${initId}-${objId}`).value.trim();
+  if (!title) { toast('Please enter a risk title.', 'err'); return; }
+  const risk = {
+    id: genId(),
+    title,
+    desc: document.getElementById(`new-obj-risk-desc-${initId}-${objId}`).value.trim(),
+    likelihood: document.getElementById(`new-obj-risk-like-${initId}-${objId}`).value,
+    impact: document.getElementById(`new-obj-risk-impact-${initId}-${objId}`).value,
+    mitigation: document.getElementById(`new-obj-risk-mit-${initId}-${objId}`).value.trim()
+  };
+  o.risks.push(risk);
+  saveState();
+  renderObjectiveDetail(initId, objId);
+  toast('Risk added.');
+}
+
+function addObjDecision(initId, objId) {
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Log a Decision</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Decision</label><input id="nod-text" placeholder="What was decided?"></div>
+      <div class="field"><label>Date</label><input type="date" id="nod-date" value="${new Date().toISOString().split('T')[0]}"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveObjDecision('${initId}','${objId}')">Save</button>
+    </div>`);
+}
+
+function saveObjDecision(initId, objId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const text = document.getElementById('nod-text').value.trim();
+  if (!text) { toast('Please enter a decision.', 'err'); return; }
+  o.decisions.unshift({id:genId(), text, date:document.getElementById('nod-date').value});
+  saveState();
+  closeModal();
+  renderObjectiveDetail(initId, objId);
+  toast('Decision logged.');
+}
+
+// ============================================================
+// 7. AI ASSISTANT
+// ============================================================
+function renderAssistant() {
+  const el = document.getElementById('view-assistant');
+  const msgs = S.chat.messages;
+  el.innerHTML = `
+  <div class="chat-wrap">
+    <div class="chat-hd">
+      <div class="chat-title">AI Assistant</div>
+      <div class="chat-sub">Powered by Claude · Ask anything about the Technology Lifecycle Program</div>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      ${msgs.length === 0 ? `
+        <div class="chat-empty">
+          <div class="ce-title">What do you need to know?</div>
+          <div class="ce-sub">Ask about priorities, risks, decisions, next steps — or anything about the TLP.</div>
+          <div class="starters">
+            ${['What should I focus on this week?','What are the biggest risks right now?','Summarize Q2 progress','What decisions still need to be made?','What is blocking us?','How is Zipped progressing?','Give me a status update I can share with Dave','What tasks are overdue or blocked?'].map(q =>
+              `<div class="starter" onclick="sendStarter(this.textContent)">${q}</div>`).join('')}
+          </div>
+        </div>` : msgs.map(renderMsg).join('')}
+    </div>
+    <div class="chat-bar">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask anything about the Technology Lifecycle Program…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+      <button class="chat-send" id="chat-send-btn" onclick="sendChat()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 8 2 2v4.5l8 1.5-8 1.5V14z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>`;
+  // auto-resize textarea
+  const ta = document.getElementById('chat-input');
+  if (ta) ta.addEventListener('input', () => { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,110)+'px'; });
+}
+
+function renderMsg(m) {
+  return `<div class="msg ${m.role}">
+    <div class="msg-av">${m.role==='user'?'JJ':'AI'}</div>
+    <div class="msg-bub">${m.role==='assistant' ? md(m.content) : esc(m.content).replace(/\n/g,'<br>')}</div>
+  </div>`;
+}
+
+function sendStarter(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!S.settings.apiKey) { toast('Add your Anthropic API key in Settings first.', 'err'); navigate('settings'); return; }
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  S.chat.messages.push({role:'user', content: text});
+  saveState();
+
+  // Add user bubble + typing indicator
+  const msgsEl = document.getElementById('chat-msgs');
+  if (msgsEl) {
+    if (msgsEl.querySelector('.chat-empty')) msgsEl.innerHTML = '';
+    msgsEl.innerHTML += renderMsg({role:'user', content:text});
+    msgsEl.innerHTML += `<div class="msg assistant" id="typing-ind">
+      <div class="msg-av">AI</div>
+      <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    </div>`;
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
+
+  const btn = document.getElementById('chat-send-btn');
+  if (btn) btn.disabled = true;
+
+  try {
+    const reply = await callClaude(
+      S.chat.messages.map(m => ({role:m.role, content:m.content})),
+      buildSystemPrompt()
+    );
+    S.chat.messages.push({role:'assistant', content:reply});
+    saveState();
+    const ti = document.getElementById('typing-ind');
+    if (ti) ti.remove();
+    if (msgsEl) {
+      msgsEl.innerHTML += renderMsg({role:'assistant', content:reply});
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+    }
+  } catch(e) {
+    const ti = document.getElementById('typing-ind');
+    if (ti) ti.remove();
+    toast('API error: ' + e.message, 'err');
+  }
+
+  if (btn) btn.disabled = false;
+}
+
+async function generateFocus() {
+  if (!S.settings.apiKey) { toast('Add your Anthropic API key in Settings.', 'err'); navigate('settings'); return; }
+  const btn = document.getElementById('focus-gen-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generating…'; }
+
+  try {
+    const reply = await callClaude([{role:'user', content:'What should I focus on this week? Give me 4–5 specific, actionable priorities as a brief bulleted list. Be direct and specific to the actual tasks and risks in the program.'}], buildSystemPrompt());
+    S.ui.focusContent = md(reply);
+    saveState();
+    const fc = document.getElementById('focus-content');
+    if (fc) fc.innerHTML = S.ui.focusContent;
+  } catch(e) {
+    toast('Error: ' + e.message, 'err');
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Regenerate'; }
+}
+
+// ============================================================
+// 8. ARTIFACTS
+// ============================================================
+const ARTIFACT_TYPES = [
+  {id:'charter', icon:'📋', name:'Program Charter', desc:'Formal scope, goals, stakeholders, and governance'},
+  {id:'risk-register', icon:'⚠️', name:'Risk Register', desc:'Full risk log with likelihood, impact, and mitigations'},
+  {id:'raci', icon:'👥', name:'RACI Matrix', desc:'Roles and responsibilities across initiatives'},
+  {id:'status-report', icon:'📊', name:'Status Report', desc:'Executive-ready Q2 progress summary'},
+  {id:'stakeholder-map', icon:'🗺️', name:'Stakeholder Map', desc:'Key stakeholders, interests, and communication needs'},
+  {id:'project-plan', icon:'📅', name:'Project Plan', desc:'Timeline, milestones, and dependencies'},
+  {id:'decision-log', icon:'📝', name:'Decision Log', desc:'Consolidated decisions across all initiatives'},
+  {id:'sbo-process', icon:'🔄', name:'SBO Process Doc', desc:'Division-specific SBO process documentation'},
+  {id:'kickoff-agenda', icon:'🚀', name:'Meeting Agenda', desc:'Structured agenda for any TLP meeting'}
+];
+
+function renderArtifacts() {
+  const el = document.getElementById('view-artifacts');
+  el.innerHTML = `
+  <div class="view-pad">
+    <div class="page-hd">
+      <div><h1 class="page-title">Artifacts</h1><p class="page-sub">Generate and manage program documents</p></div>
+    </div>
+    <div class="art-grid">
+      ${ARTIFACT_TYPES.map(a => `
+        <div class="art-type" onclick="generateArtifact('${a.id}')">
+          <div class="art-icon">${a.icon}</div>
+          <div class="art-name">${a.name}</div>
+          <div class="art-desc">${a.desc}</div>
+        </div>`).join('')}
+    </div>
+    ${S.artifacts.length ? `
+      <div class="card-title" style="margin-bottom:12px">Generated Artifacts</div>
+      ${S.artifacts.map(a => `
+        <div class="art-list-item">
+          <div>
+            <div class="art-list-name">${esc(a.title)}</div>
+            <div class="art-list-meta">${a.type} · ${a.date}</div>
+          </div>
+          <div class="flex-row">
+            <button class="btn btn-ghost btn-sm" onclick="viewArtifact('${a.id}')">View</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyArtifact('${a.id}')">Copy</button>
+            <button class="icon-btn" onclick="deleteArtifact('${a.id}')" style="color:var(--red)">✕</button>
+          </div>
+        </div>`).join('')}
+    ` : '<div class="empty-state" style="padding-top:0"><p>Click any artifact type above to generate with AI.</p></div>'}
+  </div>`;
+}
+
+async function generateArtifact(typeId) {
+  if (!S.settings.apiKey) { toast('Add your Anthropic API key in Settings.', 'err'); navigate('settings'); return; }
+  const type = ARTIFACT_TYPES.find(a => a.id === typeId);
+  if (!type) return;
+
+  // Show modal with initiative picker for relevant types
+  const initOptions = Object.values(S.initiatives).map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Generate ${type.name}</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Focus Initiative (optional)</label>
+        <select id="art-init-sel"><option value="all">All initiatives</option>${initOptions}</select>
+      </div>
+      <div class="field"><label>Additional Instructions</label>
+        <input type="text" id="art-extra" placeholder="Any specific focus or requirements…">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-accent" id="art-gen-btn" onclick="doGenerateArtifact('${typeId}')">Generate with AI</button>
+    </div>`);
+}
+
+async function doGenerateArtifact(typeId) {
+  const type = ARTIFACT_TYPES.find(a => a.id === typeId);
+  const initSel = document.getElementById('art-init-sel').value;
+  const extra = document.getElementById('art-extra').value;
+  const btn = document.getElementById('art-gen-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generating…'; }
+
+  const initCtx = initSel === 'all' ? 'all initiatives' : S.initiatives[initSel]?.name;
+  const prompt = `Generate a complete, professional ${type.name} for the Technology Lifecycle Program${initCtx ? ' focused on ' + initCtx : ''}. ${extra || ''} Use plain text formatting with clear sections. Be specific, practical, and grounded in the actual program details.`;
+
+  try {
+    const content = await callClaude([{role:'user',content:prompt}], buildSystemPrompt());
+    const artifact = {
+      id: genId(),
+      type: type.name,
+      title: `${type.name}${initSel !== 'all' ? ' — ' + S.initiatives[initSel]?.name.split(' ').slice(0,3).join(' ') : ''}`,
+      content,
+      date: new Date().toLocaleDateString()
+    };
+    S.artifacts.unshift(artifact);
+    saveState();
+    closeModal();
+    showModal(`
+      <div class="modal-hd"><span class="modal-title">${esc(artifact.title)}</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="modal-body"><div class="modal-art-content">${esc(content)}</div></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="copyText(${JSON.stringify(content)})">Copy to Clipboard</button>
+      </div>`);
+    renderArtifacts();
+    toast('Artifact generated.');
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Generate with AI'; }
+    toast('Error: ' + e.message, 'err');
+  }
+}
+
+function viewArtifact(id) {
+  const a = S.artifacts.find(x => x.id === id);
+  if (!a) return;
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">${esc(a.title)}</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body"><div class="modal-art-content">${esc(a.content)}</div></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary" onclick="copyText(${JSON.stringify(a.content)})">Copy</button>
+    </div>`);
+}
+
+function copyArtifact(id) {
+  const a = S.artifacts.find(x => x.id === id);
+  if (a) copyText(a.content);
+}
+
+function deleteArtifact(id) {
+  S.artifacts = S.artifacts.filter(a => a.id !== id);
+  saveState();
+  renderArtifacts();
+  toast('Artifact deleted.');
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard.')).catch(() => toast('Copy failed.','err'));
+}
+
+function openArtifactFor(initId) {
+  navigate('artifacts');
+  setTimeout(() => generateArtifact('status-report'), 100);
+}
+
+// ============================================================
+// 9. TRANSCRIPTS
+// ============================================================
+function renderTranscripts() {
+  const el = document.getElementById('view-transcripts');
+  el.innerHTML = `
+  <div class="view-pad">
+    <div class="page-hd">
+      <div><h1 class="page-title">Transcripts</h1><p class="page-sub">Upload meeting transcripts and extract insights</p></div>
+    </div>
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <div class="dz-icon">⬆</div>
+      <div class="dz-title">Drop a transcript here or click to upload</div>
+      <div class="dz-sub">Supports .txt and .vtt (WEBVTT) files</div>
+      <input type="file" id="file-input" accept=".txt,.vtt" style="display:none" onchange="handleFileUpload(this)">
+    </div>
+    <div id="transcript-list">
+      ${S.transcripts.length ? S.transcripts.map(renderTranscriptItem).join('') : '<div class="empty-state"><p>No transcripts uploaded yet.</p></div>'}
+    </div>
+  </div>`;
+
+  // Drag and drop
+  const dz = document.getElementById('drop-zone');
+  if (dz) {
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.classList.remove('over');
+      const f = e.dataTransfer.files[0];
+      if (f) processFile(f);
+    });
+  }
+}
+
+function renderTranscriptItem(tx) {
+  return `<div class="tx-item" id="tx-${tx.id}">
+    <div class="tx-item-hd">
+      <div>
+        <div class="tx-name">${esc(tx.name)}</div>
+        <div class="tx-date">${tx.date} · ${tx.lines} lines</div>
+      </div>
+      <div class="tx-actions">
+        ${S.settings.apiKey ? `<button class="btn btn-accent btn-sm" onclick="analyzeTx('${tx.id}')">Analyze with AI</button>` : '<span style="font-size:11px;color:var(--text-3)">Add API key to analyze</span>'}
+        <button class="icon-btn" onclick="deleteTx('${tx.id}')" style="color:var(--red)">✕</button>
+      </div>
+    </div>
+    ${tx.extracted ? renderExtracted(tx) : ''}
+  </div>`;
+}
+
+function renderExtracted(tx) {
+  const initOptions = Object.values(S.initiatives).map(i => `<option value="${i.id}">${i.name.split(' ').slice(0,3).join(' ')}</option>`).join('');
+  const mkSection = (title, items, type) => {
+    if (!items || !items.length) return '';
+    return `<div class="extracted-section">
+      <div class="extracted-title">${title} (${items.length})</div>
+      ${items.map((item, idx) => `
+        <div class="extracted-item">
+          <div class="extracted-text">${esc(item)}</div>
+          <div class="add-to-init">
+            <select id="add-sel-${tx.id}-${type}-${idx}">${initOptions}</select>
+            <button onclick="addExtractedItem('${tx.id}','${type}',${idx})">Add</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  };
+  return `
+    ${mkSection('Tasks', tx.extracted.tasks, 'task')}
+    ${mkSection('Decisions', tx.extracted.decisions, 'decision')}
+    ${mkSection('Risks', tx.extracted.risks, 'risk')}`;
+}
+
+function handleFileUpload(input) {
+  const f = input.files[0];
+  if (f) processFile(f);
+}
+
+function processFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const raw = e.target.result;
+    const text = file.name.endsWith('.vtt') ? stripVTT(raw) : raw;
+    const tx = {
+      id: genId(),
+      name: file.name,
+      date: new Date().toLocaleDateString(),
+      lines: text.split('\n').filter(l => l.trim()).length,
+      content: text,
+      extracted: null
+    };
+    S.transcripts.unshift(tx);
+    saveState();
+    renderTranscripts();
+    toast('Transcript uploaded: ' + file.name);
+  };
+  reader.readAsText(file);
+}
+
+function stripVTT(content) {
+  return content
+    .replace(/^WEBVTT[\s\S]*?\n\n/, '')
+    .replace(/^\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}.*$/gm, '')
+    .replace(/^\s*\d+\s*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+async function analyzeTx(txId) {
+  const tx = S.transcripts.find(t => t.id === txId);
+  if (!tx || !S.settings.apiKey) return;
+
+  const btn = document.querySelector(`#tx-${txId} .btn-accent`);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Analyzing…'; }
+
+  const prompt = `Analyze this meeting transcript and extract:
+1. ACTION ITEMS / TASKS: specific things people committed to do (with owner if mentioned)
+2. DECISIONS: concrete decisions that were made
+3. RISKS / CONCERNS: issues, blockers, or risks mentioned
+
+Format your response as JSON exactly like this:
+{"tasks":["task1","task2"],"decisions":["decision1"],"risks":["risk1"]}
+
+Only include real, actionable items. Here is the transcript:
+
+${tx.content.substring(0, 6000)}`;
+
+  try {
+    const reply = await callClaude([{role:'user',content:prompt}], 'You are a meeting notes analyst. Extract structured data from transcripts. Always respond with valid JSON only.');
+    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      tx.extracted = JSON.parse(jsonMatch[0]);
+      saveState();
+      renderTranscripts();
+      toast('Analysis complete!');
+    }
+  } catch(e) {
+    toast('Analysis error: ' + e.message, 'err');
+    if (btn) { btn.disabled = false; btn.textContent = 'Analyze with AI'; }
+  }
+}
+
+function addExtractedItem(txId, type, idx) {
+  const tx = S.transcripts.find(t => t.id === txId);
+  if (!tx || !tx.extracted) return;
+  const itemText = tx.extracted[type + 's']?.[idx];
+  if (!itemText) return;
+  const selEl = document.getElementById(`add-sel-${txId}-${type}-${idx}`);
+  const initId = selEl ? selEl.value : 'sbo';
+  const init = S.initiatives[initId];
+  if (!init) return;
+
+  if (type === 'task') {
+    init.tasks.push({id:genId(), text:itemText, owner:'', due:'', status:'not-started', priority:'medium'});
+    toast('Task added to ' + init.name.split(' ').slice(0,3).join(' '));
+  } else if (type === 'decision') {
+    init.decisions.unshift({id:genId(), text:itemText, date:new Date().toISOString().slice(0,10)});
+    toast('Decision added.');
+  } else if (type === 'risk') {
+    init.risks.push({id:genId(), title:itemText.substring(0,60), desc:itemText, likelihood:'medium', impact:'medium', mitigation:''});
+    toast('Risk added.');
+  }
+  saveState();
+}
+
+function deleteTx(id) {
+  S.transcripts = S.transcripts.filter(t => t.id !== id);
+  saveState();
+  renderTranscripts();
+  toast('Transcript removed.');
+}
+
+// ============================================================
+// 10. SETTINGS
+// ============================================================
+function renderSettings() {
+  const el = document.getElementById('view-settings');
+  el.innerHTML = `
+  <div class="view-pad" style="max-width:600px">
+    <div class="page-hd"><div><h1 class="page-title">Settings</h1><p class="page-sub">Configure your TLP Hub</p></div></div>
+    <div class="settings-section">
+      <div class="settings-title">Anthropic API Key</div>
+      <div class="field">
+        <label>API Key</label>
+        <div class="api-key-wrap">
+          <input type="password" id="api-key-input" value="${S.settings.apiKey}" placeholder="sk-ant-…">
+          <button class="api-key-toggle" onclick="toggleApiVis()">👁</button>
+        </div>
+        <div class="field-note">Required for AI Assistant, artifact generation, and transcript analysis. Your key is stored locally in your browser only and never sent anywhere except directly to Anthropic's API.</div>
+      </div>
+      <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Data</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-ghost" onclick="exportData()">Export Data (JSON)</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">Import Data</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
+        <button class="btn btn-ghost" style="color:var(--red);border-color:var(--red-bg)" onclick="confirmReset()">Reset All Data</button>
+      </div>
+      <div class="field-note mt-2">Export to back up your tasks, decisions, and artifacts. Import to restore from a backup.</div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">About</div>
+      <p style="font-size:13px;color:var(--text-2);line-height:1.6">TLP Hub is a personal program management tool for the BambooHR Technology Lifecycle Program. Built for JoJo Jones, Q2 2026.</p>
+    </div>
+  </div>`;
+}
+
+function toggleApiVis() {
+  const inp = document.getElementById('api-key-input');
+  if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function saveSettings() {
+  const key = document.getElementById('api-key-input').value.trim();
+  S.settings.apiKey = key;
+  saveState();
+  toast('Settings saved.');
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `tlp-hub-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('Data exported.');
+}
+
+function importData(input) {
+  const f = input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      S = JSON.parse(e.target.result);
+      saveState();
+      navigate(S.ui.currentView || 'dashboard');
+      toast('Data imported.');
+    } catch(err) { toast('Invalid file.', 'err'); }
+  };
+  reader.readAsText(f);
+}
+
+function confirmReset() {
+  if (confirm('Reset all data? This will restore the original Q2 2026 initiative data and clear all tasks, artifacts, and transcripts you have added. This cannot be undone.')) {
+    S = JSON.parse(JSON.stringify(DEFAULTS));
+    saveState();
+    navigate('dashboard');
+    toast('Data reset to defaults.');
+  }
+}
+
+// ============================================================
+// 11. CLAUDE API
+// ============================================================
+async function callClaude(messages, systemPrompt) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': S.settings.apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: S.settings.model || 'claude-sonnet-4-6',
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `HTTP ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.content[0].text;
+}
+
+function buildSystemPrompt() {
+  const today = new Date().toLocaleDateString('en-US', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const initSummary = Object.values(S.initiatives).map(i => {
+    const aTasks = allObjTasks(i);
+    const openTasks = aTasks.filter(t => t.status !== 'complete');
+    const aRisks = allObjRisks(i);
+    const highRisks = aRisks.filter(r => r.impact === 'high');
+    const aDecisions = allObjDecisions(i);
+    return `## ${i.name}
+Status: ${i.status} | Progress: ${i.progress}% | Owner: ${i.owners.join(', ')}
+Description: ${i.description}
+Objectives: ${i.objectives.map(o=>`"${o.text}" (${o.complete?'complete':'open'}, ${(o.tasks||[]).length} tasks, ${(o.risks||[]).length} risks)`).join('; ')}
+Open High-Priority Tasks: ${aTasks.filter(t=>t.priority==='high'&&t.status!=='complete').map(t=>`"${t.text}" (${t.status}, owner: ${t.owner})`).join('; ') || 'none'}
+All Open Tasks (${openTasks.length}): ${openTasks.map(t=>`"${t.text}" [${t.status}/${t.priority}]`).join('; ')}
+High-Impact Risks: ${highRisks.map(r=>`"${r.title}" — ${r.desc}`).join('; ') || 'none'}
+Recent Decisions: ${aDecisions.slice(0,3).map(d=>`"${d.text}" (${d.date})`).join('; ')}
+Notes: ${i.notes}`;
+  }).join('\n\n');
+
+  return `You are an AI assistant for Jordan "JoJo" Jones, a Program Manager at BambooHR managing the Technology Lifecycle Program (TLP). Today is ${today}.
+
+The TLP is a Q2 2026 program with three active initiatives. You have full context on all of them. Be direct, specific, and practical. When giving priorities or recommendations, reference actual tasks and risks by name. Keep responses concise unless asked for detail.
+
+KEY ACRONYMS: TLP = Technology Lifecycle Program | SBO = System Business Owner | PIR = Platform Integration Review | ESC = Enterprise Software Committee
+
+TEAM: JoJo Jones (program lead), Jessi Duffin (team member), Melissa Boud (team member), Dave Petersen (VP/exec sponsor), Alan Roper (finance), Fadi (system architect/IT), Ryan Packer (leadership)
+
+${initSummary}`;
+}
+
+// ============================================================
+// 12. MODAL + TOAST + UTILS
+// ============================================================
+function showModal(html) {
+  const ov = document.getElementById('modal-ov');
+  const box = document.getElementById('modal-box');
+  if (!ov || !box) return;
+  box.innerHTML = html;
+  ov.classList.add('open');
+  ov.onclick = e => { if (e.target === ov) closeModal(); };
+}
+
+function closeModal() {
+  const ov = document.getElementById('modal-ov');
+  if (ov) ov.classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function toast(msg, type='ok') {
+  const wrap = document.getElementById('toast-wrap');
+  if (!wrap) return;
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+function statusBadge(status) {
+  const map = {
+    'on-track': ['b-green','On Track'],
+    'at-risk': ['b-amber','At Risk'],
+    'blocked': ['b-red','Blocked'],
+    'complete': ['b-blue','Complete']
+  };
+  const [cls, label] = map[status] || ['b-gray', status];
+  return `<span class="badge ${cls}"><span class="badge-dot"></span>${label}</span>`;
+}
+
+function statusColor(status) {
+  return {
+    'on-track':'var(--green)',
+    'at-risk':'var(--amber)',
+    'blocked':'var(--red)',
+    'complete':'var(--blue)'
+  }[status] || 'var(--text-3)';
+}
+
+function progressClass(status) {
+  return {'on-track':'pf-green','at-risk':'pf-amber','blocked':'pf-red','complete':'pf-blue'}[status]||'pf-accent';
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function genId() {
+  return Math.random().toString(36).slice(2,10);
+}
+
+function allObjTasks(init) {
+  return init.objectives.flatMap(o => (o.tasks||[]).map(t => ({...t, objId:o.id, objText:o.text})));
+}
+function allObjRisks(init) {
+  return init.objectives.flatMap(o => (o.risks||[]).map(r => ({...r, objId:o.id, objText:o.text})));
+}
+function allObjDecisions(init) {
+  return init.objectives.flatMap(o => (o.decisions||[]).map(d => ({...d, objId:o.id, objText:o.text})));
+}
+
+// Simple markdown renderer
+function md(text) {
+  if (!text) return '';
+  let t = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
+  // Headers
+  t = t.replace(/^### (.+)$/gm,'<h4 style="font-size:13px;font-weight:600;margin:8px 0 4px">$1</h4>');
+  t = t.replace(/^## (.+)$/gm,'<h3 style="font-size:14px;font-weight:600;margin:10px 0 5px">$1</h3>');
+  t = t.replace(/^# (.+)$/gm,'<h2 style="font-size:15px;font-weight:700;margin:12px 0 6px">$1</h2>');
+  // Lists
+  t = t.replace(/^[-•] (.+)$/gm,'<li>$1</li>');
+  t = t.replace(/^\d+\. (.+)$/gm,'<li>$1</li>');
+  t = t.replace(/(<li>.*?<\/li>\n?)+/g, m => `<ul>${m}</ul>`);
+  // Paragraphs
+  t = t.replace(/\n\n/g,'</p><p>');
+  t = `<p>${t}</p>`;
+  t = t.replace(/<p>(<[hul])/g,'$1').replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+  t = t.replace(/<p><\/p>/g,'');
+  return t;
+}
+
+// ============================================================
+// 13. GLOBAL SEARCH
+// ============================================================
+function initSearch() {
+  const input = document.getElementById('global-search');
+  const resultsEl = document.getElementById('search-results');
+  if (!input || !resultsEl) return;
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    if (q.length < 2) { resultsEl.classList.remove('open'); return; }
+    const results = searchAll(q);
+    if (!results.length) {
+      resultsEl.innerHTML = '<div class="search-empty">No results found</div>';
+    } else {
+      resultsEl.innerHTML = results.slice(0, 10).map(r => `
+        <div class="search-result" onclick="goToSearchResult('${r.initId}','${r.objId||''}');document.getElementById('global-search').value='';document.getElementById('search-results').classList.remove('open')">
+          <div class="search-result-text">${highlightMatch(esc(r.text), q)}</div>
+          <div class="search-result-meta">
+            <span class="search-result-type">${r.type}</span>
+            <span>${esc(r.initName)}</span>
+          </div>
+        </div>`).join('');
+    }
+    resultsEl.classList.add('open');
+  });
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => resultsEl.classList.remove('open'), 200);
+  });
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length >= 2) resultsEl.classList.add('open');
+  });
+}
+
+function searchAll(query) {
+  const results = [];
+  Object.values(S.initiatives).forEach(i => {
+    const initName = i.name.split(' ').slice(0,2).join(' ');
+    i.objectives.forEach(o => {
+      const objLabel = o.text.substring(0,30) + (o.text.length>30?'…':'');
+      if (o.text.toLowerCase().includes(query)) {
+        results.push({type:'Objective', text:o.text, initId:i.id, objId:o.id, initName});
+      }
+      (o.tasks||[]).forEach(t => {
+        if (t.text.toLowerCase().includes(query)) {
+          results.push({type:'Task', text:t.text, initId:i.id, objId:o.id, initName: initName + ' › ' + objLabel});
+        }
+      });
+      (o.risks||[]).forEach(r => {
+        if (r.title.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query)) {
+          results.push({type:'Risk', text:r.title, initId:i.id, objId:o.id, initName: initName + ' › ' + objLabel});
+        }
+      });
+      (o.decisions||[]).forEach(d => {
+        if (d.text.toLowerCase().includes(query)) {
+          results.push({type:'Decision', text:d.text, initId:i.id, objId:o.id, initName: initName + ' › ' + objLabel});
+        }
+      });
+    });
+    if (i.notes && i.notes.toLowerCase().includes(query)) {
+      const idx = i.notes.toLowerCase().indexOf(query);
+      const start = Math.max(0, idx - 30);
+      const snippet = (start > 0 ? '…' : '') + i.notes.substring(start, idx + query.length + 50) + (idx + query.length + 50 < i.notes.length ? '…' : '');
+      results.push({type:'Note', text:snippet, initId:i.id, initName});
+    }
+  });
+  return results;
+}
+
+function highlightMatch(text, query) {
+  const idx = text.toLowerCase().indexOf(query);
+  if (idx === -1) return text;
+  return text.substring(0, idx) + '<strong style="color:var(--accent)">' + text.substring(idx, idx + query.length) + '</strong>' + text.substring(idx + query.length);
+}
+
+function goToSearchResult(initId, objId) {
+  if (objId) {
+    navigate(initId);
+    viewObjective(initId, objId);
+  } else {
+    S.ui.objectiveView = null;
+    navigate(initId);
+  }
+}
+
+// ============================================================
+// 14. INIT
+// ============================================================
+loadState();
+// Wire up nav clicks
+document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => navigate(btn.dataset.view));
+});
+// Wire up global search
+initSearch();
+// Render initial view
+navigate(S.ui.currentView || 'dashboard');
+</script>
+</body>
+</html>
