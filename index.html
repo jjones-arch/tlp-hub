@@ -761,6 +761,150 @@ const DEFAULTS = {
 // 2. STATE
 // ============================================================
 let S;
+const GH_REPO = 'jjones-arch/tlp-hub';
+const GH_DATA_PATH = 'data/state.json';
+const GH_ATT_DIR = 'data/attachments';
+const GH_API = 'https://api.github.com';
+const GH_RAW = 'https://raw.githubusercontent.com';
+let _ghSha = null;
+let _ghSaveTimer = null;
+let _ghSyncing = false;
+let _ghLastSync = null;
+let _ghError = null;
+
+function getGhToken() {
+  return localStorage.getItem('tlp-hub-gh-token') || '';
+}
+function setGhToken(token) {
+  if (token) localStorage.setItem('tlp-hub-gh-token', token);
+  else localStorage.removeItem('tlp-hub-gh-token');
+}
+
+async function ghApiFetch(path, opts = {}) {
+  const token = getGhToken();
+  if (!token) throw new Error('No GitHub token configured');
+  const resp = await fetch(`${GH_API}${path}`, {
+    ...opts,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(opts.headers || {})
+    }
+  });
+  if (!resp.ok) {
+    const body = await resp.text().catch(() => '');
+    throw new Error(`GitHub API ${resp.status}: ${body}`);
+  }
+  return resp;
+}
+
+async function ghLoad() {
+  try {
+    const resp = await ghApiFetch(`/repos/${GH_REPO}/contents/${GH_DATA_PATH}`);
+    const data = await resp.json();
+    _ghSha = data.sha;
+    const decoded = atob(data.content.replace(/\n/g, ''));
+    return JSON.parse(decoded);
+  } catch (e) {
+    if (e.message && e.message.includes('404')) {
+      _ghSha = null;
+      return null;
+    }
+    throw e;
+  }
+}
+
+async function ghSave(state) {
+  _ghSyncing = true;
+  _ghError = null;
+  updateSyncStatus();
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
+    const body = {
+      message: `Sync TLP Hub data — ${new Date().toLocaleString()}`,
+      content
+    };
+    if (_ghSha) body.sha = _ghSha;
+    const resp = await ghApiFetch(`/repos/${GH_REPO}/contents/${GH_DATA_PATH}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const result = await resp.json();
+    _ghSha = result.content.sha;
+    _ghLastSync = new Date();
+    _ghError = null;
+  } catch (e) {
+    _ghError = e.message;
+    console.error('GitHub save failed:', e);
+  } finally {
+    _ghSyncing = false;
+    updateSyncStatus();
+  }
+}
+
+async function ghUploadAttachment(filename, base64Content) {
+  const storedName = genId() + '_' + filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const filePath = `${GH_ATT_DIR}/${storedName}`;
+
+  let existingSha = null;
+  try {
+    const check = await ghApiFetch(`/repos/${GH_REPO}/contents/${filePath}`);
+    const checkData = await check.json();
+    existingSha = checkData.sha;
+  } catch(e) {}
+
+  const body = {
+    message: `Upload attachment: ${filename}`,
+    content: base64Content
+  };
+  if (existingSha) body.sha = existingSha;
+
+  await ghApiFetch(`/repos/${GH_REPO}/contents/${filePath}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  return {
+    storedName,
+    url: `${GH_RAW}/${GH_REPO}/main/${filePath}`
+  };
+}
+
+async function ghTestConnection() {
+  try {
+    const resp = await ghApiFetch(`/repos/${GH_REPO}`);
+    const data = await resp.json();
+    return { ok: true, repo: data.full_name };
+  } catch(e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+function queueGhSave() {
+  if (!getGhToken()) return;
+  clearTimeout(_ghSaveTimer);
+  _ghSaveTimer = setTimeout(() => ghSave(S), 2000);
+}
+
+function updateSyncStatus() {
+  const el = document.getElementById('gh-sync-status');
+  if (!el) return;
+  if (_ghSyncing) {
+    el.innerHTML = '<span style="color:var(--amber)">⟳ Syncing...</span>';
+  } else if (_ghError) {
+    el.innerHTML = `<span style="color:var(--red)">✕ Sync error</span>`;
+  } else if (_ghLastSync) {
+    el.innerHTML = `<span style="color:var(--green)">✓ Synced ${_ghLastSync.toLocaleTimeString()}</span>`;
+  } else if (getGhToken()) {
+    el.innerHTML = '<span style="color:var(--text-3)">Ready</span>';
+  } else {
+    el.innerHTML = '<span style="color:var(--text-3)">Not configured</span>';
+  }
+}
+
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem('tlp-hub-v2') || 'null');
@@ -774,6 +918,28 @@ function loadState() {
     S = JSON.parse(JSON.stringify(DEFAULTS));
   }
 }
+
+async function loadStateFromGitHub() {
+  if (!getGhToken()) return;
+  try {
+    const remote = await ghLoad();
+    if (remote) {
+      S = remote;
+      migrateObjectives();
+      localStorage.setItem('tlp-hub-v2', JSON.stringify(S));
+      _ghLastSync = new Date();
+      navigate(S.ui.currentView || 'dashboard');
+      toast('Synced from GitHub.');
+    } else {
+      await ghSave(S);
+      toast('Initial sync to GitHub complete.');
+    }
+  } catch(e) {
+    console.error('GitHub load failed, using local data:', e);
+  }
+  updateSyncStatus();
+}
+
 function migrateObjectives() {
   const defs = JSON.parse(JSON.stringify(DEFAULTS));
   Object.entries(S.initiatives).forEach(([initId, init]) => {
@@ -799,10 +965,16 @@ function migrateObjectives() {
   if (!S.ui.sboView) S.ui.sboView = 'list';
   if (!S.ui.sboCalYear) S.ui.sboCalYear = new Date().getFullYear();
   if (!S.ui.sboCalMonth) S.ui.sboCalMonth = new Date().getMonth();
-  saveState();
+  saveStateLocal();
 }
-function saveState() {
+
+function saveStateLocal() {
   try { localStorage.setItem('tlp-hub-v2', JSON.stringify(S)); } catch(e) {}
+}
+
+function saveState() {
+  saveStateLocal();
+  queueGhSave();
 }
 
 // ============================================================
@@ -1407,13 +1579,7 @@ function editTask(initId, taskId) {
             <span class="update-time">${new Date(u.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}</span>
           </div>
           <div class="update-text">${esc(u.text)}</div>
-          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a =>
-            a.dataUrl
-              ? (a.mimeType.startsWith('image/')
-                  ? `<a class="update-att" href="${a.dataUrl}" target="_blank"><img src="${a.dataUrl}" alt="${esc(a.filename)}"><span>${esc(a.filename)}</span></a>`
-                  : `<a class="update-att" href="${a.dataUrl}" download="${esc(a.filename)}">📄 <span>${esc(a.filename)}</span></a>`)
-              : `<span class="update-att">📄 ${esc(a.filename)}</span>`
-          ).join('')}</div>` : ''}
+          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a => renderAttachment(a)).join('')}</div>` : ''}
         </div>`).join('')
     : '<p class="no-updates">No updates yet. Add a note above to track progress.</p>';
 
@@ -1481,7 +1647,7 @@ function renderPendingFileChips() {
   ).join('');
 }
 
-function postTaskUpdate(initId, taskId) {
+async function postTaskUpdate(initId, taskId) {
   const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
   if (!t) return;
   if (!t.updates) t.updates = [];
@@ -1497,37 +1663,41 @@ function postTaskUpdate(initId, taskId) {
     attachments: []
   };
 
-  let filesProcessed = 0;
-  const totalFiles = files.length;
-
-  if (totalFiles === 0) {
-    t.updates.unshift(update);
-    saveState();
-    toast('Update posted.');
-    editTask(initId, taskId);
-    return;
+  for (const f of files) {
+    const base64 = await fileToBase64(f);
+    if (getGhToken()) {
+      try {
+        const result = await ghUploadAttachment(f.name, base64);
+        update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, url: result.url });
+      } catch(e) {
+        update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: 'data:' + (f.type||'application/octet-stream') + ';base64,' + base64 });
+      }
+    } else {
+      update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: 'data:' + (f.type||'application/octet-stream') + ';base64,' + base64 });
+    }
   }
 
-  files.forEach(f => {
+  t.updates.unshift(update);
+  saveState();
+  toast('Update posted.');
+  editTask(initId, taskId);
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onload = e => {
-      update.attachments.push({
-        id: genId(),
-        filename: f.name,
-        mimeType: f.type || '',
-        size: f.size,
-        dataUrl: e.target.result
-      });
-      filesProcessed++;
-      if (filesProcessed === totalFiles) {
-        t.updates.unshift(update);
-        saveState();
-        toast('Update posted.');
-        editTask(initId, taskId);
-      }
-    };
-    reader.readAsDataURL(f);
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.readAsDataURL(file);
   });
+}
+
+function renderAttachment(a) {
+  const href = a.url || a.dataUrl || '';
+  if (!href) return `<span class="update-att">📄 ${esc(a.filename)}</span>`;
+  if (a.mimeType && a.mimeType.startsWith('image/')) {
+    return `<a class="update-att" href="${href}" target="_blank"><img src="${href}" alt="${esc(a.filename)}"><span>${esc(a.filename)}</span></a>`;
+  }
+  return `<a class="update-att" href="${href}" target="_blank" download="${esc(a.filename)}">📄 <span>${esc(a.filename)}</span></a>`;
 }
 
 function saveEditTask(initId, taskId) {
@@ -1645,13 +1815,7 @@ function editObjTask(initId, objId, taskId) {
             <span class="update-time">${new Date(u.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}</span>
           </div>
           <div class="update-text">${esc(u.text)}</div>
-          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a =>
-            a.dataUrl
-              ? (a.mimeType.startsWith('image/')
-                  ? `<a class="update-att" href="${a.dataUrl}" target="_blank"><img src="${a.dataUrl}" alt="${esc(a.filename)}"><span>${esc(a.filename)}</span></a>`
-                  : `<a class="update-att" href="${a.dataUrl}" download="${esc(a.filename)}">📄 <span>${esc(a.filename)}</span></a>`)
-              : `<span class="update-att">📄 ${esc(a.filename)}</span>`
-          ).join('')}</div>` : ''}
+          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a => renderAttachment(a)).join('')}</div>` : ''}
         </div>`).join('')
     : '<p class="no-updates">No updates yet. Add a note above to track progress.</p>';
 
@@ -1710,7 +1874,7 @@ function saveEditObjTask(initId, objId, taskId) {
   toast('Task updated.');
 }
 
-function postObjTaskUpdate(initId, objId, taskId) {
+async function postObjTaskUpdate(initId, objId, taskId) {
   const o = getObjective(initId, objId);
   if (!o) return;
   const t = o.tasks.find(x => x.id === taskId);
@@ -1721,31 +1885,25 @@ function postObjTaskUpdate(initId, objId, taskId) {
   if (!text && files.length === 0) { toast('Enter a note or attach a file.', 'err'); return; }
 
   const update = { id: genId(), text, author: t.owner || '', createdAt: new Date().toISOString(), attachments: [] };
-  let filesProcessed = 0;
-  const totalFiles = files.length;
 
-  if (totalFiles === 0) {
-    t.updates.unshift(update);
-    saveState();
-    toast('Update posted.');
-    editObjTask(initId, objId, taskId);
-    return;
+  for (const f of files) {
+    const base64 = await fileToBase64(f);
+    if (getGhToken()) {
+      try {
+        const result = await ghUploadAttachment(f.name, base64);
+        update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, url: result.url });
+      } catch(e) {
+        update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: 'data:' + (f.type||'application/octet-stream') + ';base64,' + base64 });
+      }
+    } else {
+      update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: 'data:' + (f.type||'application/octet-stream') + ';base64,' + base64 });
+    }
   }
 
-  files.forEach(f => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: e.target.result });
-      filesProcessed++;
-      if (filesProcessed === totalFiles) {
-        t.updates.unshift(update);
-        saveState();
-        toast('Update posted.');
-        editObjTask(initId, objId, taskId);
-      }
-    };
-    reader.readAsDataURL(f);
-  });
+  t.updates.unshift(update);
+  saveState();
+  toast('Update posted.');
+  editObjTask(initId, objId, taskId);
 }
 
 function toggleAddObjRisk(initId, objId) {
@@ -2229,9 +2387,28 @@ function deleteTx(id) {
 // ============================================================
 function renderSettings() {
   const el = document.getElementById('view-settings');
+  const ghToken = getGhToken();
   el.innerHTML = `
   <div class="view-pad" style="max-width:600px">
     <div class="page-hd"><div><h1 class="page-title">Settings</h1><p class="page-sub">Configure your TLP Hub</p></div></div>
+    <div class="settings-section">
+      <div class="settings-title">GitHub Sync</div>
+      <div class="field">
+        <label>Personal Access Token</label>
+        <div class="api-key-wrap">
+          <input type="password" id="gh-token-input" value="${ghToken}" placeholder="github_pat_…">
+          <button class="api-key-toggle" onclick="toggleGhTokenVis()">👁</button>
+        </div>
+        <div class="field-note">Syncs your data across browsers via your GitHub repo. Create a <a href="https://github.com/settings/tokens?type=beta" target="_blank" style="color:var(--accent)">fine-grained token</a> with <strong>Contents: Read &amp; write</strong> permission on <strong>jjones-arch/tlp-hub</strong>. Token is stored in your browser only.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveGhToken()">Save Token</button>
+        <button class="btn btn-ghost" onclick="testGhConnection()">Test Connection</button>
+        <button class="btn btn-ghost" onclick="manualGhSync()">Sync Now</button>
+        <span id="gh-sync-status" style="font-size:12px"></span>
+      </div>
+      <div id="gh-test-result" style="margin-top:8px"></div>
+    </div>
     <div class="settings-section">
       <div class="settings-title">Anthropic API Key</div>
       <div class="field">
@@ -2259,11 +2436,53 @@ function renderSettings() {
       <p style="font-size:13px;color:var(--text-2);line-height:1.6">TLP Hub is a personal program management tool for the BambooHR Technology Lifecycle Program. Built for JoJo Jones, Q2 2026.</p>
     </div>
   </div>`;
+  updateSyncStatus();
 }
 
 function toggleApiVis() {
   const inp = document.getElementById('api-key-input');
   if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function toggleGhTokenVis() {
+  const inp = document.getElementById('gh-token-input');
+  if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function saveGhToken() {
+  const token = document.getElementById('gh-token-input').value.trim();
+  setGhToken(token);
+  if (token) {
+    toast('GitHub token saved. Click "Sync Now" to sync.');
+  } else {
+    toast('GitHub token removed. Using local storage only.');
+    _ghLastSync = null;
+    _ghError = null;
+  }
+  updateSyncStatus();
+}
+
+async function testGhConnection() {
+  const el = document.getElementById('gh-test-result');
+  if (!getGhToken()) { el.innerHTML = '<span style="color:var(--red);font-size:12px">Enter and save a token first.</span>'; return; }
+  el.innerHTML = '<span style="color:var(--text-3);font-size:12px">Testing...</span>';
+  const result = await ghTestConnection();
+  if (result.ok) {
+    el.innerHTML = `<span style="color:var(--green);font-size:12px">Connected to ${esc(result.repo)}</span>`;
+  } else {
+    el.innerHTML = `<span style="color:var(--red);font-size:12px">Failed: ${esc(result.error)}</span>`;
+  }
+}
+
+async function manualGhSync() {
+  if (!getGhToken()) { toast('Configure a GitHub token first.', 'err'); return; }
+  toast('Syncing...');
+  await ghSave(S);
+  if (_ghError) {
+    toast('Sync failed: ' + _ghError, 'err');
+  } else {
+    toast('Synced to GitHub.');
+  }
 }
 
 function saveSettings() {
@@ -3285,6 +3504,8 @@ document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
 initSearch();
 // Render initial view
 navigate(S.ui.currentView || 'dashboard');
+// Attempt GitHub sync in background after initial render
+loadStateFromGitHub();
 </script>
 </body>
 </html>
