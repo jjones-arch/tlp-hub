@@ -9,7 +9,7 @@
   "artifacts": [],
   "transcripts": [],
   "ui": {
-    "currentView": "transcripts",
+    "currentView": "artifacts",
     "focusContent": null,
     "objectiveView": null,
     "sboDetail": null,
