@@ -9,12 +9,9 @@
   "artifacts": [],
   "transcripts": [],
   "ui": {
-    "currentView": "sbo",
+    "currentView": "reporting",
     "focusContent": null,
-    "objectiveView": {
-      "initId": "sbo",
-      "objId": "o3"
-    },
+    "objectiveView": null,
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
