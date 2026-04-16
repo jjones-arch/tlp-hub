@@ -9,12 +9,9 @@
   "artifacts": [],
   "transcripts": [],
   "ui": {
-    "currentView": "reporting",
+    "currentView": "dashboard",
     "focusContent": null,
-    "objectiveView": {
-      "initId": "reporting",
-      "objId": "o1"
-    },
+    "objectiveView": null,
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
