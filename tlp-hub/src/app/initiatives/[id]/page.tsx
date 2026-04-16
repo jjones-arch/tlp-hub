@@ -1104,6 +1104,41 @@ export default function InitiativeDetailPage() {
         </div>
       </Modal>
 
+      {/* ── Edit Objective Modal ── */}
+      <Modal
+        open={!!editObjective}
+        onClose={() => setEditObjective(null)}
+        title="Edit Objective"
+        footer={
+          <>
+            <button onClick={() => setEditObjective(null)} className={btnGhost}>Cancel</button>
+            <button onClick={saveEditObjective} className={btnPrimary}>Save</button>
+          </>
+        }
+      >
+        <div className="space-y-3">
+          <div>
+            <label className="block text-[12px] font-medium text-text-2 mb-1">Objective</label>
+            <input
+              value={editObjForm.text}
+              onChange={(e) => setEditObjForm({ ...editObjForm, text: e.target.value })}
+              className={inputCls}
+              placeholder="Objective title"
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-medium text-text-2 mb-1">Description</label>
+            <textarea
+              value={editObjForm.description}
+              onChange={(e) => setEditObjForm({ ...editObjForm, description: e.target.value })}
+              rows={4}
+              className={`${inputCls} resize-y`}
+              placeholder="Add details, context, or success criteria..."
+            />
+          </div>
+        </div>
+      </Modal>
+
       {/* ── Add Decision Modal ── */}
       <Modal
         open={showAddDecision}

@@ -157,6 +157,9 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
 .obj-drag-handle{display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--text-3);flex-shrink:0;padding:2px 0;opacity:0;transition:opacity .14s}
 .obj-item:hover .obj-drag-handle{opacity:1}
 .obj-drag-handle:active{cursor:grabbing}
+.obj-desc{font-size:12px;color:var(--text-3);line-height:1.5;margin-top:3px}
+.obj-actions{display:flex;gap:2px;flex-shrink:0;opacity:0;transition:opacity .14s}
+.obj-item:hover .obj-actions{opacity:1}
 .obj-item.dragging{opacity:0.4;background:var(--surface-2)}
 .obj-item.drag-over-top{box-shadow:0 -2px 0 0 var(--navy)}
 .obj-item.drag-over-bottom{box-shadow:0 2px 0 0 var(--navy)}
@@ -186,8 +189,9 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
 /* ── INLINE ADD FORM ── */
 .add-form{display:none;background:var(--surface-2);border:1px solid var(--border-lt);border-radius:var(--r-sm);padding:12px;margin-top:8px;gap:8px;flex-direction:column}
 .add-form.open{display:flex}
-.add-form input,.add-form select{border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;color:var(--text);background:#fff;outline:none;width:100%}
-.add-form input:focus,.add-form select:focus{border-color:var(--navy)}
+.add-form input,.add-form select,.add-form textarea{border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;color:var(--text);background:#fff;outline:none;width:100%}
+.add-form textarea{resize:vertical;min-height:48px}
+.add-form input:focus,.add-form select:focus,.add-form textarea:focus{border-color:var(--navy)}
 .add-form-row{display:flex;gap:8px}
 .add-form-row>*{flex:1}
 .add-form-actions{display:flex;gap:6px;justify-content:flex-end}
@@ -965,6 +969,11 @@ function migrateObjectives() {
       if (o.tasks) o.tasks.forEach(t => { if (!t.updates) t.updates = []; });
     });
   });
+  Object.values(S.initiatives).forEach(init => {
+    if (init.objectives) init.objectives.forEach(o => {
+      if (o.description === undefined) o.description = '';
+    });
+  });
   if (!S.ui.objectiveView) S.ui.objectiveView = null;
   if (!S.sbos) S.sbos = {};
   if (!S.ui.sboDetail) S.ui.sboDetail = null;
@@ -1255,7 +1264,8 @@ function renderInitiative(id) {
         <button class="btn btn-ghost btn-sm" onclick="toggleAddObjective('${id}')">+ Add</button>
       </div>
       <div class="add-form" id="add-obj-form-${id}">
-        <input type="text" id="new-obj-text-${id}" placeholder="Objective description…" onkeydown="if(event.key==='Enter')saveNewObjective('${id}')">
+        <input type="text" id="new-obj-text-${id}" placeholder="Objective title…" onkeydown="if(event.key==='Enter')saveNewObjective('${id}')">
+        <textarea id="new-obj-desc-${id}" placeholder="Description (optional)…" rows="2"></textarea>
         <div class="add-form-actions">
           <button class="btn btn-ghost btn-sm" onclick="toggleAddObjective('${id}')">Cancel</button>
           <button class="btn btn-primary btn-sm" onclick="saveNewObjective('${id}')">Save Objective</button>
@@ -1287,7 +1297,12 @@ function renderObjItem(initId, o) {
     <div class="obj-check ${o.complete?'ck':''}" onclick="event.stopPropagation();toggleObjective('${initId}','${o.id}')"></div>
     <div class="obj-body">
       <span class="obj-text ${o.complete?'done':''}">${esc(o.text)}</span>
+      ${o.description ? `<div class="obj-desc">${esc(o.description)}</div>` : ''}
       ${metaParts.length ? `<div class="obj-meta">${metaParts.map(p => `<span class="obj-meta-count">${p}</span>`).join('<span style="color:var(--border)">·</span>')}</div>` : ''}
+    </div>
+    <div class="obj-actions">
+      <button class="icon-btn" onclick="event.stopPropagation();editObjective('${initId}','${o.id}')" title="Edit">✎</button>
+      <button class="icon-btn" onclick="event.stopPropagation();deleteObjective('${initId}','${o.id}')" title="Delete" style="color:var(--red)">✕</button>
     </div>
     <span class="obj-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
   </li>`;
@@ -1381,7 +1396,11 @@ function renderObjectiveDetail(initId, objId) {
       <div class="flex-row" style="gap:10px;align-items:flex-start">
         <div class="obj-check ${o.complete?'ck':''}" onclick="toggleObjectiveFromDetail('${initId}','${objId}')" style="margin-top:4px;width:20px;height:20px"></div>
         <div style="flex:1">
-          <div class="init-title" style="font-size:20px;${o.complete?'text-decoration:line-through;color:var(--text-3)':''}">${esc(o.text)}</div>
+          <div class="flex-row" style="justify-content:space-between;align-items:flex-start;gap:10px">
+            <div class="init-title" style="font-size:20px;${o.complete?'text-decoration:line-through;color:var(--text-3)':''}">${esc(o.text)}</div>
+            <button class="btn btn-ghost btn-sm" onclick="editObjective('${initId}','${objId}')" style="flex-shrink:0">✎ Edit</button>
+          </div>
+          ${o.description ? `<p style="font-size:13px;color:var(--text-2);line-height:1.5;margin-top:6px">${esc(o.description)}</p>` : ''}
           <div class="flex-row" style="gap:10px;margin-top:8px">
             ${statusBadge(o.complete ? 'complete' : 'on-track')}
             <span style="font-size:12px;color:var(--text-3)">${tasks.length} tasks · ${risks.length} risks · ${decisions.length} decisions</span>
@@ -1527,10 +1546,12 @@ function toggleAddObjective(initId) {
 
 function saveNewObjective(initId) {
   const text = document.getElementById(`new-obj-text-${initId}`).value.trim();
-  if (!text) { toast('Please enter an objective description.', 'err'); return; }
+  if (!text) { toast('Please enter an objective title.', 'err'); return; }
+  const desc = document.getElementById(`new-obj-desc-${initId}`).value.trim();
   const objective = {
     id: genId(),
     text,
+    description: desc,
     complete: false,
     tasks: [],
     risks: [],
@@ -1541,6 +1562,64 @@ function saveNewObjective(initId) {
   toggleAddObjective(initId);
   renderInitiative(initId);
   toast('Objective added.');
+}
+
+function editObjective(initId, objId) {
+  const o = S.initiatives[initId].objectives.find(x => x.id === objId);
+  if (!o) return;
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(28,43,58,.35);z-index:999;display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);width:480px;max-width:92vw;padding:28px 28px 22px;position:relative">
+      <h3 style="font-family:var(--font-s);font-size:16px;font-weight:600;color:var(--text);margin-bottom:16px">Edit Objective</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--text-2);margin-bottom:4px">Objective</label>
+          <input type="text" id="edit-obj-text" value="${esc(o.text).replace(/"/g,'&quot;')}" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;font-family:var(--font-b);font-size:13px;color:var(--text);background:#fff;outline:none;width:100%">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--text-2);margin-bottom:4px">Description</label>
+          <textarea id="edit-obj-desc" rows="4" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;font-family:var(--font-b);font-size:13px;color:var(--text);background:#fff;outline:none;width:100%;resize:vertical" placeholder="Add details, context, or success criteria…">${esc(o.description || '')}</textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+          <button class="btn btn-ghost btn-sm" id="edit-obj-cancel">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="edit-obj-save">Save</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.getElementById('edit-obj-cancel').onclick = () => overlay.remove();
+  document.getElementById('edit-obj-save').onclick = () => {
+    const newText = document.getElementById('edit-obj-text').value.trim();
+    if (!newText) { toast('Objective title is required.', 'err'); return; }
+    o.text = newText;
+    o.description = document.getElementById('edit-obj-desc').value.trim();
+    saveState();
+    overlay.remove();
+    if (S.ui.objectiveView && S.ui.objectiveView.objId === objId) {
+      renderObjectiveDetail(initId, objId);
+    } else {
+      renderInitiative(initId);
+    }
+    toast('Objective updated.');
+  };
+  document.getElementById('edit-obj-text').focus();
+}
+
+function deleteObjective(initId, objId) {
+  if (!confirm('Delete this objective? This will also remove its tasks, risks, and decisions.')) return;
+  const objs = S.initiatives[initId].objectives;
+  const idx = objs.findIndex(x => x.id === objId);
+  if (idx === -1) return;
+  objs.splice(idx, 1);
+  saveState();
+  if (S.ui.objectiveView && S.ui.objectiveView.objId === objId) {
+    S.ui.objectiveView = null;
+    saveState();
+  }
+  renderInitiative(initId);
+  toast('Objective deleted.');
 }
 
 let _objDragData = null;
