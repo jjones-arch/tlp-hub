@@ -11,10 +11,7 @@
   "ui": {
     "currentView": "sbo",
     "focusContent": null,
-    "objectiveView": {
-      "initId": "sbo",
-      "objId": "2xpf96aa"
-    },
+    "objectiveView": null,
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
