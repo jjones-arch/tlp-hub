@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+
+# Prisma generated
+tlp-hub/src/generated/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# SQLite databases
+*.db
+*.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
