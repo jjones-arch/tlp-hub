@@ -29,7 +29,7 @@
         "JoJo Jones",
         "Melissa Boud"
       ],
-      "description": "Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.",
+      "description": "Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.",
       "objectives": [
         {
           "id": "o1",
@@ -85,7 +85,7 @@
           "decisions": [
             {
               "id": "d1",
-              "text": "Committee renamed to \"Enterprise Software Committee\" ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ better reflects function than \"Steering Committee\"",
+              "text": "Committee renamed to \"Enterprise Software Committee\" ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ better reflects function than \"Steering Committee\"",
               "date": "2026-03-26"
             },
             {
@@ -206,7 +206,7 @@
           "decisions": [
             {
               "id": "d1",
-              "text": "TLP's budget role is visibility and accountability ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not promising spend reduction targets",
+              "text": "TLP's budget role is visibility and accountability ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not promising spend reduction targets",
               "date": "2026-03-26"
             }
           ]
@@ -222,7 +222,8 @@
               "owner": "Jordan Jones",
               "due": "2026-04-17",
               "status": "not-started",
-              "priority": "high"
+              "priority": "high",
+              "updates": []
             }
           ],
           "risks": [],
@@ -340,7 +341,7 @@
       "decisions": [
         {
           "id": "d1",
-          "text": "Committee renamed to \"Enterprise Software Committee\" ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ better reflects function than \"Steering Committee\"",
+          "text": "Committee renamed to \"Enterprise Software Committee\" ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ better reflects function than \"Steering Committee\"",
           "date": "2026-03-26"
         },
         {
@@ -360,11 +361,11 @@
         },
         {
           "id": "d5",
-          "text": "TLP's budget role is visibility and accountability ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not promising spend reduction targets",
+          "text": "TLP's budget role is visibility and accountability ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not promising spend reduction targets",
           "date": "2026-03-26"
         }
       ],
-      "notes": "Ryan Ostler's final SBO kickoff was March 30, 2026 ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ all SBO kickoffs are now complete.\n\nAlways use 'PIR' not 'PER' in meetings and documentation.\n\nEmbedded partners are managed by Todd Grierson in Finance (not JR) ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ coordinate with Todd for Q4 planning."
+      "notes": "Ryan Ostler's final SBO kickoff was March 30, 2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ all SBO kickoffs are now complete.\n\nAlways use 'PIR' not 'PER' in meetings and documentation.\n\nEmbedded partners are managed by Todd Grierson in Finance (not JR) ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ coordinate with Todd for Q4 planning."
     },
     "reporting": {
       "id": "reporting",
@@ -376,7 +377,7 @@
       "owners": [
         "Jessi Duffin"
       ],
-      "description": "Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ even before automation ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ and build toward SLA tracking.",
+      "description": "Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ even before automation ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ and build toward SLA tracking.",
       "objectives": [
         {
           "id": "o1",
@@ -415,7 +416,7 @@
           "decisions": [
             {
               "id": "d1",
-              "text": "Q2 approach: manual data collection by Jessi while Zipped is built ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ do not wait for a perfect system",
+              "text": "Q2 approach: manual data collection by Jessi while Zipped is built ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ do not wait for a perfect system",
               "date": "2026-04-09"
             }
           ]
@@ -578,7 +579,7 @@
       "decisions": [
         {
           "id": "d1",
-          "text": "Q2 approach: manual data collection by Jessi while Zipped is built ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ do not wait for a perfect system",
+          "text": "Q2 approach: manual data collection by Jessi while Zipped is built ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ do not wait for a perfect system",
           "date": "2026-04-09"
         },
         {
@@ -596,7 +597,7 @@
     },
     "zipped": {
       "id": "zipped",
-      "name": "Zipped ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Workflow Automation Prototype",
+      "name": "Zipped ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Workflow Automation Prototype",
       "subtitle": "Building an AI-powered intake and document collection prototype",
       "quarter": "Q2 2026",
       "status": "on-track",
@@ -652,7 +653,7 @@
           "decisions": [
             {
               "id": "d1",
-              "text": "Q2 commitment is document collection prototype only ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not the full Zipped vision",
+              "text": "Q2 commitment is document collection prototype only ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not the full Zipped vision",
               "date": "2026-04-09"
             },
             {
@@ -734,7 +735,7 @@
               "desc": "Path from prototype to production handoff not scoped or approved.",
               "likelihood": "medium",
               "impact": "medium",
-              "mitigation": "Frame Q2 as \"validate the concept\" ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ engineering conversation is Q3."
+              "mitigation": "Frame Q2 as \"validate the concept\" ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ engineering conversation is Q3."
             }
           ],
           "decisions": [
@@ -869,7 +870,7 @@
           "desc": "Path from prototype to production handoff not scoped or approved.",
           "likelihood": "medium",
           "impact": "medium",
-          "mitigation": "Frame Q2 as \"validate the concept\" ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ engineering conversation is Q3."
+          "mitigation": "Frame Q2 as \"validate the concept\" ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ engineering conversation is Q3."
         }
       ],
       "decisions": [
@@ -880,7 +881,7 @@
         },
         {
           "id": "d2",
-          "text": "Q2 commitment is document collection prototype only ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not the full Zipped vision",
+          "text": "Q2 commitment is document collection prototype only ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not the full Zipped vision",
           "date": "2026-04-09"
         },
         {
@@ -899,7 +900,7 @@
           "date": "2026-04-09"
         }
       ],
-      "notes": "\"Zipped\" is the working title (previously called \"Zip-like experience\" or \"vibe-coded prototype\").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins."
+      "notes": "\"Zipped\" is the working title (previously called \"Zip-like experience\" or \"vibe-coded prototype\").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins."
     }
   },
   "sbos": {}
