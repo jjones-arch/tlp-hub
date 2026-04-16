@@ -813,6 +813,9 @@ function navigate(view) {
   if (S.ui.objectiveView && S.ui.objectiveView.initId !== view) {
     S.ui.objectiveView = null;
   }
+  if (view !== 'sbo-tracker' && S.ui.sboDetail) {
+    S.ui.sboDetail = null;
+  }
   saveState();
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const el = document.getElementById('view-' + view);
@@ -2457,6 +2460,711 @@ function md(text) {
 }
 
 // ============================================================
+// 12b. SBO TRACKER
+// ============================================================
+const SBO_COLORS = ['var(--accent)','var(--blue)','var(--green)','var(--amber)','var(--red)','#7C3AED','#0891B2','#BE185D','#65A30D','#CA8A04','#DC2626','#2563EB','#9333EA','#059669'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const REC_LABELS = {none:'',weekly:'Weekly',biweekly:'Biweekly',monthly:'Monthly',quarterly:'Quarterly'};
+
+function sboList() { return Object.values(S.sbos).sort((a,b) => (a.sortOrder||0) - (b.sortOrder||0)); }
+function sboColorMap() {
+  const m = {};
+  sboList().forEach((s,i) => { m[s.id] = SBO_COLORS[i % SBO_COLORS.length]; });
+  return m;
+}
+function allSboTasks() {
+  const t = [];
+  sboList().forEach(s => (s.tasks||[]).forEach(tk => t.push({...tk, sboId:s.id, sboName:s.name})));
+  return t;
+}
+function allSboMeetings() {
+  const m = [];
+  sboList().forEach(s => (s.meetings||[]).forEach(mt => m.push({...mt, sboId:s.id, sboName:s.name})));
+  return m;
+}
+
+function renderSboTracker() {
+  if (S.ui.sboDetail) {
+    renderSboDetail(S.ui.sboDetail);
+  } else {
+    renderSboHub();
+  }
+}
+
+function sboViewTabsHtml(scope) {
+  const v = S.ui.sboView || 'list';
+  function tabBtn(mode, label, icon) {
+    return `<button class="sbo-tab ${v===mode?'active':''}" onclick="setSboView('${mode}','${scope}')">${icon} ${label}</button>`;
+  }
+  return `<div class="sbo-view-tabs">
+    ${tabBtn('list','List','<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>')}
+    ${tabBtn('calendar','Calendar','<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 6.5h13" stroke="currentColor" stroke-width="1.2"/><path d="M5 1v3M11 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>')}
+    ${tabBtn('gantt','Gantt','<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="8" height="2.5" rx="1" fill="currentColor" opacity=".7"/><rect x="1" y="6.5" width="10" height="2.5" rx="1" fill="currentColor" opacity=".7"/><rect x="5" y="11" width="7" height="2.5" rx="1" fill="currentColor" opacity=".7"/></svg>')}
+  </div>`;
+}
+
+function setSboView(mode, scope) {
+  S.ui.sboView = mode;
+  saveState();
+  if (scope === 'hub') renderSboHub(); else renderSboDetail(S.ui.sboDetail);
+}
+
+function renderSboHub() {
+  const el = document.getElementById('view-sbo-tracker');
+  const sbos = sboList();
+  const totalTasks = sbos.reduce((s,o) => s + (o.tasks||[]).length, 0);
+  const totalDone = sbos.reduce((s,o) => s + (o.tasks||[]).filter(t=>t.status==='complete').length, 0);
+  const today = new Date().toISOString().slice(0,10);
+  const upcoming = allSboMeetings().filter(m => m.date >= today).length;
+  const view = S.ui.sboView || 'list';
+
+  el.innerHTML = `
+  <div class="view-pad" style="max-width:1100px">
+    <div class="page-hd" style="margin-bottom:20px">
+      <div>
+        <h1 class="page-title">SBO Tracker</h1>
+        <p class="page-sub" style="margin-top:4px">Manage all Software Business Owners, their tasks, and meetings</p>
+      </div>
+    </div>
+    <div class="sbo-stats-bar">
+      <div class="sbo-stat"><span class="sbo-stat-val">${sbos.length}</span><span class="sbo-stat-label">SBOs</span></div>
+      <div class="sbo-stat-sep"></div>
+      <div class="sbo-stat"><span class="sbo-stat-val">${totalTasks}</span><span class="sbo-stat-label">Tasks</span></div>
+      <div class="sbo-stat-sep"></div>
+      <div class="sbo-stat"><span class="sbo-stat-val" style="color:#86EFAC">${totalDone}</span><span class="sbo-stat-label">Complete</span></div>
+      <div class="sbo-stat-sep"></div>
+      <div class="sbo-stat"><span class="sbo-stat-val">${upcoming}</span><span class="sbo-stat-label">Upcoming Meetings</span></div>
+      <div style="flex:1"></div>
+      <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:none" onclick="showAddSboModal()">+ Add SBO</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      ${sboViewTabsHtml('hub')}
+      ${view==='list' ? `<span style="font-size:12px;color:var(--text-3)">${sbos.length} SBOs total</span>` : ''}
+    </div>
+    <div id="sbo-hub-content"></div>
+  </div>`;
+
+  const content = document.getElementById('sbo-hub-content');
+  if (view === 'list') {
+    if (!sbos.length) {
+      content.innerHTML = '<div class="empty-state" style="padding:48px"><p>No SBOs yet. Click "+ Add SBO" to get started.</p></div>';
+    } else {
+      const colors = sboColorMap();
+      content.innerHTML = `<div class="sbo-cards">${sbos.map(s => {
+        const tc = (s.tasks||[]).length, td = (s.tasks||[]).filter(t=>t.status==='complete').length;
+        const pct = tc > 0 ? Math.round(td/tc*100) : 0;
+        const next = (s.meetings||[]).find(m => m.date >= today);
+        const strokeColor = pct === 100 ? 'var(--green)' : colors[s.id] || 'var(--accent)';
+        return `<div class="sbo-card" onclick="openSboDetail('${s.id}')">
+          <div class="sbo-card-hd">
+            ${statusBadge(s.status)}
+            ${s.division ? `<span class="sbo-card-div">${esc(s.division)}</span>` : ''}
+          </div>
+          <div class="sbo-card-name">${esc(s.name)}</div>
+          ${s.owner ? `<div class="sbo-card-owner">${esc(s.owner)}</div>` : ''}
+          <div class="sbo-card-progress">
+            <div class="sbo-ring">
+              <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="var(--border)" stroke-width="3"/>
+              <circle cx="18" cy="18" r="15" fill="none" stroke="${strokeColor}" stroke-width="3" stroke-dasharray="${(pct/100)*94.25} 94.25" stroke-linecap="round"/></svg>
+              <span class="sbo-ring-pct">${pct}%</span>
+            </div>
+            <span style="font-size:11.5px;color:var(--text-2)"><strong style="color:var(--text)">${td}</strong> of ${tc} tasks</span>
+          </div>
+          ${next ? `<div class="sbo-card-next"><span class="sbo-card-next-label">Next: </span><span class="sbo-card-next-title">${esc(next.title)}</span> <span class="sbo-card-next-date">${next.date}</span></div>` : `<div style="font-size:11px;color:var(--text-3);font-style:italic">No upcoming meetings</div>`}
+        </div>`;
+      }).join('')}</div>`;
+    }
+  } else if (view === 'calendar') {
+    content.innerHTML = renderSboCalendar(allSboMeetings(), 'hub');
+  } else if (view === 'gantt') {
+    const groups = sboList().filter(s => (s.tasks||[]).length).map(s => ({
+      id: s.id, name: s.name,
+      tasks: (s.tasks||[]).map(t => ({...t, sboId:s.id, sboName:s.name}))
+    }));
+    content.innerHTML = renderSboGantt(groups);
+  }
+}
+
+function openSboDetail(sboId) {
+  S.ui.sboDetail = sboId;
+  S.ui.sboView = 'list';
+  saveState();
+  if (S.ui.currentView !== 'sbo-tracker') {
+    navigate('sbo-tracker');
+  } else {
+    renderSboTracker();
+    document.getElementById('main').scrollTop = 0;
+  }
+}
+
+function closeSboDetail() {
+  S.ui.sboDetail = null;
+  saveState();
+  renderSboTracker();
+}
+
+// ── SBO CALENDAR ──
+function expandRecurring(meetings, rangeStart, rangeEnd) {
+  const results = [];
+  function addInterval(dateStr, rec) {
+    const d = new Date(dateStr + 'T00:00:00');
+    if (rec==='weekly') d.setDate(d.getDate()+7);
+    else if (rec==='biweekly') d.setDate(d.getDate()+14);
+    else if (rec==='monthly') d.setMonth(d.getMonth()+1);
+    else if (rec==='quarterly') d.setMonth(d.getMonth()+3);
+    else return '';
+    return d.toISOString().slice(0,10);
+  }
+  for (const m of meetings) {
+    if (!m.date) continue;
+    const base = m.date.slice(0,10);
+    if (!m.recurrence || m.recurrence === 'none') {
+      if (base >= rangeStart && base <= rangeEnd) results.push({...m, occDate:base});
+      continue;
+    }
+    let cur = base;
+    const recEnd = (m.recurrenceEnd||'').slice(0,10) || rangeEnd;
+    const effEnd = recEnd < rangeEnd ? recEnd : rangeEnd;
+    let idx = 0;
+    while (cur <= effEnd && results.length < 200) {
+      if (cur >= rangeStart) results.push({...m, occDate:cur, occIdx:idx});
+      cur = addInterval(cur, m.recurrence);
+      if (!cur) break;
+      idx++;
+    }
+  }
+  return results.sort((a,b) => a.occDate.localeCompare(b.occDate));
+}
+
+function getMonthCells(year, month) {
+  const first = new Date(year, month, 1);
+  const startDay = first.getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const prevDays = new Date(year, month, 0).getDate();
+  const cells = [];
+  for (let i = startDay-1; i >= 0; i--) {
+    const d = prevDays - i;
+    const m2 = month === 0 ? 12 : month;
+    const y2 = month === 0 ? year-1 : year;
+    cells.push({date:`${y2}-${String(m2).padStart(2,'0')}-${String(d).padStart(2,'0')}`, day:d, current:false});
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push({date:`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`, day:d, current:true});
+  }
+  const rem = 7 - (cells.length % 7);
+  if (rem < 7) {
+    for (let d = 1; d <= rem; d++) {
+      const m2 = month+2 > 12 ? 1 : month+2;
+      const y2 = month+2 > 12 ? year+1 : year;
+      cells.push({date:`${y2}-${String(m2).padStart(2,'0')}-${String(d).padStart(2,'0')}`, day:d, current:false});
+    }
+  }
+  return cells;
+}
+
+function renderSboCalendar(meetings, scope) {
+  const yr = S.ui.sboCalYear || new Date().getFullYear();
+  const mo = S.ui.sboCalMonth ?? new Date().getMonth();
+  const cells = getMonthCells(yr, mo);
+  const rangeStart = cells[0].date;
+  const rangeEnd = cells[cells.length-1].date;
+  const occs = expandRecurring(meetings, rangeStart, rangeEnd);
+  const byDate = {};
+  occs.forEach(o => { (byDate[o.occDate] = byDate[o.occDate]||[]).push(o); });
+  const colors = sboColorMap();
+  const todayStr = new Date().toISOString().slice(0,10);
+
+  return `<div class="sbo-cal">
+    <div class="sbo-cal-hd">
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="sbo-cal-nav" onclick="sboCalNav(-1,'${scope}')">&lt;</button>
+        <span class="sbo-cal-title">${MONTH_NAMES[mo]} ${yr}</span>
+        <button class="sbo-cal-nav" onclick="sboCalNav(1,'${scope}')">&gt;</button>
+      </div>
+      <button style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--font-b);font-weight:500" onclick="sboCalToday('${scope}')">Today</button>
+    </div>
+    <div class="sbo-cal-grid">
+      ${DAY_NAMES.map(d => `<div class="sbo-cal-day-hd">${d}</div>`).join('')}
+      ${cells.map(c => {
+        const dayMt = byDate[c.date] || [];
+        const isToday = c.date === todayStr;
+        return `<div class="sbo-cal-cell ${c.current?'':'other'}">
+          <div class="sbo-cal-cell-day ${isToday?'today':''}">${c.day}</div>
+          ${dayMt.slice(0,3).map(o => `<button class="sbo-cal-pill" style="background:${colors[o.sboId]||'var(--accent)'}" title="${esc(o.title)}${o.sboName?' — '+esc(o.sboName):''}" onclick="event.stopPropagation()">${esc(o.title)}</button>`).join('')}
+          ${dayMt.length > 3 ? `<span class="sbo-cal-more">+${dayMt.length-3} more</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function sboCalNav(dir, scope) {
+  let yr = S.ui.sboCalYear, mo = S.ui.sboCalMonth;
+  mo += dir;
+  if (mo < 0) { yr--; mo = 11; }
+  if (mo > 11) { yr++; mo = 0; }
+  S.ui.sboCalYear = yr; S.ui.sboCalMonth = mo;
+  saveState();
+  if (scope === 'hub') renderSboHub(); else renderSboDetail(S.ui.sboDetail);
+}
+
+function sboCalToday(scope) {
+  S.ui.sboCalYear = new Date().getFullYear();
+  S.ui.sboCalMonth = new Date().getMonth();
+  saveState();
+  if (scope === 'hub') renderSboHub(); else renderSboDetail(S.ui.sboDetail);
+}
+
+// ── SBO GANTT ──
+function renderSboGantt(groups) {
+  const STATUS_COLORS = {'not-started':'var(--text-3)','in-progress':'var(--blue)',blocked:'var(--red)',complete:'var(--green)'};
+  const STATUS_LABELS = {'not-started':'Not Started','in-progress':'In Progress',blocked:'Blocked',complete:'Complete'};
+
+  function parseD(s) { if (!s) return null; const d = new Date(s+'T00:00:00'); return isNaN(d.getTime()) ? null : d; }
+  function daysBetween(a,b) { return Math.round((b-a)/(1000*60*60*24)); }
+  function fmtShort(d) { return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+
+  const allDates = [];
+  groups.forEach(g => g.tasks.forEach(t => { const s=parseD(t.due),e=parseD(t.endDate); if(s)allDates.push(s); if(e)allDates.push(e); }));
+  if (!allDates.length) {
+    return '<div class="empty-state" style="padding:32px"><p>No tasks with due dates to display. Add tasks with due dates to see the Gantt chart.</p></div>';
+  }
+
+  const minD = new Date(Math.min(...allDates.map(d=>d.getTime())));
+  const maxD = new Date(Math.max(...allDates.map(d=>d.getTime())));
+  const timeStart = new Date(minD); timeStart.setDate(timeStart.getDate()-7);
+  const timeEnd = new Date(maxD); timeEnd.setDate(timeEnd.getDate()+14);
+  const totalDays = Math.max(daysBetween(timeStart, timeEnd)+1, 30);
+
+  const weeks = [];
+  let cur = new Date(timeStart), col = 0;
+  while (col < totalDays) {
+    const span = Math.min((7 - cur.getDay()) % 7 || 7, totalDays - col);
+    weeks.push({label: fmtShort(cur), span});
+    col += span;
+    cur = new Date(cur.getTime() + span*24*60*60*1000);
+  }
+
+  const todayOff = daysBetween(timeStart, new Date());
+
+  let rows = '';
+  groups.forEach(g => {
+    rows += `<div class="sbo-gantt-group">${esc(g.name)}<span>${g.tasks.length} tasks</span></div>`;
+    g.tasks.forEach(t => {
+      const start = parseD(t.due);
+      const end = parseD(t.endDate) || start;
+      if (!start) {
+        rows += `<div class="sbo-gantt-lbl">${esc(t.text)}</div><div class="sbo-gantt-bar-row"><div class="sbo-gantt-nodate">No due date</div></div>`;
+        return;
+      }
+      const startCol = daysBetween(timeStart, start);
+      const duration = Math.max(daysBetween(start, end)+1, 1);
+      const leftPct = (startCol/totalDays*100).toFixed(2);
+      const widthPct = Math.max((duration/totalDays*100), 1.5).toFixed(2);
+      const color = STATUS_COLORS[t.status] || 'var(--text-3)';
+      rows += `<div class="sbo-gantt-lbl"><span class="gdot" style="background:${color}"></span>${esc(t.text)}</div>`;
+      rows += `<div class="sbo-gantt-bar-row">
+        ${todayOff >= 0 && todayOff <= totalDays ? `<div class="sbo-gantt-today" style="left:${(todayOff/totalDays*100).toFixed(2)}%"></div>` : ''}
+        <div class="sbo-gantt-bar" style="left:${leftPct}%;width:${widthPct}%;background:${color}" title="${fmtShort(start)}${end&&end!==start?' — '+fmtShort(end):''}">
+          <span>${esc(t.owner) || STATUS_LABELS[t.status] || ''}</span>
+        </div>
+      </div>`;
+    });
+  });
+
+  return `<div class="sbo-gantt"><div class="sbo-gantt-inner">
+    <div class="sbo-gantt-lbl-hd">Task</div>
+    <div class="sbo-gantt-time-hd">${weeks.map(w => `<div class="sbo-gantt-week" style="width:${w.span*3}px">${w.label}</div>`).join('')}</div>
+    ${rows}
+  </div></div>`;
+}
+
+// ── SBO DETAIL PAGE ──
+function renderSboDetail(sboId) {
+  const el = document.getElementById('view-sbo-tracker');
+  const s = S.sbos[sboId];
+  if (!s) { closeSboDetail(); return; }
+  const view = S.ui.sboView || 'list';
+  const tasksDone = (s.tasks||[]).filter(t=>t.status==='complete').length;
+
+  el.innerHTML = `
+  <div class="view-pad" style="max-width:1100px">
+    <button class="back-btn" onclick="closeSboDetail()">&larr; SBO Tracker</button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap">
+      <h1 class="page-title" style="margin:0">${esc(s.name)}</h1>
+      ${statusBadge(s.status)}
+      <button class="icon-btn" style="font-size:11px" title="Change status" onclick="showSboStatusMenu('${sboId}')">▾</button>
+      <div id="sbo-status-menu" style="display:none;position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);z-index:20;padding:4px 0;min-width:130px"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;font-size:13px;color:var(--text-2);margin-bottom:6px;flex-wrap:wrap">
+      ${s.owner ? `<span>${esc(s.owner)}</span>` : ''}
+      ${s.division ? `<span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;background:var(--surface-2);padding:2px 8px;border-radius:3px">${esc(s.division)}</span>` : ''}
+    </div>
+    ${s.description ? `<p style="font-size:13.5px;color:var(--text-2);line-height:1.5;margin-bottom:16px">${esc(s.description)}</p>` : ''}
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      ${sboViewTabsHtml('detail')}
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="showSboAddTaskForm('${sboId}')">+ Add Task</button>
+        <button class="btn btn-primary btn-sm" onclick="showSboMeetingModal('${sboId}')">+ Add Meeting</button>
+      </div>
+    </div>
+    <div id="sbo-detail-content"></div>
+  </div>`;
+
+  const content = document.getElementById('sbo-detail-content');
+  if (view === 'list') {
+    content.innerHTML = `<div class="grid-2">
+      <div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Tasks</div><span style="font-size:12px;color:var(--text-3)">${tasksDone} of ${(s.tasks||[]).length} done</span></div>
+          <div id="sbo-task-form-slot"></div>
+          ${(s.tasks||[]).length ? `<ul class="task-list">${(s.tasks||[]).map(t => `
+            <li class="task-item">
+              <div class="task-check ${t.status==='complete'?'ck':''}" onclick="toggleSboTask('${sboId}','${t.id}')"></div>
+              <div class="task-body">
+                <div class="task-text ${t.status==='complete'?'done':''}">${esc(t.text)}</div>
+                <div class="task-meta">
+                  ${t.owner?`<span class="task-owner">${esc(t.owner)}</span>`:''}
+                  <span class="task-status ${{
+                    'not-started':'ts-ns','in-progress':'ts-ip','blocked':'ts-bl','complete':'ts-dn'
+                  }[t.status]||''}">${{'not-started':'Not Started','in-progress':'In Progress',blocked:'Blocked',complete:'Complete'}[t.status]||t.status}</span>
+                  <span class="${{high:'prio-high',medium:'prio-med',low:'prio-low'}[t.priority]||''}">${t.priority||''}</span>
+                  ${t.due?`<span style="font-size:10.5px;color:var(--text-3)">${t.due}</span>`:''}
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="icon-btn" onclick="showEditSboTaskModal('${sboId}','${t.id}')">✎</button>
+                <button class="icon-btn" onclick="deleteSboTask('${sboId}','${t.id}')">✕</button>
+              </div>
+            </li>`).join('')}</ul>` : '<div class="empty-state"><p>No tasks yet.</p></div>'}
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-hd"><div class="card-title">Meetings</div><span style="font-size:12px;color:var(--text-3)">${(s.meetings||[]).length}</span></div>
+          ${(s.meetings||[]).length ? (s.meetings||[]).map(m => sboMeetingHtml(sboId, m)).join('') : '<div class="empty-state"><p>No meetings yet.</p></div>'}
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:10px">Notes</div>
+          <textarea class="notes-area" onblur="saveSboNotes('${sboId}',this.value)" id="sbo-notes-area">${esc(s.notes||'')}</textarea>
+        </div>
+      </div>
+    </div>`;
+  } else if (view === 'calendar') {
+    content.innerHTML = renderSboCalendar((s.meetings||[]).map(m=>({...m,sboId:s.id,sboName:s.name})), 'detail');
+  } else if (view === 'gantt') {
+    const groups = [{id:s.id, name:s.name, tasks:(s.tasks||[]).map(t=>({...t,sboId:s.id,sboName:s.name}))}];
+    content.innerHTML = renderSboGantt(groups);
+  }
+}
+
+function sboMeetingHtml(sboId, m) {
+  const isPast = m.date && m.date < new Date().toISOString().slice(0,10);
+  const recLabel = REC_LABELS[m.recurrence] || '';
+  return `<div class="sbo-meeting ${isPast?'past':''}">
+    <div class="sbo-meeting-hd">
+      <div style="flex:1;min-width:0">
+        <div class="sbo-meeting-title">${esc(m.title)}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:2px;flex-wrap:wrap">
+          ${m.date ? `<span class="sbo-meeting-date">${m.date}${m.endDate && m.endDate !== m.date ? ' — '+m.endDate : ''}</span>` : ''}
+          ${recLabel ? `<span class="sbo-meeting-rec">${recLabel}</span>` : ''}
+        </div>
+      </div>
+      <div class="sbo-meeting-actions">
+        <button class="icon-btn" onclick="showEditSboMeetingModal('${sboId}','${m.id}')">✎</button>
+        <button class="icon-btn" onclick="deleteSboMeeting('${sboId}','${m.id}')">✕</button>
+      </div>
+    </div>
+    ${m.attendees ? `<div class="sbo-meeting-attendees"><strong style="color:var(--text-2)">Attendees:</strong> ${esc(m.attendees)}</div>` : ''}
+    ${m.description ? `<div style="font-size:12px;color:var(--text-2);margin-top:4px;line-height:1.5">${esc(m.description)}</div>` : ''}
+    ${m.agenda ? `<div class="sbo-meeting-section"><div class="sbo-meeting-section-title">Agenda</div><div class="sbo-meeting-section-body">${esc(m.agenda)}</div></div>` : ''}
+    ${m.notes ? `<div class="sbo-meeting-section"><div class="sbo-meeting-section-title">Notes</div><div class="sbo-meeting-section-body">${esc(m.notes)}</div></div>` : ''}
+    ${m.actionItems ? `<div class="sbo-meeting-section"><div class="sbo-meeting-section-title">Action Items</div><div class="sbo-meeting-section-body">${esc(m.actionItems)}</div></div>` : ''}
+  </div>`;
+}
+
+// ── SBO CRUD ──
+function showAddSboModal() {
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Add SBO</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Name</label><input id="sbo-add-name" placeholder="e.g. Revenue Operations"></div>
+      <div style="display:flex;gap:12px">
+        <div class="field" style="flex:1"><label>Owner</label><input id="sbo-add-owner" placeholder="SBO owner name"></div>
+        <div class="field" style="flex:1"><label>Division</label><input id="sbo-add-division" placeholder="e.g. Revenue, Finance"></div>
+      </div>
+      <div class="field"><label>Description</label><input id="sbo-add-desc" placeholder="Brief description"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doAddSbo()">Save</button>
+    </div>`);
+}
+
+function doAddSbo() {
+  const name = document.getElementById('sbo-add-name').value.trim();
+  if (!name) return;
+  const id = genId();
+  S.sbos[id] = {
+    id, name,
+    owner: document.getElementById('sbo-add-owner').value.trim(),
+    division: document.getElementById('sbo-add-division').value.trim(),
+    status: 'on-track',
+    description: document.getElementById('sbo-add-desc').value.trim(),
+    notes: '',
+    sortOrder: sboList().length,
+    tasks: [],
+    meetings: []
+  };
+  saveState();
+  closeModal();
+  toast('SBO added.');
+  renderSboHub();
+}
+
+function deleteSbo(sboId) {
+  if (!confirm('Delete this SBO and all its tasks and meetings?')) return;
+  delete S.sbos[sboId];
+  if (S.ui.sboDetail === sboId) S.ui.sboDetail = null;
+  saveState();
+  toast('SBO deleted.');
+  renderSboTracker();
+}
+
+function showSboStatusMenu(sboId) {
+  const menu = document.getElementById('sbo-status-menu');
+  if (!menu) return;
+  const statuses = ['on-track','at-risk','blocked','complete'];
+  menu.innerHTML = statuses.map(s =>
+    `<button style="display:block;width:100%;text-align:left;padding:6px 12px;border:none;background:none;cursor:pointer;font-size:12.5px;color:var(--text);font-family:var(--font-b);transition:background .1s"
+      onmouseenter="this.style.background='var(--surface-2)'" onmouseleave="this.style.background='none'"
+      onclick="changeSboStatus('${sboId}','${s}')">${s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</button>`
+  ).join('');
+  menu.style.display = 'block';
+  setTimeout(() => {
+    const handler = () => { menu.style.display = 'none'; document.removeEventListener('click', handler); };
+    document.addEventListener('click', handler);
+  }, 10);
+}
+
+function changeSboStatus(sboId, status) {
+  S.sbos[sboId].status = status;
+  saveState();
+  renderSboDetail(sboId);
+}
+
+// ── SBO TASK CRUD ──
+function showSboAddTaskForm(sboId) {
+  renderSboDetail(sboId);
+  const slot = document.getElementById('sbo-task-form-slot');
+  if (!slot) return;
+  slot.innerHTML = `<div class="add-form open">
+    <input id="sbo-tf-text" placeholder="Task description">
+    <div class="add-form-row">
+      <input id="sbo-tf-owner" placeholder="Owner">
+      <input id="sbo-tf-due" type="date" placeholder="Due date">
+    </div>
+    <div class="add-form-row">
+      <input id="sbo-tf-end" type="date" placeholder="End date">
+      <select id="sbo-tf-status"><option value="not-started">Not Started</option><option value="in-progress">In Progress</option><option value="blocked">Blocked</option><option value="complete">Complete</option></select>
+      <select id="sbo-tf-prio"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select>
+    </div>
+    <div class="add-form-actions">
+      <button class="btn btn-ghost btn-sm" onclick="renderSboDetail('${sboId}')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="doAddSboTask('${sboId}')">Save</button>
+    </div>
+  </div>`;
+  document.getElementById('sbo-tf-text').focus();
+}
+
+function doAddSboTask(sboId) {
+  const text = document.getElementById('sbo-tf-text').value.trim();
+  if (!text) return;
+  if (!S.sbos[sboId].tasks) S.sbos[sboId].tasks = [];
+  S.sbos[sboId].tasks.push({
+    id: genId(), text,
+    owner: document.getElementById('sbo-tf-owner').value.trim(),
+    due: document.getElementById('sbo-tf-due').value,
+    endDate: document.getElementById('sbo-tf-end').value,
+    status: document.getElementById('sbo-tf-status').value,
+    priority: document.getElementById('sbo-tf-prio').value
+  });
+  saveState();
+  toast('Task added.');
+  renderSboDetail(sboId);
+}
+
+function toggleSboTask(sboId, taskId) {
+  const t = (S.sbos[sboId].tasks||[]).find(x => x.id === taskId);
+  if (!t) return;
+  t.status = t.status === 'complete' ? 'not-started' : 'complete';
+  saveState();
+  renderSboDetail(sboId);
+}
+
+function showEditSboTaskModal(sboId, taskId) {
+  const t = (S.sbos[sboId].tasks||[]).find(x => x.id === taskId);
+  if (!t) return;
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Edit Task</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Description</label><input id="sbo-et-text" value="${esc(t.text)}"></div>
+      <div style="display:flex;gap:12px">
+        <div class="field" style="flex:1"><label>Owner</label><input id="sbo-et-owner" value="${esc(t.owner)}"></div>
+        <div class="field" style="flex:1"><label>Due Date</label><input type="date" id="sbo-et-due" value="${t.due||''}"></div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div class="field" style="flex:1"><label>End Date</label><input type="date" id="sbo-et-end" value="${t.endDate||''}"></div>
+        <div class="field" style="flex:1"><label>Status</label>
+          <select id="sbo-et-status">
+            <option value="not-started" ${t.status==='not-started'?'selected':''}>Not Started</option>
+            <option value="in-progress" ${t.status==='in-progress'?'selected':''}>In Progress</option>
+            <option value="blocked" ${t.status==='blocked'?'selected':''}>Blocked</option>
+            <option value="complete" ${t.status==='complete'?'selected':''}>Complete</option>
+          </select>
+        </div>
+        <div class="field" style="flex:1"><label>Priority</label>
+          <select id="sbo-et-prio">
+            <option value="low" ${t.priority==='low'?'selected':''}>Low</option>
+            <option value="medium" ${t.priority==='medium'?'selected':''}>Medium</option>
+            <option value="high" ${t.priority==='high'?'selected':''}>High</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doEditSboTask('${sboId}','${taskId}')">Save</button>
+    </div>`);
+}
+
+function doEditSboTask(sboId, taskId) {
+  const t = (S.sbos[sboId].tasks||[]).find(x => x.id === taskId);
+  if (!t) return;
+  t.text = document.getElementById('sbo-et-text').value.trim() || t.text;
+  t.owner = document.getElementById('sbo-et-owner').value.trim();
+  t.due = document.getElementById('sbo-et-due').value;
+  t.endDate = document.getElementById('sbo-et-end').value;
+  t.status = document.getElementById('sbo-et-status').value;
+  t.priority = document.getElementById('sbo-et-prio').value;
+  saveState();
+  closeModal();
+  toast('Task updated.');
+  renderSboDetail(sboId);
+}
+
+function deleteSboTask(sboId, taskId) {
+  S.sbos[sboId].tasks = (S.sbos[sboId].tasks||[]).filter(t => t.id !== taskId);
+  saveState();
+  toast('Task deleted.');
+  renderSboDetail(sboId);
+}
+
+// ── SBO MEETING CRUD ──
+function sboMeetingFormHtml(prefix, m) {
+  m = m || {};
+  return `
+    <div class="field"><label>Title</label><input id="${prefix}-title" value="${esc(m.title||'')}" placeholder="Meeting title"></div>
+    <div style="display:flex;gap:12px">
+      <div class="field" style="flex:1"><label>Date</label><input type="date" id="${prefix}-date" value="${m.date||''}"></div>
+      <div class="field" style="flex:1"><label>End Date</label><input type="date" id="${prefix}-enddate" value="${m.endDate||''}"></div>
+    </div>
+    <div class="field"><label>Attendees</label><input id="${prefix}-attend" value="${esc(m.attendees||'')}" placeholder="Comma-separated names"></div>
+    <div class="field"><label>Description</label><input id="${prefix}-desc" value="${esc(m.description||'')}" placeholder="Brief description"></div>
+    <div class="field"><label>Agenda</label><textarea id="${prefix}-agenda" style="width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;min-height:60px;resize:vertical;outline:none">${esc(m.agenda||'')}</textarea></div>
+    <div style="display:flex;gap:12px">
+      <div class="field" style="flex:1"><label>Recurrence</label>
+        <select id="${prefix}-rec">
+          <option value="none" ${(m.recurrence||'none')==='none'?'selected':''}>None</option>
+          <option value="weekly" ${m.recurrence==='weekly'?'selected':''}>Weekly</option>
+          <option value="biweekly" ${m.recurrence==='biweekly'?'selected':''}>Biweekly</option>
+          <option value="monthly" ${m.recurrence==='monthly'?'selected':''}>Monthly</option>
+          <option value="quarterly" ${m.recurrence==='quarterly'?'selected':''}>Quarterly</option>
+        </select>
+      </div>
+      <div class="field" style="flex:1"><label>Recurrence End</label><input type="date" id="${prefix}-recend" value="${m.recurrenceEnd||''}"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="${prefix}-notes" style="width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;min-height:50px;resize:vertical;outline:none">${esc(m.notes||'')}</textarea></div>
+    <div class="field"><label>Action Items</label><textarea id="${prefix}-actions" style="width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;font-family:var(--font-b);font-size:12.5px;min-height:50px;resize:vertical;outline:none">${esc(m.actionItems||'')}</textarea></div>`;
+}
+
+function readMeetingForm(prefix) {
+  return {
+    title: document.getElementById(prefix+'-title').value.trim(),
+    date: document.getElementById(prefix+'-date').value,
+    endDate: document.getElementById(prefix+'-enddate').value,
+    attendees: document.getElementById(prefix+'-attend').value.trim(),
+    description: document.getElementById(prefix+'-desc').value.trim(),
+    agenda: document.getElementById(prefix+'-agenda').value.trim(),
+    recurrence: document.getElementById(prefix+'-rec').value,
+    recurrenceEnd: document.getElementById(prefix+'-recend').value,
+    notes: document.getElementById(prefix+'-notes').value.trim(),
+    actionItems: document.getElementById(prefix+'-actions').value.trim()
+  };
+}
+
+function showSboMeetingModal(sboId) {
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Add Meeting</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">${sboMeetingFormHtml('sbo-am')}</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doAddSboMeeting('${sboId}')">Save</button>
+    </div>`);
+}
+
+function doAddSboMeeting(sboId) {
+  const form = readMeetingForm('sbo-am');
+  if (!form.title) return;
+  if (!S.sbos[sboId].meetings) S.sbos[sboId].meetings = [];
+  S.sbos[sboId].meetings.push({id: genId(), ...form});
+  S.sbos[sboId].meetings.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+  saveState();
+  closeModal();
+  toast('Meeting added.');
+  renderSboDetail(sboId);
+}
+
+function showEditSboMeetingModal(sboId, meetingId) {
+  const m = (S.sbos[sboId].meetings||[]).find(x => x.id === meetingId);
+  if (!m) return;
+  showModal(`
+    <div class="modal-hd"><span class="modal-title">Edit Meeting</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">${sboMeetingFormHtml('sbo-em', m)}</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doEditSboMeeting('${sboId}','${meetingId}')">Save</button>
+    </div>`);
+}
+
+function doEditSboMeeting(sboId, meetingId) {
+  const m = (S.sbos[sboId].meetings||[]).find(x => x.id === meetingId);
+  if (!m) return;
+  const form = readMeetingForm('sbo-em');
+  if (!form.title) return;
+  Object.assign(m, form);
+  S.sbos[sboId].meetings.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+  saveState();
+  closeModal();
+  toast('Meeting updated.');
+  renderSboDetail(sboId);
+}
+
+function deleteSboMeeting(sboId, meetingId) {
+  S.sbos[sboId].meetings = (S.sbos[sboId].meetings||[]).filter(m => m.id !== meetingId);
+  saveState();
+  toast('Meeting deleted.');
+  renderSboDetail(sboId);
+}
+
+function saveSboNotes(sboId, value) {
+  S.sbos[sboId].notes = value;
+  saveState();
+}
+
+// ============================================================
 // 13. GLOBAL SEARCH
 // ============================================================
 function initSearch() {
@@ -2471,12 +3179,12 @@ function initSearch() {
     if (!results.length) {
       resultsEl.innerHTML = '<div class="search-empty">No results found</div>';
     } else {
-      resultsEl.innerHTML = results.slice(0, 10).map(r => `
-        <div class="search-result" onclick="goToSearchResult('${r.initId}','${r.objId||''}');document.getElementById('global-search').value='';document.getElementById('search-results').classList.remove('open')">
+      resultsEl.innerHTML = results.slice(0, 12).map(r => `
+        <div class="search-result" onclick="${r.sboId ? `openSboDetail('${r.sboId}')` : `goToSearchResult('${r.initId}','${r.objId||''}')`};document.getElementById('global-search').value='';document.getElementById('search-results').classList.remove('open')">
           <div class="search-result-text">${highlightMatch(esc(r.text), q)}</div>
           <div class="search-result-meta">
             <span class="search-result-type">${r.type}</span>
-            <span>${esc(r.initName)}</span>
+            <span>${esc(r.initName || r.sboLabel || '')}</span>
           </div>
         </div>`).join('');
     }
@@ -2523,6 +3231,28 @@ function searchAll(query) {
       results.push({type:'Note', text:snippet, initId:i.id, initName});
     }
   });
+  Object.values(S.sbos || {}).forEach(s => {
+    const sboLabel = 'SBO: ' + s.name;
+    if (s.name.toLowerCase().includes(query)) {
+      results.push({type:'SBO', text:s.name, sboId:s.id, sboLabel});
+    }
+    (s.tasks||[]).forEach(t => {
+      if (t.text.toLowerCase().includes(query)) {
+        results.push({type:'SBO Task', text:t.text, sboId:s.id, sboLabel});
+      }
+    });
+    (s.meetings||[]).forEach(m => {
+      if (m.title.toLowerCase().includes(query) || (m.agenda||'').toLowerCase().includes(query)) {
+        results.push({type:'SBO Meeting', text:m.title, sboId:s.id, sboLabel});
+      }
+    });
+    if (s.notes && s.notes.toLowerCase().includes(query)) {
+      const idx = s.notes.toLowerCase().indexOf(query);
+      const start = Math.max(0, idx - 30);
+      const snippet = (start > 0 ? '…' : '') + s.notes.substring(start, idx + query.length + 50) + (idx + query.length + 50 < s.notes.length ? '…' : '');
+      results.push({type:'SBO Note', text:snippet, sboId:s.id, sboLabel});
+    }
+  });
   return results;
 }
 
@@ -2533,6 +3263,7 @@ function highlightMatch(text, query) {
 }
 
 function goToSearchResult(initId, objId) {
+  if (!initId) return;
   if (objId) {
     navigate(initId);
     viewObjective(initId, objId);
