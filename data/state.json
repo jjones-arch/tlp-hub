@@ -98,7 +98,8 @@
               "text": "Committee representation varies by division; not all SBOs will serve",
               "date": "2026-03-26"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o2",
@@ -131,7 +132,8 @@
               "text": "95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win",
               "date": "2026-04-09"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o3",
@@ -149,7 +151,8 @@
             }
           ],
           "risks": [],
-          "decisions": []
+          "decisions": [],
+          "description": ""
         },
         {
           "id": "o4",
@@ -176,7 +179,8 @@
               "mitigation": "Meeting with Fadi in progress. JoJo to document criteria after meeting."
             }
           ],
-          "decisions": []
+          "decisions": [],
+          "description": ""
         },
         {
           "id": "o5",
@@ -209,7 +213,8 @@
               "text": "TLP's budget role is visibility and accountability ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ not promising spend reduction targets",
               "date": "2026-03-26"
             }
-          ]
+          ],
+          "description": ""
         }
       ],
       "tasks": [
@@ -401,7 +406,8 @@
               "text": "Q2 approach: manual data collection by Jessi while Zipped is built ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ do not wait for a perfect system",
               "date": "2026-04-09"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o2",
@@ -425,7 +431,8 @@
               "text": "Moving away from one giant aggregate report; focus on concrete SBO program outcomes first",
               "date": "2026-03-26"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o3",
@@ -460,7 +467,8 @@
               "mitigation": "Zipped prototype will eventually bridge or replace both."
             }
           ],
-          "decisions": []
+          "decisions": [],
+          "description": ""
         },
         {
           "id": "o4",
@@ -483,7 +491,8 @@
               "text": "Reporting will not drive accountability until reliable, consistent data exists",
               "date": "2026-04-09"
             }
-          ]
+          ],
+          "description": ""
         }
       ],
       "tasks": [
@@ -643,7 +652,8 @@
               "text": "Prototype should capture MNDA / trust-center step before deeper document collection",
               "date": "2026-03-26"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o2",
@@ -676,7 +686,8 @@
               "text": "First build focus is vendor request portal (external-facing document collection)",
               "date": "2026-03-26"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o3",
@@ -703,7 +714,8 @@
             }
           ],
           "risks": [],
-          "decisions": []
+          "decisions": [],
+          "description": ""
         },
         {
           "id": "o4",
@@ -726,7 +738,8 @@
               "text": "If prototype proves valuable, will be handed to engineering for production development",
               "date": "2026-04-09"
             }
-          ]
+          ],
+          "description": ""
         },
         {
           "id": "o5",
@@ -753,7 +766,8 @@
               "mitigation": "Add timestamps before building more complex workflows."
             }
           ],
-          "decisions": []
+          "decisions": [],
+          "description": ""
         }
       ],
       "tasks": [
