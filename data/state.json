@@ -9,12 +9,9 @@
   "artifacts": [],
   "transcripts": [],
   "ui": {
-    "currentView": "sbo",
+    "currentView": "dashboard",
     "focusContent": null,
-    "objectiveView": {
-      "initId": "sbo",
-      "objId": "dt3q23ry"
-    },
+    "objectiveView": null,
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
@@ -218,7 +215,16 @@
           "id": "dt3q23ry",
           "text": "[additional scope] Define process for integrations and Chrome extensions",
           "complete": false,
-          "tasks": [],
+          "tasks": [
+            {
+              "id": "7jpkao3d",
+              "text": "Align with Dave on next steps",
+              "owner": "Jordan Jones",
+              "due": "2026-04-17",
+              "status": "not-started",
+              "priority": "high"
+            }
+          ],
           "risks": [],
           "decisions": []
         }
