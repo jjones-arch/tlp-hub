@@ -154,6 +154,12 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
 .obj-meta-count{font-size:10.5px;color:var(--text-3);display:flex;align-items:center;gap:3px}
 .obj-arrow{color:var(--text-3);flex-shrink:0;transition:transform .14s}
 .obj-item:hover .obj-arrow{transform:translateX(2px);color:var(--text-2)}
+.obj-drag-handle{display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--text-3);flex-shrink:0;padding:2px 0;opacity:0;transition:opacity .14s}
+.obj-item:hover .obj-drag-handle{opacity:1}
+.obj-drag-handle:active{cursor:grabbing}
+.obj-item.dragging{opacity:0.4;background:var(--surface-2)}
+.obj-item.drag-over-top{box-shadow:0 -2px 0 0 var(--navy)}
+.obj-item.drag-over-bottom{box-shadow:0 2px 0 0 var(--navy)}
 
 /* ── BREADCRUMB ── */
 .breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:20px;font-size:13px}
@@ -1276,7 +1282,8 @@ function renderObjItem(initId, o) {
   if (tCount) metaParts.push(`${tCount} task${tCount>1?'s':''}`);
   if (rCount) metaParts.push(`${rCount} risk${rCount>1?'s':''}`);
   if (dCount) metaParts.push(`${dCount} decision${dCount>1?'s':''}`);
-  return `<li class="obj-item" onclick="viewObjective('${initId}','${o.id}')">
+  return `<li class="obj-item" data-init-id="${initId}" data-obj-id="${o.id}" onclick="viewObjective('${initId}','${o.id}')" ondragstart="objDragStart(event)" ondragend="objDragEnd(event)" ondragover="objDragOver(event)" ondragleave="objDragLeave(event)" ondrop="objDrop(event)">
+    <div class="obj-drag-handle" draggable="true" onmousedown="this.parentElement.setAttribute('draggable','true')" onclick="event.stopPropagation()" title="Drag to reorder"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="5.5" cy="3.5" r="1.2"/><circle cx="10.5" cy="3.5" r="1.2"/><circle cx="5.5" cy="8" r="1.2"/><circle cx="10.5" cy="8" r="1.2"/><circle cx="5.5" cy="12.5" r="1.2"/><circle cx="10.5" cy="12.5" r="1.2"/></svg></div>
     <div class="obj-check ${o.complete?'ck':''}" onclick="event.stopPropagation();toggleObjective('${initId}','${o.id}')"></div>
     <div class="obj-body">
       <span class="obj-text ${o.complete?'done':''}">${esc(o.text)}</span>
@@ -1534,6 +1541,73 @@ function saveNewObjective(initId) {
   toggleAddObjective(initId);
   renderInitiative(initId);
   toast('Objective added.');
+}
+
+let _objDragData = null;
+
+function objDragStart(e) {
+  const li = e.target.closest('.obj-item');
+  if (!li) return;
+  if (!e.target.closest('.obj-drag-handle') && e.target !== li) {
+    e.preventDefault();
+    return;
+  }
+  _objDragData = { initId: li.dataset.initId, objId: li.dataset.objId };
+  li.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', '');
+}
+
+function objDragEnd(e) {
+  _objDragData = null;
+  document.querySelectorAll('.obj-item').forEach(el => {
+    el.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom');
+    el.removeAttribute('draggable');
+  });
+}
+
+function objDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const li = e.target.closest('.obj-item');
+  if (!li || !_objDragData || li.dataset.objId === _objDragData.objId) return;
+  li.classList.remove('drag-over-top', 'drag-over-bottom');
+  const rect = li.getBoundingClientRect();
+  const midY = rect.top + rect.height / 2;
+  li.classList.add(e.clientY < midY ? 'drag-over-top' : 'drag-over-bottom');
+}
+
+function objDragLeave(e) {
+  const li = e.target.closest('.obj-item');
+  if (li) li.classList.remove('drag-over-top', 'drag-over-bottom');
+}
+
+function objDrop(e) {
+  e.preventDefault();
+  const li = e.target.closest('.obj-item');
+  if (!li || !_objDragData) return;
+  const initId = _objDragData.initId;
+  const fromId = _objDragData.objId;
+  const toId = li.dataset.objId;
+  if (fromId === toId) return;
+
+  const objs = S.initiatives[initId].objectives;
+  const fromIdx = objs.findIndex(o => o.id === fromId);
+  const toIdx = objs.findIndex(o => o.id === toId);
+  if (fromIdx === -1 || toIdx === -1) return;
+
+  const rect = li.getBoundingClientRect();
+  const midY = rect.top + rect.height / 2;
+  const insertBefore = e.clientY < midY;
+
+  const [moved] = objs.splice(fromIdx, 1);
+  let newIdx = objs.findIndex(o => o.id === toId);
+  if (!insertBefore) newIdx++;
+  objs.splice(newIdx, 0, moved);
+
+  saveState();
+  renderInitiative(initId);
+  toast('Objectives reordered.');
 }
 
 function toggleTask(initId, taskId) {

@@ -37,6 +37,7 @@ model InitiativeOwner {
 model Objective {
   id           String     @id @default(uuid())
   text         String
+  description  String     @default("")
   complete     Boolean    @default(false)
   sortOrder    Int        @default(0)
   initiativeId String

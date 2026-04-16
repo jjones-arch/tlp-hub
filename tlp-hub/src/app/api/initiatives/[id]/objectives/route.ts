@@ -10,6 +10,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     data: {
       id: uuid(),
       text: body.text,
+      description: body.description || "",
       complete: false,
       sortOrder: (maxSort?.sortOrder ?? -1) + 1,
       initiativeId: id,

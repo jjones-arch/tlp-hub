@@ -8,6 +8,23 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { taskStatusClasses, taskStatusLabel, priorityClasses } from "@/lib/utils";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Owner {
   id: string;
@@ -16,6 +33,7 @@ interface Owner {
 interface Objective {
   id: string;
   text: string;
+  description: string;
   complete: boolean;
   sortOrder: number;
 }
@@ -92,6 +110,96 @@ function impactBorderColor(impact: string) {
   return "border-l-text-3";
 }
 
+function SortableObjective({
+  obj,
+  onToggle,
+  onEdit,
+  onDelete,
+}: {
+  obj: Objective;
+  onToggle: (obj: Objective) => void;
+  onEdit: (obj: Objective) => void;
+  onDelete: (obj: Objective) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: obj.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
+    opacity: isDragging ? 0.5 : undefined,
+  };
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className="flex items-start gap-2.5 group"
+    >
+      <button
+        {...attributes}
+        {...listeners}
+        className="mt-0.5 flex-shrink-0 cursor-grab active:cursor-grabbing text-text-3 hover:text-text-2 focus:outline-none"
+        aria-label="Drag to reorder"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <circle cx="5.5" cy="3.5" r="1.2" />
+          <circle cx="10.5" cy="3.5" r="1.2" />
+          <circle cx="5.5" cy="8" r="1.2" />
+          <circle cx="10.5" cy="8" r="1.2" />
+          <circle cx="5.5" cy="12.5" r="1.2" />
+          <circle cx="10.5" cy="12.5" r="1.2" />
+        </svg>
+      </button>
+      <button
+        onClick={() => onToggle(obj)}
+        className={`mt-0.5 w-[18px] h-[18px] rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
+          obj.complete
+            ? "bg-green border-green text-white"
+            : "border-border hover:border-text-3"
+        }`}
+      >
+        {obj.complete && (
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 6.5L5 9L9.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </button>
+      <div className="flex-1 min-w-0">
+        <span className={`text-[13.5px] leading-snug ${obj.complete ? "line-through text-text-3" : "text-text"}`}>
+          {obj.text}
+        </span>
+        {obj.description && (
+          <p className="text-[12px] text-text-3 mt-0.5 leading-relaxed">{obj.description}</p>
+        )}
+      </div>
+      <div className="opacity-0 group-hover:opacity-100 flex gap-1 flex-shrink-0 transition-opacity">
+        <button
+          onClick={() => onEdit(obj)}
+          className="text-text-3 hover:text-text text-[13px]"
+          title="Edit objective"
+        >
+          ✎
+        </button>
+        <button
+          onClick={() => onDelete(obj)}
+          className="text-text-3 hover:text-red text-[13px]"
+          title="Delete objective"
+        >
+          ✕
+        </button>
+      </div>
+    </li>
+  );
+}
+
 export default function InitiativeDetailPage() {
   const { id } = useParams() as { id: string };
   const router = useRouter();
@@ -102,6 +210,10 @@ export default function InitiativeDetailPage() {
 
   const [showAddObjective, setShowAddObjective] = useState(false);
   const [newObjectiveText, setNewObjectiveText] = useState("");
+  const [newObjectiveDesc, setNewObjectiveDesc] = useState("");
+
+  const [editObjective, setEditObjective] = useState<Objective | null>(null);
+  const [editObjForm, setEditObjForm] = useState({ text: "", description: "" });
 
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTask, setNewTask] = useState({ text: "", owner: "", due: "", status: "not-started", priority: "medium" });
@@ -119,6 +231,37 @@ export default function InitiativeDetailPage() {
   const [newDecision, setNewDecision] = useState({ text: "", date: "" });
 
   const [notesValue, setNotesValue] = useState("");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  async function handleObjectiveDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !data) return;
+
+    const sorted = [...data.objectives].sort((a, b) => a.sortOrder - b.sortOrder);
+    const oldIndex = sorted.findIndex((o) => o.id === active.id);
+    const newIndex = sorted.findIndex((o) => o.id === over.id);
+    const reordered = arrayMove(sorted, oldIndex, newIndex).map((o, i) => ({
+      ...o,
+      sortOrder: i,
+    }));
+
+    setData({ ...data, objectives: reordered });
+
+    try {
+      await fetch(`/api/initiatives/${id}/objectives/reorder`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderedIds: reordered.map((o) => o.id) }),
+      });
+    } catch {
+      toast("Failed to reorder objectives", "err");
+      await fetchData();
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -177,15 +320,44 @@ export default function InitiativeDetailPage() {
       const res = await fetch(`/api/initiatives/${id}/objectives`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: newObjectiveText }),
+        body: JSON.stringify({ text: newObjectiveText, description: newObjectiveDesc }),
       });
       if (!res.ok) throw new Error();
       toast("Objective added.");
       setNewObjectiveText("");
+      setNewObjectiveDesc("");
       setShowAddObjective(false);
       await fetchData();
     } catch {
       toast("Failed to add objective", "err");
+    }
+  }
+
+  async function saveEditObjective() {
+    if (!editObjective || !editObjForm.text.trim()) return;
+    try {
+      const res = await fetch(`/api/initiatives/${id}/objectives/${editObjective.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: editObjForm.text, description: editObjForm.description }),
+      });
+      if (!res.ok) throw new Error();
+      toast("Objective updated.");
+      setEditObjective(null);
+      await fetchData();
+    } catch {
+      toast("Failed to update objective", "err");
+    }
+  }
+
+  async function deleteObjective(obj: Objective) {
+    try {
+      const res = await fetch(`/api/initiatives/${id}/objectives/${obj.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      toast("Objective deleted.");
+      await fetchData();
+    } catch {
+      toast("Failed to delete objective", "err");
     }
   }
 
@@ -428,45 +600,50 @@ export default function InitiativeDetailPage() {
             {showAddObjective && (
               <div className="mb-4 p-3 rounded border border-border bg-surface-2 space-y-2">
                 <input
-                  placeholder="Objective description"
+                  placeholder="Objective title"
                   value={newObjectiveText}
                   onChange={(e) => setNewObjectiveText(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") addObjective(); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) addObjective(); }}
                   className={inputCls}
                   autoFocus
                 />
+                <textarea
+                  placeholder="Description (optional)"
+                  value={newObjectiveDesc}
+                  onChange={(e) => setNewObjectiveDesc(e.target.value)}
+                  rows={2}
+                  className={`${inputCls} resize-y`}
+                />
                 <div className="flex gap-2 justify-end pt-1">
-                  <button onClick={() => { setShowAddObjective(false); setNewObjectiveText(""); }} className={btnGhost}>Cancel</button>
+                  <button onClick={() => { setShowAddObjective(false); setNewObjectiveText(""); setNewObjectiveDesc(""); }} className={btnGhost}>Cancel</button>
                   <button onClick={addObjective} className={btnPrimary}>Save</button>
                 </div>
               </div>
             )}
 
-            <ul className="space-y-2">
-              {data.objectives
-                .sort((a, b) => a.sortOrder - b.sortOrder)
-                .map((obj) => (
-                  <li key={obj.id} className="flex items-start gap-2.5 group">
-                    <button
-                      onClick={() => toggleObjective(obj)}
-                      className={`mt-0.5 w-[18px] h-[18px] rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
-                        obj.complete
-                          ? "bg-green border-green text-white"
-                          : "border-border hover:border-text-3"
-                      }`}
-                    >
-                      {obj.complete && (
-                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                          <path d="M2.5 6.5L5 9L9.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      )}
-                    </button>
-                    <span className={`text-[13.5px] leading-snug ${obj.complete ? "line-through text-text-3" : "text-text"}`}>
-                      {obj.text}
-                    </span>
-                  </li>
-                ))}
-            </ul>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleObjectiveDragEnd}>
+              <SortableContext
+                items={[...data.objectives].sort((a, b) => a.sortOrder - b.sortOrder).map((o) => o.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <ul className="space-y-2">
+                  {[...data.objectives]
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
+                    .map((obj) => (
+                      <SortableObjective
+                        key={obj.id}
+                        obj={obj}
+                        onToggle={toggleObjective}
+                        onEdit={(o) => {
+                          setEditObjective(o);
+                          setEditObjForm({ text: o.text, description: o.description || "" });
+                        }}
+                        onDelete={deleteObjective}
+                      />
+                    ))}
+                </ul>
+              </SortableContext>
+            </DndContext>
           </div>
 
           {/* Tasks */}
