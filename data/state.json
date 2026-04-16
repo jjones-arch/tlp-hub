@@ -9,12 +9,9 @@
   "artifacts": [],
   "transcripts": [],
   "ui": {
-    "currentView": "sbo",
+    "currentView": "focus",
     "focusContent": null,
-    "objectiveView": {
-      "initId": "sbo",
-      "objId": "2xpf96aa"
-    },
+    "objectiveView": null,
     "sboDetail": null,
     "sboView": "list",
     "sboCalYear": 2026,
@@ -231,7 +228,8 @@
               "owner": "Jordan Jones",
               "due": "2026-04-17",
               "status": "not-started",
-              "priority": "high"
+              "priority": "high",
+              "updates": []
             }
           ],
           "risks": [],
