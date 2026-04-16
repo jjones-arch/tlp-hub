@@ -169,10 +169,16 @@ export function GanttChart({ groups, onTaskClick }: GanttChartProps) {
                     onClick={() => onTaskClick?.(task)}
                     title={`${task.text} (${taskStatusLabel(task.status)})`}
                   >
-                    <span className="inline-block w-1.5 h-1.5 rounded-full mr-1.5 flex-shrink-0" style={{ backgroundColor: STATUS_COLORS[task.status] || "var(--color-text-3)" }} />
+                    <span
+                      className="inline-block w-1.5 h-1.5 rounded-full mr-1.5 flex-shrink-0"
+                      style={{ backgroundColor: STATUS_COLORS[task.status] || "var(--color-text-3)" }}
+                    />
                     {task.text}
                   </div>
-                  <div className="border-b border-border relative bg-surface" style={{ minWidth: `${totalDays * 3}px` }}>
+                  <div
+                    className="border-b border-border relative bg-surface"
+                    style={{ minWidth: `${totalDays * 3}px` }}
+                  >
                     {todayOffset >= 0 && todayOffset <= totalDays && (
                       <div
                         className="absolute top-0 bottom-0 w-px bg-accent/30 z-[1]"

@@ -1,8 +1,8 @@
 import Database from "better-sqlite3";
-import path from "path";
 import { v4 as uuid } from "uuid";
+import { DB_PATH } from "./db-path";
 
-const dbPath = path.join(process.cwd(), "prisma", "dev.db");
+const dbPath = DB_PATH;
 console.log("DB path:", dbPath);
 
 const db = new Database(dbPath);

@@ -2,16 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useToast } from "@/components/ui/Toast";
-import {
-  statusColor,
-  taskStatusClasses,
-  taskStatusLabel,
-  priorityClasses,
-} from "@/lib/utils";
 
 interface Owner {
   id: string;
@@ -72,14 +65,7 @@ function formatToday(): string {
   });
 }
 
-function computeProgress(tasks: Task[]): number {
-  if (tasks.length === 0) return 0;
-  const done = tasks.filter((t) => t.status === "complete").length;
-  return Math.round((done / tasks.length) * 100);
-}
-
 export default function DashboardPage() {
-  const router = useRouter();
   const toast = useToast();
   const [initiatives, setInitiatives] = useState<Initiative[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,27 +92,24 @@ export default function DashboardPage() {
   }, []);
 
   const allTasks = initiatives.flatMap((init) =>
-    init.tasks.map((t) => ({ ...t, initiativeName: init.name, initiativeId: init.id }))
+    init.tasks.map((t) => ({ ...t, initiativeName: init.name, initiativeId: init.id })),
   );
 
-  const highPriorityOpen = allTasks.filter(
-    (t) => t.priority === "high" && t.status !== "complete"
-  );
+  const highPriorityOpen = allTasks.filter((t) => t.priority === "high" && t.status !== "complete");
 
   const defaultFocusItems = highPriorityOpen.slice(0, 5);
 
   const totalTasks = allTasks.length;
   const completeTasks = allTasks.filter((t) => t.status === "complete").length;
-  const highImpactRisks = initiatives
-    .flatMap((i) => i.risks)
-    .filter((r) => r.impact === "high").length;
+  const highImpactRisks = initiatives.flatMap((i) => i.risks).filter((r) => r.impact === "high").length;
   const decisionsLogged = initiatives.flatMap((i) => i.decisions).length;
 
   const pendingItems = initiatives
     .flatMap((i) =>
-      i.tasks.filter((t) => t.status === "not-started" && t.priority === "high")
+      i.tasks
+        .filter((t) => t.status === "not-started" && t.priority === "high")
         .slice(0, 2)
-        .map((t) => ({ id: t.id, text: t.text, initiativeName: i.name }))
+        .map((t) => ({ id: t.id, text: t.text, initiativeName: i.name })),
     )
     .slice(0, 4);
 
@@ -148,22 +131,15 @@ export default function DashboardPage() {
     }
   }
 
-  async function toggleTask(
-    initiativeId: string,
-    taskId: string,
-    currentStatus: string
-  ) {
+  async function toggleTask(initiativeId: string, taskId: string, currentStatus: string) {
     setTogglingTask(taskId);
     const newStatus = currentStatus === "complete" ? "not-started" : "complete";
     try {
-      const res = await fetch(
-        `/api/initiatives/${initiativeId}/tasks/${taskId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const res = await fetch(`/api/initiatives/${initiativeId}/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
       if (!res.ok) throw new Error("Update failed");
       toast(newStatus === "complete" ? "Task completed" : "Task reopened");
       await fetchData();
@@ -195,20 +171,14 @@ export default function DashboardPage() {
     <div className="max-w-[1000px] mx-auto px-9 py-10">
       {/* Header */}
       <header className="mb-8">
-        <h1 className="font-serif text-[26px] font-bold text-text leading-tight">
-          Technology Lifecycle Program
-        </h1>
-        <p className="text-[13px] text-text-3 mt-1">
-          Q2 2026 · {formatToday()} · BambooHR IT
-        </p>
+        <h1 className="font-serif text-[26px] font-bold text-text leading-tight">Technology Lifecycle Program</h1>
+        <p className="text-[13px] text-text-3 mt-1">Q2 2026 · {formatToday()} · BambooHR IT</p>
       </header>
 
       {/* Focus Box */}
       <section className="mb-8 rounded-lg bg-gradient-to-br from-navy to-navy-a p-6 text-white">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[15px] font-semibold tracking-tight">
-            ✦ Focus This Week
-          </h2>
+          <h2 className="text-[15px] font-semibold tracking-tight">✦ Focus This Week</h2>
           <button
             onClick={handleGenerateFocus}
             disabled={focusLoading}
@@ -225,19 +195,13 @@ export default function DashboardPage() {
           />
         ) : (
           <ul className="space-y-1.5">
-            {defaultFocusItems.length === 0 && (
-              <li className="text-[13px] opacity-60">
-                No high-priority open tasks
-              </li>
-            )}
+            {defaultFocusItems.length === 0 && <li className="text-[13px] opacity-60">No high-priority open tasks</li>}
             {defaultFocusItems.map((task) => (
               <li key={task.id} className="text-[13.5px] leading-snug opacity-90 flex gap-2">
                 <span className="shrink-0 mt-1">•</span>
                 <span>
                   {task.text}
-                  <span className="ml-2 text-[11px] opacity-50">
-                    {task.initiativeName}
-                  </span>
+                  <span className="ml-2 text-[11px] opacity-50">{task.initiativeName}</span>
                 </span>
               </li>
             ))}
@@ -258,21 +222,15 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <StatusBadge status={init.status} />
-                  <span className="text-[10.5px] text-text-3 font-medium uppercase tracking-wide">
-                    {init.quarter}
-                  </span>
+                  <span className="text-[10.5px] text-text-3 font-medium uppercase tracking-wide">{init.quarter}</span>
                 </div>
                 <h3 className="font-serif text-[16px] font-semibold text-text leading-snug mb-1.5 group-hover:text-accent transition-colors">
                   {init.name}
                 </h3>
-                <p className="text-[12.5px] text-text-3 leading-relaxed line-clamp-2 mb-4">
-                  {init.description}
-                </p>
+                <p className="text-[12.5px] text-text-3 leading-relaxed line-clamp-2 mb-4">{init.description}</p>
                 <ProgressBar progress={progress} status={init.status} />
                 <div className="flex items-center justify-between mt-2.5">
-                  <span className="text-[11.5px] text-text-2 font-medium">
-                    {progress}% complete
-                  </span>
+                  <span className="text-[11.5px] text-text-2 font-medium">{progress}% complete</span>
                   <div className="flex items-center gap-1">
                     {init.owners.slice(0, 3).map((o) => (
                       <span
@@ -298,31 +256,20 @@ export default function DashboardPage() {
       <section className="grid grid-cols-2 gap-5">
         {/* Left: Open High-Priority Tasks */}
         <div className="rounded-lg border border-border bg-surface p-5">
-          <h3 className="font-serif text-[15px] font-semibold text-text mb-4">
-            Open High-Priority Tasks
-          </h3>
+          <h3 className="font-serif text-[15px] font-semibold text-text mb-4">Open High-Priority Tasks</h3>
           {highPriorityOpen.length === 0 ? (
-            <p className="text-[13px] text-text-3">
-              No high-priority open tasks — nice work.
-            </p>
+            <p className="text-[13px] text-text-3">No high-priority open tasks — nice work.</p>
           ) : (
             <ul className="space-y-3">
               {highPriorityOpen.map((task) => (
                 <li key={task.id} className="flex items-start gap-2.5">
                   <button
-                    onClick={() =>
-                      toggleTask(task.initiativeId, task.id, task.status)
-                    }
+                    onClick={() => toggleTask(task.initiativeId, task.id, task.status)}
                     disabled={togglingTask === task.id}
                     className="mt-0.5 shrink-0 w-4 h-4 rounded border border-border-lt flex items-center justify-center hover:border-accent transition-colors disabled:opacity-40"
                   >
                     {task.status === "complete" && (
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 10 10"
-                        className="text-green"
-                      >
+                      <svg width="10" height="10" viewBox="0 0 10 10" className="text-green">
                         <path
                           d="M2 5l2.5 2.5L8 3"
                           stroke="currentColor"
@@ -335,18 +282,12 @@ export default function DashboardPage() {
                     )}
                   </button>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] text-text leading-snug">
-                      {task.text}
-                    </p>
+                    <p className="text-[13px] text-text leading-snug">{task.text}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-[10.5px] text-text-3 bg-bg px-1.5 py-0.5 rounded">
                         {task.initiativeName}
                       </span>
-                      {task.owner && (
-                        <span className="text-[10.5px] text-text-3">
-                          {task.owner}
-                        </span>
-                      )}
+                      {task.owner && <span className="text-[10.5px] text-text-3">{task.owner}</span>}
                     </div>
                   </div>
                 </li>
@@ -359,64 +300,40 @@ export default function DashboardPage() {
         <div className="space-y-5">
           {/* Program Stats */}
           <div className="rounded-lg border border-border bg-surface p-5">
-            <h3 className="font-serif text-[15px] font-semibold text-text mb-4">
-              Program Stats
-            </h3>
+            <h3 className="font-serif text-[15px] font-semibold text-text mb-4">Program Stats</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[22px] font-bold text-text leading-none">
-                  {totalTasks}
-                </p>
+                <p className="text-[22px] font-bold text-text leading-none">{totalTasks}</p>
                 <p className="text-[11.5px] text-text-3 mt-1">Tasks total</p>
               </div>
               <div>
-                <p className="text-[22px] font-bold text-green leading-none">
-                  {completeTasks}
-                </p>
-                <p className="text-[11.5px] text-text-3 mt-1">
-                  Tasks complete
-                </p>
+                <p className="text-[22px] font-bold text-green leading-none">{completeTasks}</p>
+                <p className="text-[11.5px] text-text-3 mt-1">Tasks complete</p>
               </div>
               <div>
-                <p className="text-[22px] font-bold text-red leading-none">
-                  {highImpactRisks}
-                </p>
-                <p className="text-[11.5px] text-text-3 mt-1">
-                  High-impact risks
-                </p>
+                <p className="text-[22px] font-bold text-red leading-none">{highImpactRisks}</p>
+                <p className="text-[11.5px] text-text-3 mt-1">High-impact risks</p>
               </div>
               <div>
-                <p className="text-[22px] font-bold text-text leading-none">
-                  {decisionsLogged}
-                </p>
-                <p className="text-[11.5px] text-text-3 mt-1">
-                  Decisions logged
-                </p>
+                <p className="text-[22px] font-bold text-text leading-none">{decisionsLogged}</p>
+                <p className="text-[11.5px] text-text-3 mt-1">Decisions logged</p>
               </div>
             </div>
           </div>
 
           {/* Pending Decisions */}
           <div className="rounded-lg border border-border bg-surface p-5">
-            <h3 className="font-serif text-[15px] font-semibold text-text mb-4">
-              Pending Decisions
-            </h3>
+            <h3 className="font-serif text-[15px] font-semibold text-text mb-4">Pending Decisions</h3>
             {pendingItems.length === 0 ? (
-              <p className="text-[13px] text-text-3">
-                No pending decisions right now.
-              </p>
+              <p className="text-[13px] text-text-3">No pending decisions right now.</p>
             ) : (
               <ul className="space-y-2.5">
                 {pendingItems.map((d) => (
                   <li key={d.id} className="flex items-start gap-2">
                     <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-amber shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-[13px] text-text leading-snug">
-                        {d.text}
-                      </p>
-                      <span className="text-[10.5px] text-text-3">
-                        {d.initiativeName}
-                      </span>
+                      <p className="text-[13px] text-text leading-snug">{d.text}</p>
+                      <span className="text-[10.5px] text-text-3">{d.initiativeName}</span>
                     </div>
                   </li>
                 ))}

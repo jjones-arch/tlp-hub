@@ -18,16 +18,23 @@ export async function POST(req: NextRequest) {
 
     if (action === "focus") {
       const reply = await callClaude(
-        [{ role: "user" as const, content: "What should I focus on this week? Give me 4–5 specific, actionable priorities as a brief bulleted list. Be direct and specific to the actual tasks and risks in the program." }],
-        systemPrompt
+        [
+          {
+            role: "user" as const,
+            content:
+              "What should I focus on this week? Give me 4–5 specific, actionable priorities as a brief bulleted list. Be direct and specific to the actual tasks and risks in the program.",
+          },
+        ],
+        systemPrompt,
       );
       return NextResponse.json({ reply });
     }
 
     if (action === "artifact") {
-      const initCtx = initiativeId && initiativeId !== "all"
-        ? (await prisma.initiative.findUnique({ where: { id: initiativeId } }))?.name
-        : "all initiatives";
+      const initCtx =
+        initiativeId && initiativeId !== "all"
+          ? (await prisma.initiative.findUnique({ where: { id: initiativeId } }))?.name
+          : "all initiatives";
       const prompt = `Generate a complete, professional ${artifactType} for the Technology Lifecycle Program${initCtx ? " focused on " + initCtx : ""}. ${extra || ""} Use plain text formatting with clear sections. Be specific, practical, and grounded in the actual program details.`;
       const reply = await callClaude([{ role: "user" as const, content: prompt }], systemPrompt);
       const artifact = await prisma.artifact.create({
@@ -57,7 +64,7 @@ ${(transcriptContent || "").substring(0, 6000)}`;
 
       const reply = await callClaude(
         [{ role: "user" as const, content: prompt }],
-        "You are a meeting notes analyst. Extract structured data from transcripts. Always respond with valid JSON only."
+        "You are a meeting notes analyst. Extract structured data from transcripts. Always respond with valid JSON only.",
       );
       const jsonMatch = reply.match(/\{[\s\S]*\}/);
       if (jsonMatch) {

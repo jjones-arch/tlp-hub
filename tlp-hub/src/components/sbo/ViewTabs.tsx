@@ -49,9 +49,7 @@ export function ViewTabs({ active, onChange }: ViewTabsProps) {
           key={mode}
           onClick={() => onChange(mode)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12.5px] font-medium transition-colors ${
-            active === mode
-              ? "bg-navy text-white shadow-sm"
-              : "text-text-2 hover:bg-surface-2 hover:text-text"
+            active === mode ? "bg-navy text-white shadow-sm" : "text-text-2 hover:bg-surface-2 hover:text-text"
           }`}
         >
           {icon}

@@ -20,10 +20,7 @@ const STARTERS = [
 ];
 
 function renderMarkdown(raw: string): string {
-  let html = raw
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  let html = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   html = html.replace(/^### (.+)$/gm, '<div style="font-weight:700;font-size:14px;margin:12px 0 4px">$1</div>');
   html = html.replace(/^## (.+)$/gm, '<div style="font-weight:700;font-size:15px;margin:14px 0 4px">$1</div>');
@@ -31,7 +28,10 @@ function renderMarkdown(raw: string): string {
 
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
-  html = html.replace(/`(.+?)`/g, '<code style="background:#F5F3EF;padding:1px 5px;border-radius:3px;font-size:12px">$1</code>');
+  html = html.replace(
+    /`(.+?)`/g,
+    '<code style="background:#F5F3EF;padding:1px 5px;border-radius:3px;font-size:12px">$1</code>',
+  );
 
   const lines = html.split("\n");
   let result = "";
@@ -40,10 +40,16 @@ function renderMarkdown(raw: string): string {
   for (const line of lines) {
     const trimmed = line.trim();
     if (/^[-•] /.test(trimmed)) {
-      if (!inList) { result += "<ul style='margin:4px 0;padding-left:20px'>"; inList = true; }
+      if (!inList) {
+        result += "<ul style='margin:4px 0;padding-left:20px'>";
+        inList = true;
+      }
       result += `<li style="margin:2px 0;font-size:13px">${trimmed.replace(/^[-•] /, "")}</li>`;
     } else {
-      if (inList) { result += "</ul>"; inList = false; }
+      if (inList) {
+        result += "</ul>";
+        inList = false;
+      }
       if (trimmed === "") {
         result += "<br/>";
       } else {
@@ -143,9 +149,7 @@ export default function AssistantPage() {
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Header */}
       <div className="shrink-0 bg-surface border-b border-border px-6 py-4">
-        <h1 className="font-serif text-[20px] font-bold text-text leading-tight">
-          AI Assistant
-        </h1>
+        <h1 className="font-serif text-[20px] font-bold text-text leading-tight">AI Assistant</h1>
         <p className="text-[12.5px] text-text-3 mt-0.5">
           Powered by Claude · Ask anything about the Technology Lifecycle Program
         </p>
@@ -164,9 +168,7 @@ export default function AssistantPage() {
         ) : !hasMessages ? (
           <div className="flex items-center justify-center h-full px-6">
             <div className="text-center max-w-[520px]">
-              <h2 className="font-serif text-[22px] font-bold text-text mb-2">
-                What do you need to know?
-              </h2>
+              <h2 className="font-serif text-[22px] font-bold text-text mb-2">What do you need to know?</h2>
               <p className="text-[13px] text-text-3 mb-6 leading-relaxed">
                 Ask about initiatives, tasks, risks, decisions, or anything else in the Technology Lifecycle Program.
               </p>
@@ -194,9 +196,7 @@ export default function AssistantPage() {
                 )}
                 <div
                   className={`max-w-[85%] rounded-lg px-4 py-3 text-[13.5px] leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-navy text-white"
-                      : "bg-surface border border-border text-text"
+                    msg.role === "user" ? "bg-navy text-white" : "bg-surface border border-border text-text"
                   }`}
                 >
                   {msg.role === "user" ? (
@@ -219,9 +219,18 @@ export default function AssistantPage() {
                   <span className="text-[11px] font-bold text-accent">AI</span>
                 </div>
                 <div className="bg-surface border border-border rounded-lg px-4 py-3 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-3" style={{ animation: "bounce-dots 1s infinite 0ms" }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-3" style={{ animation: "bounce-dots 1s infinite 150ms" }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-3" style={{ animation: "bounce-dots 1s infinite 300ms" }} />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-text-3"
+                    style={{ animation: "bounce-dots 1s infinite 0ms" }}
+                  />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-text-3"
+                    style={{ animation: "bounce-dots 1s infinite 150ms" }}
+                  />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-text-3"
+                    style={{ animation: "bounce-dots 1s infinite 300ms" }}
+                  />
                 </div>
               </div>
             )}
@@ -237,7 +246,10 @@ export default function AssistantPage() {
           <textarea
             ref={textareaRef}
             value={input}
-            onChange={(e) => { setInput(e.target.value); resizeTextarea(); }}
+            onChange={(e) => {
+              setInput(e.target.value);
+              resizeTextarea();
+            }}
             onKeyDown={handleKeyDown}
             placeholder="Ask anything about the program…"
             rows={1}
@@ -250,7 +262,13 @@ export default function AssistantPage() {
             className="shrink-0 w-9 h-9 rounded-lg bg-navy text-white flex items-center justify-center hover:bg-navy-h transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
         </div>

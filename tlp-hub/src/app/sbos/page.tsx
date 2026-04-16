@@ -49,8 +49,10 @@ interface AllMeeting {
   sbo: { id: string; name: string };
 }
 
-const inputCls = "w-full rounded border border-border bg-surface px-3 py-1.5 text-[13px] text-text placeholder:text-text-3 focus:outline-none focus:ring-1 focus:ring-accent";
-const btnPrimary = "rounded bg-navy px-3.5 py-1.5 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity";
+const inputCls =
+  "w-full rounded border border-border bg-surface px-3 py-1.5 text-[13px] text-text placeholder:text-text-3 focus:outline-none focus:ring-1 focus:ring-accent";
+const btnPrimary =
+  "rounded bg-navy px-3.5 py-1.5 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity";
 const btnGhost = "rounded px-3 py-1.5 text-[12.5px] font-medium text-text-2 hover:bg-surface-2 transition-colors";
 
 export default function SboHubPage() {
@@ -70,6 +72,7 @@ export default function SboHubPage() {
         fetch("/api/sbos/all-tasks"),
         fetch("/api/sbos/all-meetings"),
       ]);
+      if (!sbosRes.ok || !tasksRes.ok || !meetingsRes.ok) throw new Error("Failed to load SBO data");
       setSbos(await sbosRes.json());
       setAllTasks(await tasksRes.json());
       setAllMeetings(await meetingsRes.json());
@@ -80,7 +83,9 @@ export default function SboHubPage() {
     }
   }, [toast]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   async function addSbo() {
     if (!newSbo.name.trim()) return;
@@ -163,7 +168,10 @@ export default function SboHubPage() {
           <span className="text-[12px] ml-1.5 opacity-70">Upcoming Meetings</span>
         </div>
         <div className="flex-1" />
-        <button onClick={() => setShowAddSbo(true)} className="rounded bg-white/15 px-4 py-1.5 text-[12.5px] font-semibold hover:bg-white/25 transition-colors">
+        <button
+          onClick={() => setShowAddSbo(true)}
+          className="rounded bg-white/15 px-4 py-1.5 text-[12.5px] font-semibold hover:bg-white/25 transition-colors"
+        >
           + Add SBO
         </button>
       </div>
@@ -171,9 +179,7 @@ export default function SboHubPage() {
       {/* View toggle */}
       <div className="flex items-center justify-between mb-5">
         <ViewTabs active={view} onChange={setView} />
-        {view === "list" && (
-          <span className="text-[12px] text-text-3">{sbos.length} SBOs total</span>
-        )}
+        {view === "list" && <span className="text-[12px] text-text-3">{sbos.length} SBOs total</span>}
       </div>
 
       {/* List View */}
@@ -190,14 +196,10 @@ export default function SboHubPage() {
       )}
 
       {/* Calendar View */}
-      {view === "calendar" && (
-        <CalendarGrid meetings={allMeetings} />
-      )}
+      {view === "calendar" && <CalendarGrid meetings={allMeetings} />}
 
       {/* Gantt View */}
-      {view === "gantt" && (
-        <GanttChart groups={ganttGroups} />
-      )}
+      {view === "gantt" && <GanttChart groups={ganttGroups} />}
 
       {/* Add SBO Modal */}
       <Modal
@@ -206,29 +208,54 @@ export default function SboHubPage() {
         title="Add SBO"
         footer={
           <>
-            <button onClick={() => setShowAddSbo(false)} className={btnGhost}>Cancel</button>
-            <button onClick={addSbo} className={btnPrimary}>Save</button>
+            <button onClick={() => setShowAddSbo(false)} className={btnGhost}>
+              Cancel
+            </button>
+            <button onClick={addSbo} className={btnPrimary}>
+              Save
+            </button>
           </>
         }
       >
         <div className="space-y-3">
           <div>
             <label className="block text-[12px] font-medium text-text-2 mb-1">Name</label>
-            <input value={newSbo.name} onChange={(e) => setNewSbo({ ...newSbo, name: e.target.value })} className={inputCls} placeholder="e.g. Revenue Operations" />
+            <input
+              value={newSbo.name}
+              onChange={(e) => setNewSbo({ ...newSbo, name: e.target.value })}
+              className={inputCls}
+              placeholder="e.g. Revenue Operations"
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-[12px] font-medium text-text-2 mb-1">Owner</label>
-              <input value={newSbo.owner} onChange={(e) => setNewSbo({ ...newSbo, owner: e.target.value })} className={inputCls} placeholder="SBO owner name" />
+              <input
+                value={newSbo.owner}
+                onChange={(e) => setNewSbo({ ...newSbo, owner: e.target.value })}
+                className={inputCls}
+                placeholder="SBO owner name"
+              />
             </div>
             <div>
               <label className="block text-[12px] font-medium text-text-2 mb-1">Division</label>
-              <input value={newSbo.division} onChange={(e) => setNewSbo({ ...newSbo, division: e.target.value })} className={inputCls} placeholder="e.g. Revenue, Finance" />
+              <input
+                value={newSbo.division}
+                onChange={(e) => setNewSbo({ ...newSbo, division: e.target.value })}
+                className={inputCls}
+                placeholder="e.g. Revenue, Finance"
+              />
             </div>
           </div>
           <div>
             <label className="block text-[12px] font-medium text-text-2 mb-1">Description</label>
-            <textarea value={newSbo.description} onChange={(e) => setNewSbo({ ...newSbo, description: e.target.value })} rows={3} className={inputCls} placeholder="Brief description of this SBO's scope" />
+            <textarea
+              value={newSbo.description}
+              onChange={(e) => setNewSbo({ ...newSbo, description: e.target.value })}
+              rows={3}
+              className={inputCls}
+              placeholder="Brief description of this SBO's scope"
+            />
           </div>
         </div>
       </Modal>

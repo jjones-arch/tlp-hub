@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { prisma } from "./db";
+import { DEFAULT_AI_MODEL } from "./constants";
 
 async function getApiKey(): Promise<string> {
   const setting = await prisma.setting.findUnique({ where: { key: "apiKey" } });
@@ -8,12 +9,12 @@ async function getApiKey(): Promise<string> {
 
 async function getModel(): Promise<string> {
   const setting = await prisma.setting.findUnique({ where: { key: "model" } });
-  return setting?.value || "claude-sonnet-4-6";
+  return setting?.value || DEFAULT_AI_MODEL;
 }
 
 export async function callClaude(
   messages: { role: "user" | "assistant"; content: string }[],
-  systemPrompt: string
+  systemPrompt: string,
 ): Promise<string> {
   const apiKey = await getApiKey();
   if (!apiKey) throw new Error("No API key configured. Add your Anthropic API key in Settings.");

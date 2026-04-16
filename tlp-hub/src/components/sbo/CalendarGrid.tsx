@@ -26,11 +26,35 @@ interface CalendarGridProps {
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 const DEFAULT_COLORS = [
-  "var(--color-accent)", "var(--color-blue)", "var(--color-green)", "var(--color-amber)",
-  "var(--color-red)", "#7C3AED", "#0891B2", "#BE185D", "#65A30D",
-  "#CA8A04", "#DC2626", "#2563EB", "#9333EA", "#059669",
+  "var(--color-accent)",
+  "var(--color-blue)",
+  "var(--color-green)",
+  "var(--color-amber)",
+  "var(--color-red)",
+  "#7C3AED",
+  "#0891B2",
+  "#BE185D",
+  "#65A30D",
+  "#CA8A04",
+  "#DC2626",
+  "#2563EB",
+  "#9333EA",
+  "#059669",
 ];
 
 function getMonthDays(year: number, month: number) {
@@ -95,10 +119,7 @@ export function CalendarGrid({ meetings, sboColors: externalColors, onMeetingCli
     return map;
   }, [meetings, externalColors]);
 
-  const occurrences = useMemo(
-    () => expandMeetings(meetings, rangeStart, rangeEnd),
-    [meetings, rangeStart, rangeEnd]
-  );
+  const occurrences = useMemo(() => expandMeetings(meetings, rangeStart, rangeEnd), [meetings, rangeStart, rangeEnd]);
 
   const byDate = useMemo(() => {
     const map: Record<string, MeetingOccurrence[]> = {};
@@ -111,12 +132,16 @@ export function CalendarGrid({ meetings, sboColors: externalColors, onMeetingCli
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   function prevMonth() {
-    if (month === 0) { setYear(year - 1); setMonth(11); }
-    else setMonth(month - 1);
+    if (month === 0) {
+      setYear(year - 1);
+      setMonth(11);
+    } else setMonth(month - 1);
   }
   function nextMonth() {
-    if (month === 11) { setYear(year + 1); setMonth(0); }
-    else setMonth(month + 1);
+    if (month === 11) {
+      setYear(year + 1);
+      setMonth(0);
+    } else setMonth(month + 1);
   }
   function goToday() {
     setYear(today.getFullYear());
@@ -127,18 +152,33 @@ export function CalendarGrid({ meetings, sboColors: externalColors, onMeetingCli
     <div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <button onClick={prevMonth} className="w-7 h-7 rounded border border-border flex items-center justify-center text-text-2 hover:bg-surface-2 text-sm">&lt;</button>
+          <button
+            onClick={prevMonth}
+            className="w-7 h-7 rounded border border-border flex items-center justify-center text-text-2 hover:bg-surface-2 text-sm"
+          >
+            &lt;
+          </button>
           <h3 className="font-serif text-[16px] font-semibold text-text min-w-[180px] text-center">
             {MONTH_NAMES[month]} {year}
           </h3>
-          <button onClick={nextMonth} className="w-7 h-7 rounded border border-border flex items-center justify-center text-text-2 hover:bg-surface-2 text-sm">&gt;</button>
+          <button
+            onClick={nextMonth}
+            className="w-7 h-7 rounded border border-border flex items-center justify-center text-text-2 hover:bg-surface-2 text-sm"
+          >
+            &gt;
+          </button>
         </div>
-        <button onClick={goToday} className="text-[12px] font-medium text-accent hover:underline">Today</button>
+        <button onClick={goToday} className="text-[12px] font-medium text-accent hover:underline">
+          Today
+        </button>
       </div>
 
       <div className="grid grid-cols-7 border border-border rounded-lg overflow-hidden">
         {DAYS.map((d) => (
-          <div key={d} className="bg-surface-2 text-center text-[11px] font-semibold text-text-2 uppercase tracking-wider py-2 border-b border-border">
+          <div
+            key={d}
+            className="bg-surface-2 text-center text-[11px] font-semibold text-text-2 uppercase tracking-wider py-2 border-b border-border"
+          >
             {d}
           </div>
         ))}
@@ -153,11 +193,15 @@ export function CalendarGrid({ meetings, sboColors: externalColors, onMeetingCli
                 cell.isCurrentMonth ? "bg-surface" : "bg-surface-2/50"
               }`}
             >
-              <div className={`text-[11px] font-medium mb-1 ${
-                isToday
-                  ? "w-5 h-5 rounded-full bg-accent text-white flex items-center justify-center"
-                  : cell.isCurrentMonth ? "text-text-2" : "text-text-3"
-              }`}>
+              <div
+                className={`text-[11px] font-medium mb-1 ${
+                  isToday
+                    ? "w-5 h-5 rounded-full bg-accent text-white flex items-center justify-center"
+                    : cell.isCurrentMonth
+                      ? "text-text-2"
+                      : "text-text-3"
+                }`}
+              >
                 {cell.day}
               </div>
               <div className="space-y-0.5">

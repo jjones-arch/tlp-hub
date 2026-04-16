@@ -37,9 +37,7 @@ export function SboCard({ sbo }: SboCardProps) {
       <h3 className="font-serif text-[15px] font-semibold text-text leading-snug mb-1 group-hover:text-accent transition-colors">
         {sbo.name}
       </h3>
-      {sbo.owner && (
-        <p className="text-[12px] text-text-2 mb-3">{sbo.owner}</p>
-      )}
+      {sbo.owner && <p className="text-[12px] text-text-2 mb-3">{sbo.owner}</p>}
 
       {/* Progress ring */}
       <div className="flex items-center gap-3 mb-3">
@@ -47,7 +45,10 @@ export function SboCard({ sbo }: SboCardProps) {
           <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
             <circle cx="18" cy="18" r="15" fill="none" stroke="var(--color-border)" strokeWidth="3" />
             <circle
-              cx="18" cy="18" r="15" fill="none"
+              cx="18"
+              cy="18"
+              r="15"
+              fill="none"
               stroke={pct === 100 ? "var(--color-green)" : "var(--color-accent)"}
               strokeWidth="3"
               strokeDasharray={`${(pct / 100) * 94.25} 94.25`}

@@ -37,7 +37,8 @@ export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             {meeting.date && (
               <span className="text-[11.5px] text-text-2 tabular-nums">
-                {meeting.date}{meeting.endDate && meeting.endDate !== meeting.date ? ` — ${meeting.endDate}` : ""}
+                {meeting.date}
+                {meeting.endDate && meeting.endDate !== meeting.date ? ` — ${meeting.endDate}` : ""}
               </span>
             )}
             {recLabel && (
@@ -49,10 +50,14 @@ export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
         </div>
         <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity ml-2">
           {onEdit && (
-            <button onClick={onEdit} className="text-text-3 hover:text-text text-[13px]">✎</button>
+            <button onClick={onEdit} className="text-text-3 hover:text-text text-[13px]">
+              ✎
+            </button>
           )}
           {onDelete && (
-            <button onClick={onDelete} className="text-text-3 hover:text-red text-[13px]">✕</button>
+            <button onClick={onDelete} className="text-text-3 hover:text-red text-[13px]">
+              ✕
+            </button>
           )}
         </div>
       </div>
@@ -62,9 +67,7 @@ export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
           <span className="font-medium text-text-2">Attendees:</span> {meeting.attendees}
         </p>
       )}
-      {meeting.description && (
-        <p className="text-[12px] text-text-2 mb-1.5 leading-relaxed">{meeting.description}</p>
-      )}
+      {meeting.description && <p className="text-[12px] text-text-2 mb-1.5 leading-relaxed">{meeting.description}</p>}
       {meeting.agenda && (
         <div className="mt-2 pt-2 border-t border-border-lt">
           <p className="text-[10.5px] font-semibold text-text-2 uppercase tracking-wider mb-1">Agenda</p>

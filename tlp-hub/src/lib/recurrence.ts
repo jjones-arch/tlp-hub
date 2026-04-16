@@ -55,7 +55,7 @@ export function expandMeetings(
   meetings: BaseMeeting[],
   rangeStart: string,
   rangeEnd: string,
-  limit = 200
+  limit = 200,
 ): MeetingOccurrence[] {
   const results: MeetingOccurrence[] = [];
 
