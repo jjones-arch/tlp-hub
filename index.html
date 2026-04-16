@@ -287,6 +287,35 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
 .modal-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
 .modal-art-content{font-family:var(--font-b);font-size:12.5px;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface-2);padding:16px;border-radius:var(--r-sm);border:1px solid var(--border-lt)}
 
+/* ── TASK UPDATES ── */
+.updates-section{border-top:1px solid var(--border);margin-top:16px;padding-top:16px}
+.updates-section h4{font-family:var(--font-s);font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+.update-form{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:16px}
+.update-form textarea{width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;font-size:13px;font-family:var(--font-b);resize:vertical;min-height:48px;background:var(--surface);color:var(--text)}
+.update-form textarea:focus{outline:none;border-color:var(--accent)}
+.update-form-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.attach-label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-2);transition:color .15s}
+.attach-label:hover{color:var(--text)}
+.attach-label input{display:none}
+.file-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.file-chip{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px 8px;font-size:11px;color:var(--text-2)}
+.file-chip button{background:none;border:none;cursor:pointer;color:var(--text-3);font-size:11px;padding:0 0 0 2px}
+.file-chip button:hover{color:var(--red)}
+.updates-timeline{max-height:280px;overflow-y:auto;padding-right:4px}
+.update-entry{position:relative;padding-left:18px;border-left:2px solid var(--border);padding-bottom:12px;margin-bottom:4px}
+.update-entry:last-child{padding-bottom:0;margin-bottom:0}
+.update-dot{position:absolute;left:-5px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--navy)}
+.update-meta{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.update-author{font-size:12px;font-weight:600;color:var(--text)}
+.update-time{font-size:11px;color:var(--text-3)}
+.update-text{font-size:13px;color:var(--text);line-height:1.5;white-space:pre-wrap}
+.update-attachments{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.update-att{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:var(--r-sm);padding:4px 8px;font-size:11px;color:var(--text-2);text-decoration:none;transition:border-color .15s}
+.update-att:hover{border-color:var(--accent);color:var(--accent)}
+.update-att img{width:32px;height:32px;border-radius:4px;object-fit:cover}
+.update-count{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--text-3)}
+.no-updates{font-size:12px;color:var(--text-3);font-style:italic}
+
 /* ── TOAST ── */
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{padding:10px 16px;border-radius:var(--r-sm);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);animation:slideup .2s ease;pointer-events:auto}
@@ -318,6 +347,74 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
 .spinner-dark{border-color:rgba(28,43,58,.2);border-top-color:var(--navy)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-row{display:flex;align-items:center;gap:8px;color:var(--text-3);font-size:13px;padding:10px 0}
+
+/* ── SBO TRACKER ── */
+.sbo-stats-bar{display:flex;align-items:center;gap:24px;padding:16px 24px;border-radius:var(--r);background:linear-gradient(135deg,#1C2B3A 0%,#2D4259 100%);color:#fff;margin-bottom:20px}
+.sbo-stats-bar .sbo-stat{display:flex;align-items:baseline;gap:6px}
+.sbo-stats-bar .sbo-stat-val{font-size:20px;font-weight:700}
+.sbo-stats-bar .sbo-stat-label{font-size:12px;opacity:.7}
+.sbo-stats-bar .sbo-stat-sep{width:1px;height:28px;background:rgba(255,255,255,.2)}
+.sbo-view-tabs{display:inline-flex;border-radius:var(--r);border:1px solid var(--border);background:var(--surface);padding:2px;gap:2px}
+.sbo-tab{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text-2);font-family:var(--font-b);transition:all .14s}
+.sbo-tab:hover{background:var(--surface-2);color:var(--text)}
+.sbo-tab.active{background:var(--navy);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.sbo-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sbo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;cursor:pointer;transition:all .18s;box-shadow:var(--shadow)}
+.sbo-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.sbo-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sbo-card-name{font-family:var(--font-s);font-size:15px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px}
+.sbo-card-owner{font-size:12px;color:var(--text-2);margin-bottom:12px}
+.sbo-card-progress{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sbo-ring{position:relative;width:36px;height:36px;flex-shrink:0}
+.sbo-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.sbo-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--text-2)}
+.sbo-card-next{background:var(--surface-2);border-radius:var(--r-sm);padding:6px 10px;font-size:11px}
+.sbo-card-next-label{color:var(--text-3)}
+.sbo-card-next-title{color:var(--text);font-weight:500}
+.sbo-card-next-date{color:var(--text-3)}
+.sbo-card-div{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;background:var(--surface-2);padding:2px 6px;border-radius:3px;color:var(--text-3)}
+.sbo-cal{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.sbo-cal-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.sbo-cal-title{font-family:var(--font-s);font-size:16px;font-weight:600;color:var(--text);min-width:180px;text-align:center}
+.sbo-cal-nav{width:28px;height:28px;border:1px solid var(--border);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;background:none;color:var(--text-2);font-size:13px;font-family:var(--font-b)}
+.sbo-cal-nav:hover{background:var(--surface-2)}
+.sbo-cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.sbo-cal-day-hd{background:var(--surface-2);text-align:center;font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;padding:6px 0;border-bottom:1px solid var(--border)}
+.sbo-cal-cell{min-height:80px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:4px;background:var(--surface)}
+.sbo-cal-cell.other{background:var(--surface-2);opacity:.5}
+.sbo-cal-cell-day{font-size:11px;font-weight:500;color:var(--text-2);margin-bottom:3px}
+.sbo-cal-cell-day.today{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center}
+.sbo-cal-pill{display:block;width:100%;text-align:left;border:none;border-radius:3px;padding:2px 4px;font-size:10px;font-weight:500;color:#fff;margin-bottom:2px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-b);transition:opacity .14s}
+.sbo-cal-pill:hover{opacity:.8}
+.sbo-cal-more{font-size:9px;color:var(--text-3);padding-left:4px}
+.sbo-gantt{border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;background:var(--surface)}
+.sbo-gantt-inner{display:grid;grid-template-columns:220px 1fr;min-width:800px}
+.sbo-gantt-lbl-hd{background:var(--surface-2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:8px 12px;font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;position:sticky;left:0;z-index:2}
+.sbo-gantt-time-hd{background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;height:32px;overflow:hidden}
+.sbo-gantt-week{border-right:1px solid var(--border-lt);font-size:9.5px;color:var(--text-3);padding:2px 4px;flex-shrink:0}
+.sbo-gantt-group{grid-column:1/-1;background:var(--surface-2);border-bottom:1px solid var(--border);padding:6px 12px;font-size:11.5px;font-weight:600;color:var(--text);position:sticky;left:0;z-index:2}
+.sbo-gantt-group span{font-weight:400;color:var(--text-3);margin-left:8px}
+.sbo-gantt-lbl{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:6px 12px;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:sticky;left:0;z-index:2;background:var(--surface);cursor:pointer;transition:background .12s}
+.sbo-gantt-lbl:hover{background:var(--surface-2)}
+.sbo-gantt-lbl .gdot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;flex-shrink:0}
+.sbo-gantt-bar-row{border-bottom:1px solid var(--border);position:relative;min-height:30px;background:var(--surface)}
+.sbo-gantt-bar{position:absolute;top:6px;height:18px;border-radius:4px;cursor:pointer;transition:opacity .14s;display:flex;align-items:center;padding:0 6px}
+.sbo-gantt-bar:hover{opacity:.8}
+.sbo-gantt-bar span{font-size:9px;color:#fff;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbo-gantt-today{position:absolute;top:0;bottom:0;width:1px;background:var(--accent);opacity:.3;z-index:1}
+.sbo-gantt-nodate{font-size:10px;color:var(--text-3);font-style:italic;padding:8px}
+.sbo-meeting{border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;background:var(--surface);margin-bottom:10px}
+.sbo-meeting.past{opacity:.65}
+.sbo-meeting-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.sbo-meeting-title{font-size:13.5px;font-weight:600;color:var(--text)}
+.sbo-meeting-date{font-size:11.5px;color:var(--text-2);margin-top:2px}
+.sbo-meeting-rec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--accent);background:var(--accent-bg);padding:2px 6px;border-radius:3px}
+.sbo-meeting-section{margin-top:8px;padding-top:8px;border-top:1px solid var(--border-lt)}
+.sbo-meeting-section-title{font-size:10.5px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sbo-meeting-section-body{font-size:12px;color:var(--text-2);line-height:1.5;white-space:pre-line}
+.sbo-meeting-attendees{font-size:11.5px;color:var(--text-3);margin-top:4px}
+.sbo-meeting-actions{display:flex;gap:4px;opacity:0;transition:opacity .14s;flex-shrink:0}
+.sbo-meeting:hover .sbo-meeting-actions{opacity:1}
 </style>
 </head>
 <body>
@@ -358,6 +455,11 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
         <span class="nav-dot" id="dot-zipped" style="background:var(--green)"></span>
         Zipped Prototype
       </button>
+      <span class="nav-label">SBO Tracker</span>
+      <button class="nav-item" data-view="sbo-tracker">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="4" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".75"/><circle cx="11" cy="4" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".75"/><path d="M1 13c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".75"/><path d="M7 13c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".75"/></svg>
+        SBO Hub
+      </button>
       <span class="nav-label">Tools</span>
       <button class="nav-item" data-view="assistant">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.5 4.5H14l-3.6 2.6 1.4 4.4L8 10l-3.8 2.5 1.4-4.4L2 5.5h4.5L8 1z" fill="currentColor" opacity=".75"/></svg>
@@ -389,6 +491,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);overflow:h
     <div id="view-sbo" class="view"></div>
     <div id="view-reporting" class="view"></div>
     <div id="view-zipped" class="view"></div>
+    <div id="view-sbo-tracker" class="view"></div>
     <div id="view-assistant" class="view"></div>
     <div id="view-artifacts" class="view"></div>
     <div id="view-transcripts" class="view"></div>
@@ -650,7 +753,8 @@ const DEFAULTS = {
       ],
       notes: '"Zipped" is the working title (previously called "Zip-like experience" or "vibe-coded prototype").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies — consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins.'
     }
-  }
+  },
+  sbos: {}
 };
 
 // ============================================================
@@ -683,7 +787,18 @@ function migrateObjectives() {
       }
     });
   });
+  Object.values(S.initiatives).forEach(init => {
+    if (init.tasks) init.tasks.forEach(t => { if (!t.updates) t.updates = []; });
+    if (init.objectives) init.objectives.forEach(o => {
+      if (o.tasks) o.tasks.forEach(t => { if (!t.updates) t.updates = []; });
+    });
+  });
   if (!S.ui.objectiveView) S.ui.objectiveView = null;
+  if (!S.sbos) S.sbos = {};
+  if (!S.ui.sboDetail) S.ui.sboDetail = null;
+  if (!S.ui.sboView) S.ui.sboView = 'list';
+  if (!S.ui.sboCalYear) S.ui.sboCalYear = new Date().getFullYear();
+  if (!S.ui.sboCalMonth) S.ui.sboCalMonth = new Date().getMonth();
   saveState();
 }
 function saveState() {
@@ -716,6 +831,7 @@ function render(view) {
     sbo: () => renderInitiative('sbo'),
     reporting: () => renderInitiative('reporting'),
     zipped: () => renderInitiative('zipped'),
+    'sbo-tracker': renderSboTracker,
     assistant: renderAssistant,
     artifacts: renderArtifacts,
     transcripts: renderTranscripts,
@@ -1005,6 +1121,7 @@ function renderTaskItem(initId, t) {
         <span class="task-status ${statusCls}">${statusLabel}</span>
         ${t.priority ? `<span class="${prioCls}">${t.priority}</span>` : ''}
         ${t.due ? `<span style="font-size:11px;color:var(--text-3)">${t.due}</span>` : ''}
+        ${(t.updates && t.updates.length) ? `<span class="update-count" title="${t.updates.length} update${t.updates.length!==1?'s':''}">💬 ${t.updates.length}</span>` : ''}
       </div>
     </div>
     <div class="task-actions">
@@ -1275,6 +1392,28 @@ function deleteTask(initId, taskId) {
 function editTask(initId, taskId) {
   const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
   if (!t) return;
+  if (!t.updates) t.updates = [];
+  window._editTaskPendingFiles = [];
+
+  const updatesHtml = t.updates.length
+    ? t.updates.map(u => `
+        <div class="update-entry">
+          <div class="update-dot"></div>
+          <div class="update-meta">
+            ${u.author ? `<span class="update-author">${esc(u.author)}</span>` : ''}
+            <span class="update-time">${new Date(u.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}</span>
+          </div>
+          <div class="update-text">${esc(u.text)}</div>
+          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a =>
+            a.dataUrl
+              ? (a.mimeType.startsWith('image/')
+                  ? `<a class="update-att" href="${a.dataUrl}" target="_blank"><img src="${a.dataUrl}" alt="${esc(a.filename)}"><span>${esc(a.filename)}</span></a>`
+                  : `<a class="update-att" href="${a.dataUrl}" download="${esc(a.filename)}">📄 <span>${esc(a.filename)}</span></a>`)
+              : `<span class="update-att">📄 ${esc(a.filename)}</span>`
+          ).join('')}</div>` : ''}
+        </div>`).join('')
+    : '<p class="no-updates">No updates yet. Add a note above to track progress.</p>';
+
   showModal(`
     <div class="modal-hd"><span class="modal-title">Edit Task</span><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
@@ -1295,11 +1434,97 @@ function editTask(initId, taskId) {
           </select>
         </div>
       </div>
+      <div class="updates-section">
+        <h4>Updates</h4>
+        <div class="update-form">
+          <textarea id="et-update-text" placeholder="Add a progress note, comment, or status update..."></textarea>
+          <div class="update-form-actions">
+            <label class="attach-label">
+              📎 Attach files
+              <input type="file" multiple onchange="handleTaskFileSelect(this)">
+            </label>
+            <button class="btn btn-primary btn-sm" onclick="postTaskUpdate('${initId}','${taskId}')">Post Update</button>
+          </div>
+          <div class="file-chips" id="et-file-chips"></div>
+        </div>
+        <div class="updates-timeline">${updatesHtml}</div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveEditTask('${initId}','${taskId}')">Save Changes</button>
     </div>`);
+}
+
+function handleTaskFileSelect(input) {
+  if (!input.files) return;
+  for (const f of input.files) {
+    window._editTaskPendingFiles.push(f);
+  }
+  input.value = '';
+  renderPendingFileChips();
+}
+
+function removePendingFile(idx) {
+  window._editTaskPendingFiles.splice(idx, 1);
+  renderPendingFileChips();
+}
+
+function renderPendingFileChips() {
+  const el = document.getElementById('et-file-chips');
+  if (!el) return;
+  el.innerHTML = window._editTaskPendingFiles.map((f, i) =>
+    `<span class="file-chip">${esc(f.name)}<button onclick="removePendingFile(${i})">✕</button></span>`
+  ).join('');
+}
+
+function postTaskUpdate(initId, taskId) {
+  const t = S.initiatives[initId].tasks.find(x => x.id === taskId);
+  if (!t) return;
+  if (!t.updates) t.updates = [];
+  const text = document.getElementById('et-update-text').value.trim();
+  const files = window._editTaskPendingFiles || [];
+  if (!text && files.length === 0) { toast('Enter a note or attach a file.', 'err'); return; }
+
+  const update = {
+    id: genId(),
+    text,
+    author: t.owner || '',
+    createdAt: new Date().toISOString(),
+    attachments: []
+  };
+
+  let filesProcessed = 0;
+  const totalFiles = files.length;
+
+  if (totalFiles === 0) {
+    t.updates.unshift(update);
+    saveState();
+    toast('Update posted.');
+    editTask(initId, taskId);
+    return;
+  }
+
+  files.forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      update.attachments.push({
+        id: genId(),
+        filename: f.name,
+        mimeType: f.type || '',
+        size: f.size,
+        dataUrl: e.target.result
+      });
+      filesProcessed++;
+      if (filesProcessed === totalFiles) {
+        t.updates.unshift(update);
+        saveState();
+        toast('Update posted.');
+        editTask(initId, taskId);
+      }
+    };
+    reader.readAsDataURL(f);
+  });
 }
 
 function saveEditTask(initId, taskId) {
@@ -1405,6 +1630,28 @@ function editObjTask(initId, objId, taskId) {
   if (!o) return;
   const t = o.tasks.find(x => x.id === taskId);
   if (!t) return;
+  if (!t.updates) t.updates = [];
+  window._editTaskPendingFiles = [];
+
+  const updatesHtml = t.updates.length
+    ? t.updates.map(u => `
+        <div class="update-entry">
+          <div class="update-dot"></div>
+          <div class="update-meta">
+            ${u.author ? `<span class="update-author">${esc(u.author)}</span>` : ''}
+            <span class="update-time">${new Date(u.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}</span>
+          </div>
+          <div class="update-text">${esc(u.text)}</div>
+          ${u.attachments && u.attachments.length ? `<div class="update-attachments">${u.attachments.map(a =>
+            a.dataUrl
+              ? (a.mimeType.startsWith('image/')
+                  ? `<a class="update-att" href="${a.dataUrl}" target="_blank"><img src="${a.dataUrl}" alt="${esc(a.filename)}"><span>${esc(a.filename)}</span></a>`
+                  : `<a class="update-att" href="${a.dataUrl}" download="${esc(a.filename)}">📄 <span>${esc(a.filename)}</span></a>`)
+              : `<span class="update-att">📄 ${esc(a.filename)}</span>`
+          ).join('')}</div>` : ''}
+        </div>`).join('')
+    : '<p class="no-updates">No updates yet. Add a note above to track progress.</p>';
+
   showModal(`
     <div class="modal-hd"><span class="modal-title">Edit Task</span><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
@@ -1422,6 +1669,21 @@ function editObjTask(initId, objId, taskId) {
         <option value="medium" ${t.priority==='medium'?'selected':''}>Medium</option>
         <option value="low" ${t.priority==='low'?'selected':''}>Low</option>
       </select></div>
+      <div class="updates-section">
+        <h4>Updates</h4>
+        <div class="update-form">
+          <textarea id="eot-update-text" placeholder="Add a progress note, comment, or status update..."></textarea>
+          <div class="update-form-actions">
+            <label class="attach-label">
+              📎 Attach files
+              <input type="file" multiple onchange="handleTaskFileSelect(this)">
+            </label>
+            <button class="btn btn-primary btn-sm" onclick="postObjTaskUpdate('${initId}','${objId}','${taskId}')">Post Update</button>
+          </div>
+          <div class="file-chips" id="et-file-chips"></div>
+        </div>
+        <div class="updates-timeline">${updatesHtml}</div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
@@ -1443,6 +1705,44 @@ function saveEditObjTask(initId, objId, taskId) {
   closeModal();
   renderObjectiveDetail(initId, objId);
   toast('Task updated.');
+}
+
+function postObjTaskUpdate(initId, objId, taskId) {
+  const o = getObjective(initId, objId);
+  if (!o) return;
+  const t = o.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  if (!t.updates) t.updates = [];
+  const text = document.getElementById('eot-update-text').value.trim();
+  const files = window._editTaskPendingFiles || [];
+  if (!text && files.length === 0) { toast('Enter a note or attach a file.', 'err'); return; }
+
+  const update = { id: genId(), text, author: t.owner || '', createdAt: new Date().toISOString(), attachments: [] };
+  let filesProcessed = 0;
+  const totalFiles = files.length;
+
+  if (totalFiles === 0) {
+    t.updates.unshift(update);
+    saveState();
+    toast('Update posted.');
+    editObjTask(initId, objId, taskId);
+    return;
+  }
+
+  files.forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      update.attachments.push({ id: genId(), filename: f.name, mimeType: f.type || '', size: f.size, dataUrl: e.target.result });
+      filesProcessed++;
+      if (filesProcessed === totalFiles) {
+        t.updates.unshift(update);
+        saveState();
+        toast('Update posted.');
+        editObjTask(initId, objId, taskId);
+      }
+    };
+    reader.readAsDataURL(f);
+  });
 }
 
 function toggleAddObjRisk(initId, objId) {
