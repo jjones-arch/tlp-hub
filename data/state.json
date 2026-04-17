@@ -1050,6 +1050,18 @@
       "sortOrder": 10,
       "tasks": [],
       "meetings": []
+    },
+    "t3jmjm60": {
+      "id": "t3jmjm60",
+      "name": "People Operations (HR)",
+      "owner": "Wende Smith",
+      "division": "Legal",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 11,
+      "tasks": [],
+      "meetings": []
     }
   }
 }
