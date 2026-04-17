@@ -12,7 +12,7 @@
     "currentView": "sbo-tracker",
     "focusContent": null,
     "objectiveView": null,
-    "sboDetail": null,
+    "sboDetail": "t318jy5b",
     "sboView": "list",
     "sboCalYear": 2026,
     "sboCalMonth": 3
@@ -1012,6 +1012,18 @@
       "description": "",
       "notes": "",
       "sortOrder": 7,
+      "tasks": [],
+      "meetings": []
+    },
+    "q5yngwbw": {
+      "id": "q5yngwbw",
+      "name": "Accounting",
+      "owner": "Scott Dallas",
+      "division": "Finance",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 8,
       "tasks": [],
       "meetings": []
     }
