@@ -56,6 +56,9 @@ function addInterval(dateStr: string, recurrence: string): string {
     case "quarterly":
       d.setMonth(d.getMonth() + 3);
       break;
+    case "yearly":
+      d.setFullYear(d.getFullYear() + 1);
+      break;
     case "monthly_nth_weekday": {
       const weekday = d.getDay();
       const nth = Math.floor((d.getDate() - 1) / 7) + 1;

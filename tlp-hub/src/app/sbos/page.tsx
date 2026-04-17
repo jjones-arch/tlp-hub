@@ -58,6 +58,7 @@ interface AllMeeting {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
   recurrence: string;
   recurrenceEnd: string;
   sboId: string;

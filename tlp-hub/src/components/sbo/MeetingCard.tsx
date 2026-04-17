@@ -1,13 +1,8 @@
 "use client";
 
-const RECURRENCE_LABELS: Record<string, string> = {
-  none: "",
-  weekly: "Weekly",
-  biweekly: "Biweekly",
-  monthly: "Monthly",
-  monthly_nth_weekday: "Monthly (weekday pattern)",
-  quarterly: "Quarterly",
-};
+const WEEKDAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const ORDINAL_SHORT = ["1st", "2nd", "3rd", "4th", "5th"];
 
 interface MeetingCardProps {
   meeting: {
@@ -27,8 +22,34 @@ interface MeetingCardProps {
   onDelete?: () => void;
 }
 
+function recurrenceLabel(recurrence: string, date: string): string {
+  if (!recurrence || recurrence === "none") return "";
+  const parsed = date ? new Date(`${date}T00:00:00`) : null;
+  const hasValidDate = !!parsed && !Number.isNaN(parsed.getTime());
+  const weekday = hasValidDate ? WEEKDAY_SHORT[parsed!.getDay()] : "";
+  const day = hasValidDate ? parsed!.getDate() : 0;
+
+  switch (recurrence) {
+    case "weekly":
+      return hasValidDate ? `Weekly (${weekday})` : "Weekly";
+    case "biweekly":
+      return hasValidDate ? `Every 2 weeks (${weekday})` : "Every 2 weeks";
+    case "monthly":
+      return hasValidDate ? `Monthly (day ${day})` : "Monthly";
+    case "monthly_nth_weekday":
+      if (!hasValidDate) return "Monthly (weekday pattern)";
+      return `Monthly (${ORDINAL_SHORT[Math.floor((day - 1) / 7)]} ${weekday})`;
+    case "quarterly":
+      return hasValidDate ? `Quarterly (day ${day})` : "Quarterly";
+    case "yearly":
+      return hasValidDate ? `Annually (${MONTH_SHORT[parsed!.getMonth()]} ${day})` : "Annually";
+    default:
+      return recurrence;
+  }
+}
+
 export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
-  const recLabel = RECURRENCE_LABELS[meeting.recurrence];
+  const recLabel = recurrenceLabel(meeting.recurrence, meeting.date);
   const isPast = meeting.date && meeting.date < new Date().toISOString().slice(0, 10);
 
   return (
@@ -91,7 +112,9 @@ export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
       {meeting.transcript && (
         <div className="mt-2 pt-2 border-t border-border-lt">
           <p className="text-[10.5px] font-semibold text-text-2 uppercase tracking-wider mb-1">Transcript</p>
-          <p className="text-[12px] text-text-2 leading-relaxed whitespace-pre-line max-h-40 overflow-y-auto">{meeting.transcript}</p>
+          <p className="text-[12px] text-text-2 leading-relaxed whitespace-pre-line max-h-40 overflow-y-auto">
+            {meeting.transcript}
+          </p>
         </div>
       )}
     </div>

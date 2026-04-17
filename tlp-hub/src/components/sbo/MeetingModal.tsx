@@ -5,6 +5,20 @@ import { Modal } from "@/components/ui/Modal";
 
 const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const ORDINALS = ["first", "second", "third", "fourth", "fifth"];
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 function getOrdinalLabel(index: number): string {
   return ORDINALS[index - 1] || `${index}th`;
@@ -18,6 +32,41 @@ function getMonthlyWeekdayLabel(date: string): string {
   const weekday = WEEKDAY_NAMES[parsed.getDay()];
   const ordinal = getOrdinalLabel(Math.floor((dayOfMonth - 1) / 7) + 1);
   return `Monthly on the ${ordinal} ${weekday}`;
+}
+
+function getWeeklyLabel(date: string): string {
+  if (!date) return "Weekly";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Weekly";
+  return `Weekly on ${WEEKDAY_NAMES[parsed.getDay()]}`;
+}
+
+function getBiweeklyLabel(date: string): string {
+  if (!date) return "Every 2 weeks";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Every 2 weeks";
+  return `Every 2 weeks on ${WEEKDAY_NAMES[parsed.getDay()]}`;
+}
+
+function getMonthlyByDateLabel(date: string): string {
+  if (!date) return "Monthly";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Monthly";
+  return `Monthly on day ${parsed.getDate()}`;
+}
+
+function getQuarterlyLabel(date: string): string {
+  if (!date) return "Quarterly";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Quarterly";
+  return `Quarterly on day ${parsed.getDate()}`;
+}
+
+function getYearlyLabel(date: string): string {
+  if (!date) return "Annually";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Annually";
+  return `Annually on ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getDate()}`;
 }
 
 export interface MeetingForm {
@@ -72,11 +121,12 @@ export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle
   const recurrenceOptions = useMemo(
     () => [
       { value: "none", label: "None" },
-      { value: "weekly", label: "Weekly" },
-      { value: "biweekly", label: "Biweekly" },
-      { value: "monthly", label: "Monthly (same date)" },
+      { value: "weekly", label: getWeeklyLabel(form.date) },
+      { value: "biweekly", label: getBiweeklyLabel(form.date) },
+      { value: "monthly", label: getMonthlyByDateLabel(form.date) },
       { value: "monthly_nth_weekday", label: getMonthlyWeekdayLabel(form.date) },
-      { value: "quarterly", label: "Quarterly" },
+      { value: "quarterly", label: getQuarterlyLabel(form.date) },
+      { value: "yearly", label: getYearlyLabel(form.date) },
     ],
     [form.date],
   );
@@ -265,11 +315,7 @@ export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle
               </span>
             )}
             {form.transcript && (
-              <button
-                type="button"
-                onClick={clearTranscript}
-                className="text-[11px] text-red hover:underline ml-auto"
-              >
+              <button type="button" onClick={clearTranscript} className="text-[11px] text-red hover:underline ml-auto">
                 Clear
               </button>
             )}

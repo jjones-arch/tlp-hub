@@ -53,6 +53,9 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: lint-and-build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tlp-hub
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -61,13 +64,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tlp-hub/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Build static export
+        run: |
+          rm -rf src/app/api
+          npm run build
+        env:
+          GITHUB_PAGES: "true"
+
+      - name: Prepare Pages artifact
+        run: |
+          cp out/index.html out/404.html
+          touch out/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: tlp-hub/out
 
       - name: Deploy to GitHub Pages
         id: deployment
