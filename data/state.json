@@ -1038,6 +1038,18 @@
       "sortOrder": 9,
       "tasks": [],
       "meetings": []
+    },
+    "577xnlpn": {
+      "id": "577xnlpn",
+      "name": "Legal",
+      "owner": "Greg Pyper",
+      "division": "Legal",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 10,
+      "tasks": [],
+      "meetings": []
     }
   }
 }
