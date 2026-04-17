@@ -927,7 +927,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 0,
+      "sortOrder": 1,
       "tasks": [],
       "meetings": []
     },
@@ -939,7 +939,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 1,
+      "sortOrder": 2,
       "tasks": [],
       "meetings": []
     },
@@ -951,7 +951,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 2,
+      "sortOrder": 3,
       "tasks": [],
       "meetings": []
     },
@@ -963,7 +963,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 3,
+      "sortOrder": 4,
       "tasks": [],
       "meetings": []
     },
@@ -975,7 +975,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 4,
+      "sortOrder": 5,
       "tasks": [],
       "meetings": []
     },
@@ -987,7 +987,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 5,
+      "sortOrder": 6,
       "tasks": [],
       "meetings": []
     },
@@ -999,7 +999,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 6,
+      "sortOrder": 7,
       "tasks": [],
       "meetings": []
     },
@@ -1011,7 +1011,7 @@
       "status": "on-track",
       "description": "",
       "notes": "",
-      "sortOrder": 7,
+      "sortOrder": 0,
       "tasks": [],
       "meetings": []
     },
