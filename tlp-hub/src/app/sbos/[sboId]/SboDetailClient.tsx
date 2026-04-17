@@ -341,6 +341,24 @@ export default function SboDetailPage() {
       setEditTask(null);
       await fetchData();
     } catch {
+      if (isGithubPagesRuntime() && data) {
+        const next = {
+          ...data,
+          tasks: data.tasks.map((t) =>
+            t.id === editTask.id
+              ? {
+                  ...t,
+                  ...editTaskForm,
+                }
+              : t,
+          ),
+        };
+        setData(next);
+        writeLocalSboSnapshot(next);
+        setEditTask(null);
+        toast("Task updated.");
+        return;
+      }
       toast("Failed to update task", "err");
     }
   }
