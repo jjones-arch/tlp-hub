@@ -2,6 +2,7 @@
 import { useState, useEffect, ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { useToast } from "@/components/ui/Toast";
+import { loadStaticState, mapInitiativesForSidebar } from "@/lib/staticState";
 
 interface AppShellProps {
   children: ReactNode;
@@ -19,7 +20,14 @@ export function AppShell({ children }: AppShellProps) {
         return r.json();
       })
       .then((data) => setInitiatives(data))
-      .catch(() => toast("Failed to load sidebar data", "err"));
+      .catch(async () => {
+        try {
+          const state = await loadStaticState();
+          setInitiatives(mapInitiativesForSidebar(state));
+        } catch {
+          toast("Failed to load sidebar data", "err");
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

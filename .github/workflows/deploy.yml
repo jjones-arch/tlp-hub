@@ -87,6 +87,8 @@ jobs:
       - name: Prepare Pages artifact
         run: |
           cp out/index.html out/404.html
+          mkdir -p out/data
+          cp ../data/state.json out/data/state.json
           touch out/.nojekyll
 
       - name: Setup Pages

@@ -7,6 +7,7 @@ import { ViewTabs, ViewMode } from "@/components/sbo/ViewTabs";
 import { SortableSboRow } from "@/components/sbo/SortableSboRow";
 import { CalendarGrid } from "@/components/sbo/CalendarGrid";
 import { GanttChart } from "@/components/sbo/GanttChart";
+import { loadStaticState, mapSboFallbackData } from "@/lib/staticState";
 import {
   DndContext,
   closestCenter,
@@ -119,7 +120,15 @@ export default function SboHubPage() {
       setAllTasks(await tasksRes.json());
       setAllMeetings(await meetingsRes.json());
     } catch {
-      toast("Failed to load SBO data", "err");
+      try {
+        const state = await loadStaticState();
+        const fallback = mapSboFallbackData(state);
+        setSbos(fallback.sbosSummary);
+        setAllTasks(fallback.allTasks);
+        setAllMeetings(fallback.allMeetings);
+      } catch {
+        toast("Failed to load SBO data", "err");
+      }
     } finally {
       setLoading(false);
     }
