@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Modal } from "@/components/ui/Modal";
 
 const RECURRENCES = [
@@ -56,12 +56,12 @@ const btnGhost = "rounded px-3 py-1.5 text-[12.5px] font-medium text-text-2 hove
 
 export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle }: MeetingModalProps) {
   const [form, setForm] = useState<MeetingForm>(EMPTY);
+  const prevOpenRef = useRef(false);
 
-  useEffect(() => {
-    if (open) {
-      setForm({ ...EMPTY, ...initial });
-    }
-  }, [open, initial]);
+  if (open && !prevOpenRef.current) {
+    setForm({ ...EMPTY, ...initial });
+  }
+  prevOpenRef.current = open;
 
   function update(field: keyof MeetingForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));

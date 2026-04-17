@@ -47,6 +47,23 @@ function formatShortDate(d: Date) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+function generateWeeks(start: Date, days: number) {
+  const result: { label: string; startCol: number; span: number }[] = [];
+  let current = new Date(start);
+  let col = 0;
+
+  while (col < days) {
+    const weekStart = col;
+    const label = formatShortDate(current);
+    const daysUntilSunday = (7 - current.getDay()) % 7 || 7;
+    const span = Math.min(daysUntilSunday, days - col);
+    result.push({ label, startCol: weekStart, span });
+    col += span;
+    current = new Date(current.getTime() + span * 24 * 60 * 60 * 1000);
+  }
+  return result;
+}
+
 export function GanttChart({ groups, onTaskClick }: GanttChartProps) {
   const { timelineStart, totalDays, weeks } = useMemo(() => {
     const allDates: Date[] = [];
@@ -85,23 +102,6 @@ export function GanttChart({ groups, onTaskClick }: GanttChartProps) {
       weeks: generateWeeks(start, Math.max(days, 30)),
     };
   }, [groups]);
-
-  function generateWeeks(start: Date, days: number) {
-    const result: { label: string; startCol: number; span: number }[] = [];
-    let current = new Date(start);
-    let col = 0;
-
-    while (col < days) {
-      const weekStart = col;
-      const label = formatShortDate(current);
-      const daysUntilSunday = (7 - current.getDay()) % 7 || 7;
-      const span = Math.min(daysUntilSunday, days - col);
-      result.push({ label, startCol: weekStart, span });
-      col += span;
-      current = new Date(current.getTime() + span * 24 * 60 * 60 * 1000);
-    }
-    return result;
-  }
 
   const todayOffset = daysBetween(timelineStart, new Date());
 
