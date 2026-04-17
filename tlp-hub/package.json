@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "backfill:recurring-meetings": "npx tsx prisma/backfill-recurring-meetings.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"

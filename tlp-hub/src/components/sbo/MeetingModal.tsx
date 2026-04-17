@@ -69,6 +69,15 @@ function getYearlyLabel(date: string): string {
   return `Annually on ${MONTH_NAMES[parsed.getMonth()]} ${parsed.getDate()}`;
 }
 
+function normalizeDateInput(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toISOString().slice(0, 10);
+}
+
 export interface MeetingForm {
   title: string;
   description: string;
@@ -163,7 +172,16 @@ export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle
 
   function handleSave() {
     if (!form.title.trim()) return;
-    onSave(form);
+    const normalizedDate = normalizeDateInput(form.date);
+    const normalizedEndDate = normalizeDateInput(form.endDate) || normalizedDate;
+    const normalizedRecurrenceEnd = normalizeDateInput(form.recurrenceEnd);
+
+    onSave({
+      ...form,
+      date: normalizedDate,
+      endDate: normalizedEndDate,
+      recurrenceEnd: form.recurrence === "none" ? "" : normalizedRecurrenceEnd,
+    });
   }
 
   return (

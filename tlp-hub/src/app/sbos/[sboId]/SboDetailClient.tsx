@@ -204,6 +204,45 @@ export default function SboDetailPage() {
   const [notesValue, setNotesValue] = useState("");
   const [editingStatus, setEditingStatus] = useState(false);
 
+  const localSboStorageKey = `tlp-hub:sbo:${sboId}`;
+
+  function isGithubPagesRuntime() {
+    return typeof window !== "undefined" && window.location.hostname.endsWith("github.io");
+  }
+
+  const readLocalSboSnapshot = useCallback((): SboData | null => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = window.localStorage.getItem(localSboStorageKey);
+      if (!raw) return null;
+      return JSON.parse(raw) as SboData;
+    } catch {
+      return null;
+    }
+  }, [localSboStorageKey]);
+
+  const writeLocalSboSnapshot = useCallback(
+    (next: SboData) => {
+      if (typeof window === "undefined") return;
+      try {
+        window.localStorage.setItem(localSboStorageKey, JSON.stringify(next));
+      } catch {
+        // Ignore localStorage write failures (quota/private mode)
+      }
+    },
+    [localSboStorageKey],
+  );
+
+  async function readErrorMessage(res: Response, fallback: string) {
+    try {
+      const payload = (await res.json()) as { error?: string };
+      if (payload.error) return `${fallback}: ${payload.error}`;
+    } catch {
+      // ignore non-JSON error payloads
+    }
+    return fallback;
+  }
+
   const fetchData = useCallback(async () => {
     try {
       const res = await fetch(`/api/sbos/${sboId}`);
@@ -216,15 +255,17 @@ export default function SboDetailPage() {
         const state = (await loadStaticState()) as StaticStateShape;
         const fallbackData = mapSboFromStaticState(state, sboId);
         if (!fallbackData) throw new Error();
-        setData(fallbackData);
-        setNotesValue(fallbackData.notes || "");
+        const localSnapshot = readLocalSboSnapshot();
+        const hydrated = localSnapshot?.id === fallbackData.id ? localSnapshot : fallbackData;
+        setData(hydrated);
+        setNotesValue(hydrated.notes || "");
       } catch {
         toast("Failed to load SBO", "err");
       }
     } finally {
       setLoading(false);
     }
-  }, [sboId, toast]);
+  }, [readLocalSboSnapshot, sboId, toast]);
 
   useEffect(() => {
     fetchData();
@@ -361,12 +402,37 @@ export default function SboDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error(await readErrorMessage(res, "Failed to add meeting"));
       toast("Meeting added.");
       setShowAddMeeting(false);
       await fetchData();
-    } catch {
-      toast("Failed to add meeting", "err");
+    } catch (e: unknown) {
+      if (isGithubPagesRuntime() && data) {
+        const localMeeting: SboMeeting = {
+          id: `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
+          title: form.title,
+          description: form.description,
+          date: form.date,
+          endDate: form.endDate,
+          attendees: form.attendees,
+          agenda: form.agenda,
+          notes: form.notes,
+          actionItems: form.actionItems,
+          transcript: form.transcript,
+          recurrence: form.recurrence,
+          recurrenceEnd: form.recurrenceEnd,
+        };
+        const next = {
+          ...data,
+          meetings: [...data.meetings, localMeeting].sort((a, b) => (a.date || "").localeCompare(b.date || "")),
+        };
+        setData(next);
+        writeLocalSboSnapshot(next);
+        setShowAddMeeting(false);
+        toast("Meeting added.");
+        return;
+      }
+      toast(e instanceof Error ? e.message : "Failed to add meeting", "err");
     }
   }
 
@@ -378,12 +444,30 @@ export default function SboDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error(await readErrorMessage(res, "Failed to update meeting"));
       toast("Meeting updated.");
       setEditMeeting(null);
       await fetchData();
-    } catch {
-      toast("Failed to update meeting", "err");
+    } catch (e: unknown) {
+      if (isGithubPagesRuntime() && data) {
+        const next = {
+          ...data,
+          meetings: data.meetings.map((m) =>
+            m.id === editMeeting.id
+              ? {
+                  ...m,
+                  ...form,
+                }
+              : m,
+          ),
+        };
+        setData(next);
+        writeLocalSboSnapshot(next);
+        setEditMeeting(null);
+        toast("Meeting updated.");
+        return;
+      }
+      toast(e instanceof Error ? e.message : "Failed to update meeting", "err");
     }
   }
 
@@ -394,6 +478,16 @@ export default function SboDetailPage() {
       toast("Meeting deleted.");
       await fetchData();
     } catch {
+      if (isGithubPagesRuntime() && data) {
+        const next = {
+          ...data,
+          meetings: data.meetings.filter((m) => m.id !== mid),
+        };
+        setData(next);
+        writeLocalSboSnapshot(next);
+        toast("Meeting deleted.");
+        return;
+      }
       toast("Failed to delete meeting", "err");
     }
   }
