@@ -150,17 +150,41 @@ model Sbo {
 }
 
 model SboTask {
+  id          String          @id @default(uuid())
+  text        String
+  description String          @default("")
+  owner       String          @default("")
+  due         String          @default("")
+  endDate     String          @default("")
+  status      String          @default("not-started")
+  priority    String          @default("medium")
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+  sboId       String
+  sbo         Sbo             @relation(fields: [sboId], references: [id], onDelete: Cascade)
+  updates     SboTaskUpdate[]
+}
+
+model SboTaskUpdate {
   id        String   @id @default(uuid())
   text      String
-  owner     String   @default("")
-  due       String   @default("")
-  endDate   String   @default("")
-  status    String   @default("not-started")
-  priority  String   @default("medium")
-  sortOrder Int      @default(0)
+  author    String   @default("")
   createdAt DateTime @default(now())
-  sboId     String
-  sbo       Sbo      @relation(fields: [sboId], references: [id], onDelete: Cascade)
+  taskId    String
+  task      SboTask  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  attachments SboTaskAttachment[]
+}
+
+model SboTaskAttachment {
+  id              String        @id @default(uuid())
+  filename        String
+  storedName      String
+  mimeType        String        @default("")
+  size            Int           @default(0)
+  createdAt       DateTime      @default(now())
+  sboTaskUpdateId String
+  sboTaskUpdate   SboTaskUpdate @relation(fields: [sboTaskUpdateId], references: [id], onDelete: Cascade)
 }
 
 model SboMeeting {
@@ -173,6 +197,7 @@ model SboMeeting {
   agenda        String   @default("")
   notes         String   @default("")
   actionItems   String   @default("")
+  transcript    String   @default("")
   recurrence    String   @default("none")
   recurrenceEnd String   @default("")
   createdAt     DateTime @default(now())

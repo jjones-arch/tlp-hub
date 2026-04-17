@@ -5,6 +5,7 @@ const RECURRENCE_LABELS: Record<string, string> = {
   weekly: "Weekly",
   biweekly: "Biweekly",
   monthly: "Monthly",
+  monthly_nth_weekday: "Monthly (weekday pattern)",
   quarterly: "Quarterly",
 };
 
@@ -19,6 +20,7 @@ interface MeetingCardProps {
     agenda: string;
     notes: string;
     actionItems: string;
+    transcript: string;
     recurrence: string;
   };
   onEdit?: () => void;
@@ -84,6 +86,12 @@ export function MeetingCard({ meeting, onEdit, onDelete }: MeetingCardProps) {
         <div className="mt-2 pt-2 border-t border-border-lt">
           <p className="text-[10.5px] font-semibold text-text-2 uppercase tracking-wider mb-1">Action Items</p>
           <p className="text-[12px] text-text-2 leading-relaxed whitespace-pre-line">{meeting.actionItems}</p>
+        </div>
+      )}
+      {meeting.transcript && (
+        <div className="mt-2 pt-2 border-t border-border-lt">
+          <p className="text-[10.5px] font-semibold text-text-2 uppercase tracking-wider mb-1">Transcript</p>
+          <p className="text-[12px] text-text-2 leading-relaxed whitespace-pre-line max-h-40 overflow-y-auto">{meeting.transcript}</p>
         </div>
       )}
     </div>

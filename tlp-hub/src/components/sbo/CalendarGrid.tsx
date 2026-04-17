@@ -16,6 +16,7 @@ interface RawMeeting {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
   sbo?: { id: string; name: string };
 }
 

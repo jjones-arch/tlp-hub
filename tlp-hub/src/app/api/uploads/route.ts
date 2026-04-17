@@ -29,11 +29,12 @@ const ALLOWED_EXTENSIONS = new Set([
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const taskUpdateId = formData.get("taskUpdateId") as string;
+    const taskUpdateId = formData.get("taskUpdateId") as string | null;
+    const sboTaskUpdateId = formData.get("sboTaskUpdateId") as string | null;
     const files = formData.getAll("files") as File[];
 
-    if (!taskUpdateId || files.length === 0) {
-      return NextResponse.json({ error: "Missing taskUpdateId or files" }, { status: 400 });
+    if ((!taskUpdateId && !sboTaskUpdateId) || files.length === 0) {
+      return NextResponse.json({ error: "Missing update ID or files" }, { status: 400 });
     }
 
     for (const file of files) {
@@ -57,17 +58,31 @@ export async function POST(req: NextRequest) {
       const buffer = Buffer.from(await file.arrayBuffer());
       await writeFile(path.join(uploadDir, storedName), buffer);
 
-      const attachment = await prisma.taskAttachment.create({
-        data: {
-          id: uuid(),
-          filename: file.name,
-          storedName,
-          mimeType: file.type || "",
-          size: file.size,
-          taskUpdateId,
-        },
-      });
-      attachments.push(attachment);
+      if (sboTaskUpdateId) {
+        const attachment = await prisma.sboTaskAttachment.create({
+          data: {
+            id: uuid(),
+            filename: file.name,
+            storedName,
+            mimeType: file.type || "",
+            size: file.size,
+            sboTaskUpdateId,
+          },
+        });
+        attachments.push(attachment);
+      } else {
+        const attachment = await prisma.taskAttachment.create({
+          data: {
+            id: uuid(),
+            filename: file.name,
+            storedName,
+            mimeType: file.type || "",
+            size: file.size,
+            taskUpdateId: taskUpdateId!,
+          },
+        });
+        attachments.push(attachment);
+      }
     }
 
     return NextResponse.json(attachments);

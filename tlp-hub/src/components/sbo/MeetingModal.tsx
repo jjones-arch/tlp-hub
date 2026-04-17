@@ -1,15 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Modal } from "@/components/ui/Modal";
 
-const RECURRENCES = [
-  { value: "none", label: "None" },
-  { value: "weekly", label: "Weekly" },
-  { value: "biweekly", label: "Biweekly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "quarterly", label: "Quarterly" },
-];
+const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const ORDINALS = ["first", "second", "third", "fourth", "fifth"];
+
+function getOrdinalLabel(index: number): string {
+  return ORDINALS[index - 1] || `${index}th`;
+}
+
+function getMonthlyWeekdayLabel(date: string): string {
+  if (!date) return "Monthly on the same weekday";
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return "Monthly on the same weekday";
+  const dayOfMonth = parsed.getDate();
+  const weekday = WEEKDAY_NAMES[parsed.getDay()];
+  const ordinal = getOrdinalLabel(Math.floor((dayOfMonth - 1) / 7) + 1);
+  return `Monthly on the ${ordinal} ${weekday}`;
+}
 
 export interface MeetingForm {
   title: string;
@@ -20,6 +29,7 @@ export interface MeetingForm {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
   recurrence: string;
   recurrenceEnd: string;
 }
@@ -33,6 +43,7 @@ const EMPTY: MeetingForm = {
   agenda: "",
   notes: "",
   actionItems: "",
+  transcript: "",
   recurrence: "none",
   recurrenceEnd: "",
 };
@@ -56,16 +67,48 @@ const btnGhost = "rounded px-3 py-1.5 text-[12.5px] font-medium text-text-2 hove
 
 export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle }: MeetingModalProps) {
   const [form, setForm] = useState<MeetingForm>(EMPTY);
+  const [transcriptFileName, setTranscriptFileName] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const recurrenceOptions = useMemo(
+    () => [
+      { value: "none", label: "None" },
+      { value: "weekly", label: "Weekly" },
+      { value: "biweekly", label: "Biweekly" },
+      { value: "monthly", label: "Monthly (same date)" },
+      { value: "monthly_nth_weekday", label: getMonthlyWeekdayLabel(form.date) },
+      { value: "quarterly", label: "Quarterly" },
+    ],
+    [form.date],
+  );
 
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form when modal opens with new initial values
       setForm({ ...EMPTY, ...initial });
+      setTranscriptFileName("");
     }
   }, [open, initial]);
 
   function update(field: keyof MeetingForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function handleTranscriptFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setTranscriptFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const text = evt.target?.result;
+      if (typeof text === "string") update("transcript", text);
+    };
+    reader.readAsText(file);
+  }
+
+  function clearTranscript() {
+    update("transcript", "");
+    setTranscriptFileName("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   function handleSave() {
@@ -156,7 +199,7 @@ export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle
               onChange={(e) => update("recurrence", e.target.value)}
               className={selectCls}
             >
-              {RECURRENCES.map((r) => (
+              {recurrenceOptions.map((r) => (
                 <option key={r.value} value={r.value}>
                   {r.label}
                 </option>
@@ -193,6 +236,50 @@ export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle
             rows={2}
             className={inputCls}
             placeholder="Follow-up action items"
+          />
+        </div>
+        <div>
+          <label className={labelCls}>Meeting Transcript</label>
+          <div className="flex items-center gap-2 mb-1.5">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".txt,.vtt,.srt,.md,.doc,.docx,.csv"
+              onChange={handleTranscriptFile}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded border border-border bg-surface px-3 py-1.5 text-[12px] font-medium text-text-2 hover:bg-surface-2 transition-colors flex items-center gap-1.5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                <path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636v8.614z" />
+                <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+              </svg>
+              Upload Transcript
+            </button>
+            {transcriptFileName && (
+              <span className="text-[11.5px] text-text-3 truncate max-w-[200px]" title={transcriptFileName}>
+                {transcriptFileName}
+              </span>
+            )}
+            {form.transcript && (
+              <button
+                type="button"
+                onClick={clearTranscript}
+                className="text-[11px] text-red hover:underline ml-auto"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          <textarea
+            value={form.transcript}
+            onChange={(e) => update("transcript", e.target.value)}
+            rows={4}
+            className={inputCls}
+            placeholder="Paste transcript text or upload a file…"
           />
         </div>
       </div>

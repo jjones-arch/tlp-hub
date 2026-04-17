@@ -12,6 +12,7 @@ export interface MeetingOccurrence {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
 }
 
 interface BaseMeeting {
@@ -27,7 +28,17 @@ interface BaseMeeting {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
   sbo?: { id: string; name: string };
+}
+
+function getNthWeekdayDate(year: number, month: number, weekday: number, nth: number): Date | null {
+  const firstOfMonth = new Date(year, month, 1);
+  const offset = (weekday - firstOfMonth.getDay() + 7) % 7;
+  const dayOfMonth = 1 + offset + (nth - 1) * 7;
+  const candidate = new Date(year, month, dayOfMonth);
+  if (candidate.getMonth() !== month) return null;
+  return candidate;
 }
 
 function addInterval(dateStr: string, recurrence: string): string {
@@ -45,6 +56,26 @@ function addInterval(dateStr: string, recurrence: string): string {
     case "quarterly":
       d.setMonth(d.getMonth() + 3);
       break;
+    case "monthly_nth_weekday": {
+      const weekday = d.getDay();
+      const nth = Math.floor((d.getDate() - 1) / 7) + 1;
+      const targetMonth = d.getMonth() + 1;
+      const targetYear = targetMonth > 11 ? d.getFullYear() + 1 : d.getFullYear();
+      const normalizedMonth = targetMonth % 12;
+      const next = getNthWeekdayDate(targetYear, normalizedMonth, weekday, nth);
+      if (!next) {
+        // Some months do not have a 5th weekday; skip ahead until we find a valid month.
+        for (let i = 2; i <= 12; i++) {
+          const iterMonth = d.getMonth() + i;
+          const iterYear = d.getFullYear() + Math.floor(iterMonth / 12);
+          const normalizedIterMonth = ((iterMonth % 12) + 12) % 12;
+          const fallback = getNthWeekdayDate(iterYear, normalizedIterMonth, weekday, nth);
+          if (fallback) return fallback.toISOString().slice(0, 10);
+        }
+        return "";
+      }
+      return next.toISOString().slice(0, 10);
+    }
     default:
       return "";
   }
@@ -81,6 +112,7 @@ export function expandMeetings(
           agenda: m.agenda,
           notes: m.notes,
           actionItems: m.actionItems,
+          transcript: m.transcript,
         });
       }
       continue;
@@ -107,6 +139,7 @@ export function expandMeetings(
           agenda: m.agenda,
           notes: m.notes,
           actionItems: m.actionItems,
+          transcript: m.transcript,
         });
       }
       current = addInterval(current, m.recurrence);

@@ -14,6 +14,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ sboId:
       "agenda",
       "notes",
       "actionItems",
+      "transcript",
       "recurrence",
       "recurrenceEnd",
     ];

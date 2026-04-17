@@ -15,6 +15,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ sboId: 
         agenda: body.agenda || "",
         notes: body.notes || "",
         actionItems: body.actionItems || "",
+        transcript: body.transcript || "",
         recurrence: body.recurrence || "none",
         recurrenceEnd: body.recurrenceEnd || "",
         sboId,

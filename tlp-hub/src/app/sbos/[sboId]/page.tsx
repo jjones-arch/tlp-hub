@@ -13,15 +13,33 @@ import { MeetingCard } from "@/components/sbo/MeetingCard";
 import { MeetingModal, MeetingForm } from "@/components/sbo/MeetingModal";
 import { taskStatusClasses, taskStatusLabel, priorityClasses } from "@/lib/utils";
 
+interface SboTaskAttachment {
+  id: string;
+  filename: string;
+  storedName: string;
+  mimeType: string;
+  size: number;
+}
+
+interface SboTaskUpdate {
+  id: string;
+  text: string;
+  author: string;
+  createdAt: string;
+  attachments: SboTaskAttachment[];
+}
+
 interface SboTask {
   id: string;
   text: string;
+  description: string;
   owner: string;
   due: string;
   endDate: string;
   status: string;
   priority: string;
   sortOrder: number;
+  updates: SboTaskUpdate[];
 }
 
 interface SboMeeting {
@@ -34,6 +52,7 @@ interface SboMeeting {
   agenda: string;
   notes: string;
   actionItems: string;
+  transcript: string;
   recurrence: string;
   recurrenceEnd: string;
 }
@@ -75,6 +94,7 @@ export default function SboDetailPage() {
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTask, setNewTask] = useState({
     text: "",
+    description: "",
     owner: "",
     due: "",
     endDate: "",
@@ -84,12 +104,16 @@ export default function SboDetailPage() {
   const [editTask, setEditTask] = useState<SboTask | null>(null);
   const [editTaskForm, setEditTaskForm] = useState({
     text: "",
+    description: "",
     owner: "",
     due: "",
     endDate: "",
     status: "",
     priority: "",
   });
+  const [newUpdateText, setNewUpdateText] = useState("");
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const [submittingUpdate, setSubmittingUpdate] = useState(false);
 
   // Meeting state
   const [showAddMeeting, setShowAddMeeting] = useState(false);
@@ -158,7 +182,7 @@ export default function SboDetailPage() {
       });
       if (!res.ok) throw new Error();
       toast("Task added.");
-      setNewTask({ text: "", owner: "", due: "", endDate: "", status: "not-started", priority: "medium" });
+      setNewTask({ text: "", description: "", owner: "", due: "", endDate: "", status: "not-started", priority: "medium" });
       setShowAddTask(false);
       await fetchData();
     } catch {
@@ -191,6 +215,43 @@ export default function SboDetailPage() {
       await fetchData();
     } catch {
       toast("Failed to delete task", "err");
+    }
+  }
+
+  async function addTaskUpdate() {
+    if (!editTask || (!newUpdateText.trim() && pendingFiles.length === 0)) return;
+    setSubmittingUpdate(true);
+    try {
+      const res = await fetch(`/api/sbos/${sboId}/tasks/${editTask.id}/updates`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: newUpdateText, author: editTaskForm.owner }),
+      });
+      if (!res.ok) throw new Error();
+      const update = await res.json();
+
+      if (pendingFiles.length > 0) {
+        const fd = new FormData();
+        fd.append("sboTaskUpdateId", update.id);
+        pendingFiles.forEach((f) => fd.append("files", f));
+        await fetch("/api/uploads", { method: "POST", body: fd });
+      }
+
+      toast("Update added.");
+      setNewUpdateText("");
+      setPendingFiles([]);
+
+      const refreshRes = await fetch(`/api/sbos/${sboId}`);
+      if (refreshRes.ok) {
+        const json: SboData = await refreshRes.json();
+        setData(json);
+        const refreshed = json.tasks.find((t) => t.id === editTask.id);
+        if (refreshed) setEditTask(refreshed);
+      }
+    } catch {
+      toast("Failed to add update", "err");
+    } finally {
+      setSubmittingUpdate(false);
     }
   }
 
@@ -361,10 +422,17 @@ export default function SboDetailPage() {
               {showAddTask && (
                 <div className="mb-4 p-3 rounded border border-border bg-surface-2 space-y-2">
                   <input
-                    placeholder="Task description"
+                    placeholder="Task title"
                     value={newTask.text}
                     onChange={(e) => setNewTask({ ...newTask, text: e.target.value })}
                     className={inputCls}
+                  />
+                  <textarea
+                    placeholder="Description (optional)"
+                    value={newTask.description}
+                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                    rows={2}
+                    className={`${inputCls} resize-y`}
                   />
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -470,12 +538,15 @@ export default function SboDetailPage() {
                               setEditTask(task);
                               setEditTaskForm({
                                 text: task.text,
+                                description: task.description,
                                 owner: task.owner,
                                 due: task.due,
                                 endDate: task.endDate,
                                 status: task.status,
                                 priority: task.priority,
                               });
+                              setNewUpdateText("");
+                              setPendingFiles([]);
                             }}
                             className="text-text-3 hover:text-text text-[13px]"
                           >
@@ -557,11 +628,21 @@ export default function SboDetailPage() {
       >
         <div className="space-y-3">
           <div>
-            <label className="block text-[12px] font-medium text-text-2 mb-1">Description</label>
+            <label className="block text-[12px] font-medium text-text-2 mb-1">Title</label>
             <input
               value={editTaskForm.text}
               onChange={(e) => setEditTaskForm({ ...editTaskForm, text: e.target.value })}
               className={inputCls}
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-medium text-text-2 mb-1">Description</label>
+            <textarea
+              value={editTaskForm.description}
+              onChange={(e) => setEditTaskForm({ ...editTaskForm, description: e.target.value })}
+              rows={3}
+              placeholder="Describe the task in more detail..."
+              className={`${inputCls} resize-y`}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -621,6 +702,151 @@ export default function SboDetailPage() {
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* ── Updates / Notes ── */}
+          <div className="border-t border-border pt-4 mt-4">
+            <h3 className="text-[13px] font-semibold text-text mb-3">Updates</h3>
+
+            <div className="rounded border border-border bg-surface-2 p-3 space-y-2 mb-4">
+              <textarea
+                value={newUpdateText}
+                onChange={(e) => setNewUpdateText(e.target.value)}
+                placeholder="Add a progress note, comment, or status update..."
+                rows={2}
+                className={`${inputCls} resize-y`}
+              />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <label className="flex items-center gap-1.5 cursor-pointer text-[12px] text-text-2 hover:text-text transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-text-3">
+                      <path
+                        d="M14 10V12.667A1.334 1.334 0 0112.667 14H3.333A1.334 1.334 0 012 12.667V10M11.333 5.333L8 2M8 2L4.667 5.333M8 2v8"
+                        stroke="currentColor"
+                        strokeWidth="1.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Attach files
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setPendingFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+                        }
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  {pendingFiles.length > 0 && (
+                    <span className="text-[11px] text-text-3">
+                      {pendingFiles.length} file{pendingFiles.length !== 1 ? "s" : ""} selected
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={addTaskUpdate}
+                  disabled={submittingUpdate || (!newUpdateText.trim() && pendingFiles.length === 0)}
+                  className={`${btnPrimary} disabled:opacity-40 disabled:cursor-not-allowed`}
+                >
+                  {submittingUpdate ? "Posting..." : "Post Update"}
+                </button>
+              </div>
+              {pendingFiles.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {pendingFiles.map((f, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 rounded bg-surface px-2 py-0.5 text-[11px] text-text-2 border border-border"
+                    >
+                      {f.name}
+                      <button
+                        onClick={() => setPendingFiles((prev) => prev.filter((_, j) => j !== i))}
+                        className="text-text-3 hover:text-red ml-0.5"
+                      >
+                        x
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {editTask && editTask.updates && editTask.updates.length > 0 ? (
+              <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                {editTask.updates.map((upd) => (
+                  <div key={upd.id} className="relative pl-5 border-l-2 border-border pb-1">
+                    <div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-navy" />
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      {upd.author && <span className="text-[12px] font-semibold text-text">{upd.author}</span>}
+                      <span className="text-[11px] text-text-3">
+                        {new Date(upd.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{upd.text}</p>
+                    {upd.attachments && upd.attachments.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {upd.attachments.map((att) => {
+                          const isImage = att.mimeType.startsWith("image/");
+                          return (
+                            <a
+                              key={att.id}
+                              href={`/uploads/${att.storedName}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group/att flex items-center gap-1.5 rounded border border-border bg-surface px-2 py-1 text-[11px] text-text-2 hover:border-accent hover:text-accent transition-colors"
+                            >
+                              {isImage ? (
+                                <img
+                                  src={`/uploads/${att.storedName}`}
+                                  alt={att.filename}
+                                  className="w-8 h-8 rounded object-cover"
+                                />
+                              ) : (
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  className="text-text-3 group-hover/att:text-accent"
+                                >
+                                  <path
+                                    d="M9.333 1.333H4A1.333 1.333 0 002.667 2.667v10.666A1.333 1.333 0 004 14.667h8a1.333 1.333 0 001.333-1.334V5.333l-4-4z"
+                                    stroke="currentColor"
+                                    strokeWidth="1.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M9.333 1.333v4h4"
+                                    stroke="currentColor"
+                                    strokeWidth="1.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              )}
+                              <span className="max-w-[120px] truncate">{att.filename}</span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[12px] text-text-3 italic">No updates yet. Add a note above to track progress.</p>
+            )}
           </div>
         </div>
       </Modal>

@@ -7,7 +7,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ sboId: 
     const sbo = await prisma.sbo.findUnique({
       where: { id: sboId },
       include: {
-        tasks: { orderBy: { sortOrder: "asc" } },
+        tasks: {
+          orderBy: { sortOrder: "asc" },
+          include: { updates: { include: { attachments: true }, orderBy: { createdAt: "desc" } } },
+        },
         meetings: { orderBy: { date: "asc" } },
       },
     });

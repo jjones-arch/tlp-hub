@@ -12,6 +12,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ sboId: 
     const task = await prisma.sboTask.create({
       data: {
         text: body.text || "",
+        description: body.description || "",
         owner: body.owner || "",
         due: body.due || "",
         endDate: body.endDate || "",
