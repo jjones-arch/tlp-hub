@@ -1012,7 +1012,17 @@
       "description": "",
       "notes": "",
       "sortOrder": 0,
-      "tasks": [],
+      "tasks": [
+        {
+          "id": "1ddgto4d",
+          "text": "Topics for meeting",
+          "owner": "Jordan Jones",
+          "due": "2026-04-17",
+          "endDate": "2026-04-17",
+          "status": "in-progress",
+          "priority": "low"
+        }
+      ],
       "meetings": [
         {
           "id": "jz0qc29v",
