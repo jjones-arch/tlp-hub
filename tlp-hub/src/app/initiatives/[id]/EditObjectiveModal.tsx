@@ -13,17 +13,14 @@ interface EditObjectiveModalProps {
 
 export function EditObjectiveModal({ objective, onClose, onSave }: EditObjectiveModalProps) {
   if (!objective) {
-    return <Modal open={false} onClose={onClose} title="" footer={null}><div /></Modal>;
+    return (
+      <Modal open={false} onClose={onClose} title="" footer={null}>
+        <div />
+      </Modal>
+    );
   }
 
-  return (
-    <EditObjectiveModalInner
-      key={objective.id}
-      objective={objective}
-      onClose={onClose}
-      onSave={onSave}
-    />
-  );
+  return <EditObjectiveModalInner key={objective.id} objective={objective} onClose={onClose} onSave={onSave} />;
 }
 
 function EditObjectiveModalInner({
@@ -51,8 +48,12 @@ function EditObjectiveModalInner({
       title="Edit Objective"
       footer={
         <>
-          <button onClick={onClose} className={btnGhost}>Cancel</button>
-          <button onClick={handleSave} className={btnPrimary}>Save</button>
+          <button onClick={onClose} className={btnGhost}>
+            Cancel
+          </button>
+          <button onClick={handleSave} className={btnPrimary}>
+            Save
+          </button>
         </>
       }
     >
