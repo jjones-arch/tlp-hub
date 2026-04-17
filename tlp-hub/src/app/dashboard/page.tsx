@@ -5,6 +5,7 @@ import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useToast } from "@/components/ui/Toast";
+import { loadStaticState, mapInitiativesForDashboard } from "@/lib/staticState";
 
 interface Owner {
   id: string;
@@ -80,7 +81,12 @@ export default function DashboardPage() {
       const data: Initiative[] = await res.json();
       setInitiatives(data);
     } catch {
-      toast("Failed to load initiatives", "err");
+      try {
+        const state = await loadStaticState();
+        setInitiatives(mapInitiativesForDashboard(state));
+      } catch {
+        toast("Failed to load initiatives", "err");
+      }
     } finally {
       setLoading(false);
     }

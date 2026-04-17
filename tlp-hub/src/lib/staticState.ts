@@ -1,4 +1,30 @@
 type InitiativeSummary = { id: string; name: string; status: string };
+type InitiativeOwner = { id: string; name: string; role: string };
+type InitiativeTask = {
+  id: string;
+  text: string;
+  owner: string;
+  due: string | null;
+  status: string;
+  priority: string;
+  initiativeId: string;
+};
+type InitiativeRisk = { id: string; text: string; impact: string; likelihood: string; status: string };
+type InitiativeObjective = { id: string; text: string; status: string };
+type InitiativeDecision = { id: string; title: string; status: string; priority: string };
+type InitiativeDashboard = {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  progress: number;
+  quarter: string;
+  owners: InitiativeOwner[];
+  tasks: InitiativeTask[];
+  risks: InitiativeRisk[];
+  objectives: InitiativeObjective[];
+  decisions: InitiativeDecision[];
+};
 
 type StateSboTask = {
   id: string;
@@ -39,7 +65,19 @@ type StateSbo = {
 };
 
 type StateShape = {
-  initiatives?: Record<string, InitiativeSummary>;
+  initiatives?: Record<
+    string,
+    InitiativeSummary & {
+      description?: string;
+      progress?: number;
+      quarter?: string;
+      owners?: string[];
+      tasks?: Array<{ id: string; text: string; owner?: string; due?: string; status?: string; priority?: string }>;
+      risks?: Array<{ id: string; title?: string; impact?: string; likelihood?: string }>;
+      objectives?: Array<{ id: string; text: string; complete?: boolean }>;
+      decisions?: Array<{ id: string; text?: string }>;
+    }
+  >;
   sbos?: Record<string, StateSbo>;
 };
 
@@ -57,6 +95,45 @@ export async function loadStaticState() {
 
 export function mapInitiativesForSidebar(state: StateShape): InitiativeSummary[] {
   return Object.values(state.initiatives ?? {});
+}
+
+export function mapInitiativesForDashboard(state: StateShape): InitiativeDashboard[] {
+  return Object.values(state.initiatives ?? {}).map((initiative) => ({
+    id: initiative.id,
+    name: initiative.name,
+    description: initiative.description ?? "",
+    status: initiative.status ?? "on-track",
+    progress: initiative.progress ?? 0,
+    quarter: initiative.quarter ?? "",
+    owners: (initiative.owners ?? []).map((name, idx) => ({ id: `${initiative.id}-owner-${idx}`, name, role: "" })),
+    tasks: (initiative.tasks ?? []).map((task) => ({
+      id: task.id,
+      text: task.text,
+      owner: task.owner ?? "",
+      due: task.due ?? null,
+      status: task.status ?? "not-started",
+      priority: task.priority ?? "medium",
+      initiativeId: initiative.id,
+    })),
+    risks: (initiative.risks ?? []).map((risk) => ({
+      id: risk.id,
+      text: risk.title ?? "",
+      impact: risk.impact ?? "medium",
+      likelihood: risk.likelihood ?? "medium",
+      status: "open",
+    })),
+    objectives: (initiative.objectives ?? []).map((objective) => ({
+      id: objective.id,
+      text: objective.text,
+      status: objective.complete ? "complete" : "open",
+    })),
+    decisions: (initiative.decisions ?? []).map((decision) => ({
+      id: decision.id,
+      title: decision.text ?? "",
+      status: "logged",
+      priority: "medium",
+    })),
+  }));
 }
 
 export function mapSboFallbackData(state: StateShape) {
