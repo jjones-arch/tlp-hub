@@ -4,9 +4,24 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useToast } from "@/components/ui/Toast";
 import { Modal } from "@/components/ui/Modal";
 import { ViewTabs, ViewMode } from "@/components/sbo/ViewTabs";
-import { SboCard } from "@/components/sbo/SboCard";
+import { SortableSboRow } from "@/components/sbo/SortableSboRow";
 import { CalendarGrid } from "@/components/sbo/CalendarGrid";
 import { GanttChart } from "@/components/sbo/GanttChart";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 interface SboSummary {
   id: string;
@@ -64,6 +79,32 @@ export default function SboHubPage() {
   const [view, setView] = useState<ViewMode>("list");
   const [showAddSbo, setShowAddSbo] = useState(false);
   const [newSbo, setNewSbo] = useState({ name: "", owner: "", division: "", description: "" });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  async function handleSboDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = sbos.findIndex((s) => s.id === active.id);
+    const newIndex = sbos.findIndex((s) => s.id === over.id);
+    const reordered = arrayMove(sbos, oldIndex, newIndex);
+    setSbos(reordered);
+
+    try {
+      await fetch("/api/sbos/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderedIds: reordered.map((s) => s.id) }),
+      });
+    } catch {
+      toast("Failed to save order", "err");
+      await fetchData();
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -126,9 +167,9 @@ export default function SboHubPage() {
         <div className="animate-pulse space-y-6">
           <div className="h-8 w-60 bg-surface rounded" />
           <div className="h-4 w-44 bg-surface rounded" />
-          <div className="grid grid-cols-3 gap-5 mt-6">
+          <div className="space-y-2 mt-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-48 bg-surface rounded-lg" />
+              <div key={i} className="h-14 bg-surface rounded-lg" />
             ))}
           </div>
         </div>
@@ -184,13 +225,21 @@ export default function SboHubPage() {
 
       {/* List View */}
       {view === "list" && (
-        <div className="grid grid-cols-3 gap-5">
+        <div>
           {sbos.length === 0 ? (
-            <div className="col-span-3 text-center py-12 text-[14px] text-text-3">
+            <div className="text-center py-12 text-[14px] text-text-3">
               No SBOs yet. Click &ldquo;+ Add SBO&rdquo; to get started.
             </div>
           ) : (
-            sbos.map((sbo) => <SboCard key={sbo.id} sbo={sbo} />)
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSboDragEnd}>
+              <SortableContext items={sbos.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+                <ul className="space-y-2">
+                  {sbos.map((sbo) => (
+                    <SortableSboRow key={sbo.id} sbo={sbo} />
+                  ))}
+                </ul>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
       )}
