@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-const VALID_RECURRENCES = new Set(["none", "weekly", "biweekly", "monthly", "monthly_nth_weekday", "quarterly", "yearly"]);
+const VALID_RECURRENCES = new Set([
+  "none",
+  "weekly",
+  "biweekly",
+  "monthly",
+  "monthly_nth_weekday",
+  "quarterly",
+  "yearly",
+]);
 
 function normalizeDateValue(value: unknown): string {
   if (typeof value !== "string") return "";
