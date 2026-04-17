@@ -1026,6 +1026,18 @@
       "sortOrder": 8,
       "tasks": [],
       "meetings": []
+    },
+    "xttmc469": {
+      "id": "xttmc469",
+      "name": "Finance",
+      "owner": "Ryan Ostler",
+      "division": "Finance",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 9,
+      "tasks": [],
+      "meetings": []
     }
   }
 }
