@@ -1013,7 +1013,21 @@
       "notes": "",
       "sortOrder": 0,
       "tasks": [],
-      "meetings": []
+      "meetings": [
+        {
+          "id": "jz0qc29v",
+          "title": "SBO Software Portfolio Review",
+          "date": "2026-04-17",
+          "endDate": "2026-04-17",
+          "attendees": "",
+          "description": "",
+          "agenda": "",
+          "recurrence": "monthly",
+          "recurrenceEnd": "",
+          "notes": "",
+          "actionItems": ""
+        }
+      ]
     },
     "q5yngwbw": {
       "id": "q5yngwbw",
