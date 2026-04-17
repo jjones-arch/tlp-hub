@@ -11,6 +11,7 @@ import { CalendarGrid } from "@/components/sbo/CalendarGrid";
 import { GanttChart } from "@/components/sbo/GanttChart";
 import { MeetingCard } from "@/components/sbo/MeetingCard";
 import { MeetingModal, MeetingForm } from "@/components/sbo/MeetingModal";
+import { loadStaticState } from "@/lib/staticState";
 import { taskStatusClasses, taskStatusLabel, priorityClasses } from "@/lib/utils";
 
 interface SboTaskAttachment {
@@ -67,6 +68,86 @@ interface SboData {
   notes: string;
   tasks: SboTask[];
   meetings: SboMeeting[];
+}
+
+interface StaticStateShape {
+  sbos?: Record<
+    string,
+    {
+      id: string;
+      name: string;
+      owner?: string;
+      division?: string;
+      status?: string;
+      description?: string;
+      notes?: string;
+      tasks?: Array<{
+        id: string;
+        text: string;
+        description?: string;
+        owner?: string;
+        due?: string;
+        endDate?: string;
+        status?: string;
+        priority?: string;
+      }>;
+      meetings?: Array<{
+        id: string;
+        title: string;
+        description?: string;
+        date?: string;
+        endDate?: string;
+        attendees?: string;
+        agenda?: string;
+        notes?: string;
+        actionItems?: string;
+        transcript?: string;
+        recurrence?: string;
+        recurrenceEnd?: string;
+      }>;
+    }
+  >;
+}
+
+function mapSboFromStaticState(state: StaticStateShape, sboId: string): SboData | null {
+  const sbo = state.sbos?.[sboId];
+  if (!sbo) return null;
+
+  return {
+    id: sbo.id,
+    name: sbo.name,
+    owner: sbo.owner ?? "",
+    division: sbo.division ?? "",
+    status: sbo.status ?? "on-track",
+    description: sbo.description ?? "",
+    notes: sbo.notes ?? "",
+    tasks: (sbo.tasks ?? []).map((task, index) => ({
+      id: task.id,
+      text: task.text,
+      description: task.description ?? "",
+      owner: task.owner ?? "",
+      due: task.due ?? "",
+      endDate: task.endDate ?? task.due ?? "",
+      status: task.status ?? "not-started",
+      priority: task.priority ?? "medium",
+      sortOrder: index,
+      updates: [],
+    })),
+    meetings: (sbo.meetings ?? []).map((meeting) => ({
+      id: meeting.id,
+      title: meeting.title,
+      description: meeting.description ?? "",
+      date: meeting.date ?? "",
+      endDate: meeting.endDate ?? meeting.date ?? "",
+      attendees: meeting.attendees ?? "",
+      agenda: meeting.agenda ?? "",
+      notes: meeting.notes ?? "",
+      actionItems: meeting.actionItems ?? "",
+      transcript: meeting.transcript ?? "",
+      recurrence: meeting.recurrence ?? "none",
+      recurrenceEnd: meeting.recurrenceEnd ?? "",
+    })),
+  };
 }
 
 const TASK_STATUSES = ["not-started", "in-progress", "blocked", "complete"];
@@ -131,7 +212,15 @@ export default function SboDetailPage() {
       setData(json);
       setNotesValue(json.notes || "");
     } catch {
-      toast("Failed to load SBO", "err");
+      try {
+        const state = (await loadStaticState()) as StaticStateShape;
+        const fallbackData = mapSboFromStaticState(state, sboId);
+        if (!fallbackData) throw new Error();
+        setData(fallbackData);
+        setNotesValue(fallbackData.notes || "");
+      } catch {
+        toast("Failed to load SBO", "err");
+      }
     } finally {
       setLoading(false);
     }
