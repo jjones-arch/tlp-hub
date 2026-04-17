@@ -8,6 +8,7 @@ export default defineConfig({
     seed: "npx tsx prisma/setup.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"] || "file:./dev.db",
+    // Keep Prisma CLI operations on the same file used by the app/runtime adapter.
+    url: process.env["DATABASE_URL"] || "file:./prisma/dev.db",
   },
 });
