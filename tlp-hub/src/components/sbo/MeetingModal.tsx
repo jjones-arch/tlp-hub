@@ -57,9 +57,9 @@ const btnGhost = "rounded px-3 py-1.5 text-[12.5px] font-medium text-text-2 hove
 export function MeetingModal({ open, onClose, onSave, initial, title: modalTitle }: MeetingModalProps) {
   const [form, setForm] = useState<MeetingForm>(EMPTY);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form when modal opens with new initial values
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form when modal opens with new initial values
       setForm({ ...EMPTY, ...initial });
     }
   }, [open, initial]);
