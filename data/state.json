@@ -1062,6 +1062,18 @@
       "sortOrder": 11,
       "tasks": [],
       "meetings": []
+    },
+    "ku6sjzgg": {
+      "id": "ku6sjzgg",
+      "name": "Talent Aquisition",
+      "owner": "Brandon Welch",
+      "division": "Legal",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 12,
+      "tasks": [],
+      "meetings": []
     }
   }
 }
