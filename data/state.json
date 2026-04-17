@@ -942,6 +942,18 @@
       "sortOrder": 1,
       "tasks": [],
       "meetings": []
+    },
+    "ph453yg5": {
+      "id": "ph453yg5",
+      "name": "AI Labs",
+      "owner": "Alan Whitaker",
+      "division": "IT",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 2,
+      "tasks": [],
+      "meetings": []
     }
   }
 }
