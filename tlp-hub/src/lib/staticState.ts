@@ -136,6 +136,53 @@ export function mapInitiativesForDashboard(state: StateShape): InitiativeDashboa
   }));
 }
 
+export function mapInitiativeDetail(state: StateShape, initiativeId: string) {
+  const raw = state.initiatives?.[initiativeId];
+  if (!raw) return null;
+
+  return {
+    id: raw.id,
+    name: raw.name,
+    subtitle: "",
+    quarter: raw.quarter ?? "",
+    status: raw.status ?? "on-track",
+    progress: raw.progress ?? 0,
+    description: raw.description ?? "",
+    notes: "",
+    owners: (raw.owners ?? []).map((name, idx) => ({ id: `${raw.id}-owner-${idx}`, name })),
+    objectives: (raw.objectives ?? []).map((o, idx) => ({
+      id: o.id,
+      text: o.text,
+      description: "",
+      complete: o.complete ?? false,
+      sortOrder: idx,
+    })),
+    tasks: (raw.tasks ?? []).map((t, idx) => ({
+      id: t.id,
+      text: t.text,
+      owner: t.owner ?? "",
+      due: t.due ?? "",
+      status: t.status ?? "not-started",
+      priority: t.priority ?? "medium",
+      sortOrder: idx,
+      updates: [],
+    })),
+    risks: (raw.risks ?? []).map((r) => ({
+      id: r.id,
+      title: r.title ?? "",
+      description: "",
+      likelihood: r.likelihood ?? "medium",
+      impact: r.impact ?? "medium",
+      mitigation: "",
+    })),
+    decisions: (raw.decisions ?? []).map((d) => ({
+      id: d.id,
+      text: d.text ?? "",
+      date: "",
+    })),
+  };
+}
+
 export function mapSboFallbackData(state: StateShape) {
   const sbos = Object.values(state.sbos ?? {}).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 

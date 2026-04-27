@@ -83,6 +83,7 @@ jobs:
           npm run build
         env:
           GITHUB_PAGES: "true"
+          NEXT_PUBLIC_READONLY: "true"
 
       - name: Prepare Pages artifact
         run: |

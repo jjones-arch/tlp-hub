@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { loadStaticState, mapInitiativeDetail } from "@/lib/staticState";
 import type { Initiative, Objective, Task } from "./types";
 
 export function useInitiativeData(id: string) {
@@ -25,7 +26,15 @@ export function useInitiativeData(id: string) {
       setData(json);
       setNotesValue(json.notes || "");
     } catch {
-      toast("Failed to load initiative", "err");
+      try {
+        const state = await loadStaticState();
+        const fallback = mapInitiativeDetail(state, id);
+        if (!fallback) throw new Error("Not in static state");
+        setData(fallback as Initiative);
+        setNotesValue(fallback.notes || "");
+      } catch {
+        toast("Failed to load initiative", "err");
+      }
     } finally {
       setLoading(false);
     }

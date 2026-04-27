@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useToast } from "@/components/ui/Toast";
 import { loadStaticState, mapInitiativesForDashboard } from "@/lib/staticState";
+import { isReadOnly } from "@/lib/readOnly";
 
 interface Owner {
   id: string;
@@ -68,6 +69,7 @@ function formatToday(): string {
 
 export default function DashboardPage() {
   const toast = useToast();
+  const readonly = isReadOnly();
   const [initiatives, setInitiatives] = useState<Initiative[]>([]);
   const [loading, setLoading] = useState(true);
   const [focusHtml, setFocusHtml] = useState<string | null>(null);
@@ -185,13 +187,15 @@ export default function DashboardPage() {
       <section className="mb-8 rounded-lg bg-gradient-to-br from-navy to-navy-a p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-[15px] font-semibold tracking-tight">✦ Focus This Week</h2>
-          <button
-            onClick={handleGenerateFocus}
-            disabled={focusLoading}
-            className="text-[12px] font-medium px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50"
-          >
-            {focusLoading ? "Generating…" : "Generate with AI"}
-          </button>
+          {!readonly && (
+            <button
+              onClick={handleGenerateFocus}
+              disabled={focusLoading}
+              className="text-[12px] font-medium px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50"
+            >
+              {focusLoading ? "Generating…" : "Generate with AI"}
+            </button>
+          )}
         </div>
 
         {focusHtml ? (
@@ -269,24 +273,28 @@ export default function DashboardPage() {
             <ul className="space-y-3">
               {highPriorityOpen.map((task) => (
                 <li key={task.id} className="flex items-start gap-2.5">
-                  <button
-                    onClick={() => toggleTask(task.initiativeId, task.id, task.status)}
-                    disabled={togglingTask === task.id}
-                    className="mt-0.5 shrink-0 w-4 h-4 rounded border border-border-lt flex items-center justify-center hover:border-accent transition-colors disabled:opacity-40"
-                  >
-                    {task.status === "complete" && (
-                      <svg width="10" height="10" viewBox="0 0 10 10" className="text-green">
-                        <path
-                          d="M2 5l2.5 2.5L8 3"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </button>
+                  {!readonly ? (
+                    <button
+                      onClick={() => toggleTask(task.initiativeId, task.id, task.status)}
+                      disabled={togglingTask === task.id}
+                      className="mt-0.5 shrink-0 w-4 h-4 rounded border border-border-lt flex items-center justify-center hover:border-accent transition-colors disabled:opacity-40"
+                    >
+                      {task.status === "complete" && (
+                        <svg width="10" height="10" viewBox="0 0 10 10" className="text-green">
+                          <path
+                            d="M2 5l2.5 2.5L8 3"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  ) : (
+                    <span className="mt-0.5 shrink-0 w-1.5 h-1.5 rounded-full bg-red" />
+                  )}
                   <div className="min-w-0 flex-1">
                     <p className="text-[13px] text-text leading-snug">{task.text}</p>
                     <div className="flex items-center gap-2 mt-1">

@@ -7,6 +7,7 @@ interface SidebarProps {
   initiatives: { id: string; name: string; status: string }[];
   collapsed: boolean;
   onToggle: () => void;
+  readonly?: boolean;
 }
 
 const navIcon = (name: string) => {
@@ -71,7 +72,7 @@ const navIcon = (name: string) => {
   return icons[name] || null;
 };
 
-export function Sidebar({ initiatives, collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ initiatives, collapsed, onToggle, readonly }: SidebarProps) {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -120,25 +121,29 @@ export function Sidebar({ initiatives, collapsed, onToggle }: SidebarProps) {
           {navIcon("sboTracker")} SBO Hub
         </Link>
 
-        <span className="block text-[9.5px] font-semibold text-cream-d uppercase tracking-widest px-2 pt-3 pb-1.5">
-          Tools
-        </span>
-        <Link href="/assistant" className={linkClasses("/assistant")}>
-          {navIcon("assistant")} AI Assistant
-        </Link>
-        <Link href="/artifacts" className={linkClasses("/artifacts")}>
-          {navIcon("artifacts")} Artifacts
-        </Link>
-        <Link href="/transcripts" className={linkClasses("/transcripts")}>
-          {navIcon("transcripts")} Transcripts
-        </Link>
+        {!readonly && (
+          <>
+            <span className="block text-[9.5px] font-semibold text-cream-d uppercase tracking-widest px-2 pt-3 pb-1.5">
+              Tools
+            </span>
+            <Link href="/assistant" className={linkClasses("/assistant")}>
+              {navIcon("assistant")} AI Assistant
+            </Link>
+            <Link href="/artifacts" className={linkClasses("/artifacts")}>
+              {navIcon("artifacts")} Artifacts
+            </Link>
+            <Link href="/transcripts" className={linkClasses("/transcripts")}>
+              {navIcon("transcripts")} Transcripts
+            </Link>
 
-        <span className="block text-[9.5px] font-semibold text-cream-d uppercase tracking-widest px-2 pt-3 pb-1.5">
-          Config
-        </span>
-        <Link href="/settings" className={linkClasses("/settings")}>
-          {navIcon("settings")} Settings
-        </Link>
+            <span className="block text-[9.5px] font-semibold text-cream-d uppercase tracking-widest px-2 pt-3 pb-1.5">
+              Config
+            </span>
+            <Link href="/settings" className={linkClasses("/settings")}>
+              {navIcon("settings")} Settings
+            </Link>
+          </>
+        )}
       </nav>
 
       <div className="p-2.5 border-t border-white/[0.06]">

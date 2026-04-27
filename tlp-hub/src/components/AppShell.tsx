@@ -3,6 +3,7 @@ import { useState, useEffect, ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { useToast } from "@/components/ui/Toast";
 import { loadStaticState, mapInitiativesForSidebar } from "@/lib/staticState";
+import { isReadOnly } from "@/lib/readOnly";
 
 interface AppShellProps {
   children: ReactNode;
@@ -10,6 +11,7 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const toast = useToast();
+  const readonly = isReadOnly();
   const [collapsed, setCollapsed] = useState(false);
   const [initiatives, setInitiatives] = useState<{ id: string; name: string; status: string }[]>([]);
 
@@ -33,7 +35,12 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar initiatives={initiatives} collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+      <Sidebar
+        initiatives={initiatives}
+        collapsed={collapsed}
+        onToggle={() => setCollapsed(!collapsed)}
+        readonly={readonly}
+      />
       <main className="flex-1 overflow-y-auto overflow-x-hidden bg-bg">
         {/* Mobile hamburger */}
         <button
@@ -42,6 +49,12 @@ export function AppShell({ children }: AppShellProps) {
         >
           ☰
         </button>
+        {readonly && (
+          <div className="bg-amber/10 border-b border-amber/20 px-4 py-2 text-center text-[12.5px] text-amber-800">
+            <span className="font-semibold">Read-only snapshot</span> — this is a static view of TLP Hub data. Edits
+            are available in the local version.
+          </div>
+        )}
         {children}
       </main>
     </div>

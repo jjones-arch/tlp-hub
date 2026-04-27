@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -13,6 +13,7 @@ import { MeetingCard } from "@/components/sbo/MeetingCard";
 import { MeetingModal, MeetingForm } from "@/components/sbo/MeetingModal";
 import { loadStaticState } from "@/lib/staticState";
 import { taskStatusClasses, taskStatusLabel, priorityClasses } from "@/lib/utils";
+import { isReadOnly } from "@/lib/readOnly";
 
 interface SboTaskAttachment {
   id: string;
@@ -166,6 +167,7 @@ export default function SboDetailPage() {
   const { sboId } = useParams() as { sboId: string };
   const router = useRouter();
   const toast = useToast();
+  const readonly = isReadOnly();
 
   const [data, setData] = useState<SboData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -204,35 +206,6 @@ export default function SboDetailPage() {
   const [notesValue, setNotesValue] = useState("");
   const [editingStatus, setEditingStatus] = useState(false);
 
-  const localSboStorageKey = `tlp-hub:sbo:${sboId}`;
-
-  function isGithubPagesRuntime() {
-    return typeof window !== "undefined" && window.location.hostname.endsWith("github.io");
-  }
-
-  const readLocalSboSnapshot = useCallback((): SboData | null => {
-    if (typeof window === "undefined") return null;
-    try {
-      const raw = window.localStorage.getItem(localSboStorageKey);
-      if (!raw) return null;
-      return JSON.parse(raw) as SboData;
-    } catch {
-      return null;
-    }
-  }, [localSboStorageKey]);
-
-  const writeLocalSboSnapshot = useCallback(
-    (next: SboData) => {
-      if (typeof window === "undefined") return;
-      try {
-        window.localStorage.setItem(localSboStorageKey, JSON.stringify(next));
-      } catch {
-        // Ignore localStorage write failures (quota/private mode)
-      }
-    },
-    [localSboStorageKey],
-  );
-
   async function readErrorMessage(res: Response, fallback: string) {
     try {
       const payload = (await res.json()) as { error?: string };
@@ -255,17 +228,15 @@ export default function SboDetailPage() {
         const state = (await loadStaticState()) as StaticStateShape;
         const fallbackData = mapSboFromStaticState(state, sboId);
         if (!fallbackData) throw new Error();
-        const localSnapshot = readLocalSboSnapshot();
-        const hydrated = localSnapshot?.id === fallbackData.id ? localSnapshot : fallbackData;
-        setData(hydrated);
-        setNotesValue(hydrated.notes || "");
+        setData(fallbackData);
+        setNotesValue(fallbackData.notes || "");
       } catch {
         toast("Failed to load SBO", "err");
       }
     } finally {
       setLoading(false);
     }
-  }, [readLocalSboSnapshot, sboId, toast]);
+  }, [sboId, toast]);
 
   useEffect(() => {
     fetchData();
@@ -341,24 +312,6 @@ export default function SboDetailPage() {
       setEditTask(null);
       await fetchData();
     } catch {
-      if (isGithubPagesRuntime() && data) {
-        const next = {
-          ...data,
-          tasks: data.tasks.map((t) =>
-            t.id === editTask.id
-              ? {
-                  ...t,
-                  ...editTaskForm,
-                }
-              : t,
-          ),
-        };
-        setData(next);
-        writeLocalSboSnapshot(next);
-        setEditTask(null);
-        toast("Task updated.");
-        return;
-      }
       toast("Failed to update task", "err");
     }
   }
@@ -425,31 +378,6 @@ export default function SboDetailPage() {
       setShowAddMeeting(false);
       await fetchData();
     } catch (e: unknown) {
-      if (isGithubPagesRuntime() && data) {
-        const localMeeting: SboMeeting = {
-          id: `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
-          title: form.title,
-          description: form.description,
-          date: form.date,
-          endDate: form.endDate,
-          attendees: form.attendees,
-          agenda: form.agenda,
-          notes: form.notes,
-          actionItems: form.actionItems,
-          transcript: form.transcript,
-          recurrence: form.recurrence,
-          recurrenceEnd: form.recurrenceEnd,
-        };
-        const next = {
-          ...data,
-          meetings: [...data.meetings, localMeeting].sort((a, b) => (a.date || "").localeCompare(b.date || "")),
-        };
-        setData(next);
-        writeLocalSboSnapshot(next);
-        setShowAddMeeting(false);
-        toast("Meeting added.");
-        return;
-      }
       toast(e instanceof Error ? e.message : "Failed to add meeting", "err");
     }
   }
@@ -467,24 +395,6 @@ export default function SboDetailPage() {
       setEditMeeting(null);
       await fetchData();
     } catch (e: unknown) {
-      if (isGithubPagesRuntime() && data) {
-        const next = {
-          ...data,
-          meetings: data.meetings.map((m) =>
-            m.id === editMeeting.id
-              ? {
-                  ...m,
-                  ...form,
-                }
-              : m,
-          ),
-        };
-        setData(next);
-        writeLocalSboSnapshot(next);
-        setEditMeeting(null);
-        toast("Meeting updated.");
-        return;
-      }
       toast(e instanceof Error ? e.message : "Failed to update meeting", "err");
     }
   }
@@ -496,16 +406,6 @@ export default function SboDetailPage() {
       toast("Meeting deleted.");
       await fetchData();
     } catch {
-      if (isGithubPagesRuntime() && data) {
-        const next = {
-          ...data,
-          meetings: data.meetings.filter((m) => m.id !== mid),
-        };
-        setData(next);
-        writeLocalSboSnapshot(next);
-        toast("Meeting deleted.");
-        return;
-      }
       toast("Failed to delete meeting", "err");
     }
   }
@@ -573,21 +473,27 @@ export default function SboDetailPage() {
         <div className="flex items-center gap-3 mb-1">
           <h1 className="font-serif text-[24px] font-bold text-text leading-tight">{data.name}</h1>
           <div className="relative">
-            <button onClick={() => setEditingStatus(!editingStatus)}>
+            {readonly ? (
               <StatusBadge status={data.status} />
-            </button>
-            {editingStatus && (
-              <div className="absolute top-full left-0 mt-1 bg-surface border border-border rounded-lg shadow-lg z-20 py-1 min-w-[130px]">
-                {SBO_STATUSES.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => changeStatus(s)}
-                    className="block w-full text-left px-3 py-1.5 text-[12.5px] text-text hover:bg-surface-2 transition-colors"
-                  >
-                    {s.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-                  </button>
-                ))}
-              </div>
+            ) : (
+              <>
+                <button onClick={() => setEditingStatus(!editingStatus)}>
+                  <StatusBadge status={data.status} />
+                </button>
+                {editingStatus && (
+                  <div className="absolute top-full left-0 mt-1 bg-surface border border-border rounded-lg shadow-lg z-20 py-1 min-w-[130px]">
+                    {SBO_STATUSES.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => changeStatus(s)}
+                        className="block w-full text-left px-3 py-1.5 text-[12.5px] text-text hover:bg-surface-2 transition-colors"
+                      >
+                        {s.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -605,14 +511,16 @@ export default function SboDetailPage() {
       {/* View toggle */}
       <div className="flex items-center justify-between mb-5">
         <ViewTabs active={view} onChange={setView} />
-        <div className="flex items-center gap-3">
-          <button onClick={() => setShowAddTask(true)} className={btnPrimary}>
-            + Add Task
-          </button>
-          <button onClick={() => setShowAddMeeting(true)} className={btnPrimary}>
-            + Add Meeting
-          </button>
-        </div>
+        {!readonly && (
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowAddTask(true)} className={btnPrimary}>
+              + Add Task
+            </button>
+            <button onClick={() => setShowAddMeeting(true)} className={btnPrimary}>
+              + Add Meeting
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ═══ LIST VIEW ═══ */}
@@ -741,33 +649,35 @@ export default function SboDetailPage() {
                         </span>
                         <span className={`text-[11px] ${priorityClasses(task.priority)}`}>{task.priority}</span>
                         {task.due && <span className="text-[11px] text-text-3 tabular-nums">{task.due}</span>}
-                        <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
-                          <button
-                            onClick={() => {
-                              setEditTask(task);
-                              setEditTaskForm({
-                                text: task.text,
-                                description: task.description,
-                                owner: task.owner,
-                                due: task.due,
-                                endDate: task.endDate,
-                                status: task.status,
-                                priority: task.priority,
-                              });
-                              setNewUpdateText("");
-                              setPendingFiles([]);
-                            }}
-                            className="text-text-3 hover:text-text text-[13px]"
-                          >
-                            ✎
-                          </button>
-                          <button
-                            onClick={() => deleteTask(task.id)}
-                            className="text-text-3 hover:text-red text-[13px]"
-                          >
-                            ✕
-                          </button>
-                        </div>
+                        {!readonly && (
+                          <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+                            <button
+                              onClick={() => {
+                                setEditTask(task);
+                                setEditTaskForm({
+                                  text: task.text,
+                                  description: task.description,
+                                  owner: task.owner,
+                                  due: task.due,
+                                  endDate: task.endDate,
+                                  status: task.status,
+                                  priority: task.priority,
+                                });
+                                setNewUpdateText("");
+                                setPendingFiles([]);
+                              }}
+                              className="text-text-3 hover:text-text text-[13px]"
+                            >
+                              ✎
+                            </button>
+                            <button
+                              onClick={() => deleteTask(task.id)}
+                              className="text-text-3 hover:text-red text-[13px]"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        )}
                       </li>
                     ))}
                 </ul>
@@ -790,8 +700,8 @@ export default function SboDetailPage() {
                     <MeetingCard
                       key={m.id}
                       meeting={m}
-                      onEdit={() => setEditMeeting(m)}
-                      onDelete={() => deleteMeeting(m.id)}
+                      onEdit={readonly ? undefined : () => setEditMeeting(m)}
+                      onDelete={readonly ? undefined : () => deleteMeeting(m.id)}
                     />
                   ))}
                 </div>
@@ -800,14 +710,22 @@ export default function SboDetailPage() {
 
             <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
               <h2 className="font-serif text-[15px] font-bold text-text mb-3">Notes</h2>
-              <textarea
-                value={notesValue}
-                onChange={(e) => setNotesValue(e.target.value)}
-                onBlur={saveNotes}
-                rows={6}
-                className={`${inputCls} resize-y`}
-                placeholder="Add notes..."
-              />
+              {readonly ? (
+                notesValue ? (
+                  <p className="text-[13px] text-text leading-relaxed whitespace-pre-line">{notesValue}</p>
+                ) : (
+                  <p className="text-[13px] text-text-3 italic">No notes.</p>
+                )
+              ) : (
+                <textarea
+                  value={notesValue}
+                  onChange={(e) => setNotesValue(e.target.value)}
+                  onBlur={saveNotes}
+                  rows={6}
+                  className={`${inputCls} resize-y`}
+                  placeholder="Add notes..."
+                />
+              )}
             </div>
           </div>
         </div>

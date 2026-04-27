@@ -29,6 +29,7 @@ import { SortableObjective } from "./SortableObjective";
 import { EditTaskModal } from "./EditTaskModal";
 import { EditObjectiveModal } from "./EditObjectiveModal";
 import { AddDecisionModal } from "./AddDecisionModal";
+import { isReadOnly } from "@/lib/readOnly";
 
 function impactBorderColor(impact: string) {
   if (impact === "high") return "border-l-red";
@@ -39,6 +40,7 @@ function impactBorderColor(impact: string) {
 export default function InitiativeDetailPage() {
   const { id } = useParams() as { id: string };
   const router = useRouter();
+  const readonly = isReadOnly();
 
   const initiative = useInitiativeData(id);
   const { data, loading, fetchData } = initiative;
@@ -166,24 +168,28 @@ export default function InitiativeDetailPage() {
           <div className="flex-1">
             <ProgressBar progress={data.progress} status={data.status} />
           </div>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={data.progress}
-            onChange={(e) => initiative.handleProgressChange(Number(e.target.value))}
-            className="w-24 accent-navy cursor-pointer"
-          />
+          {!readonly && (
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={data.progress}
+              onChange={(e) => initiative.handleProgressChange(Number(e.target.value))}
+              className="w-24 accent-navy cursor-pointer"
+            />
+          )}
           <span className="text-[12px] font-semibold text-text-2 tabular-nums w-8 text-right">{data.progress}%</span>
         </div>
-        <div className="mt-4">
-          <Link
-            href="/artifacts"
-            className="inline-flex items-center gap-1.5 rounded bg-navy px-4 py-2 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity"
-          >
-            Generate Artifact
-          </Link>
-        </div>
+        {!readonly && (
+          <div className="mt-4">
+            <Link
+              href="/artifacts"
+              className="inline-flex items-center gap-1.5 rounded bg-navy px-4 py-2 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity"
+            >
+              Generate Artifact
+            </Link>
+          </div>
+        )}
       </div>
 
       {data.description && <p className="text-[14px] text-text leading-relaxed mb-8">{data.description}</p>}
@@ -199,9 +205,11 @@ export default function InitiativeDetailPage() {
                 <span className="text-[12px] text-text-3">
                   {objectivesComplete} of {data.objectives.length} complete
                 </span>
-                <button onClick={() => setShowAddObjective(!showAddObjective)} className={btnPrimary}>
-                  + Add
-                </button>
+                {!readonly && (
+                  <button onClick={() => setShowAddObjective(!showAddObjective)} className={btnPrimary}>
+                    + Add
+                  </button>
+                )}
               </div>
             </div>
             {showAddObjective && (
@@ -240,26 +248,36 @@ export default function InitiativeDetailPage() {
                 </div>
               </div>
             )}
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleObjectiveDragEnd}>
-              <SortableContext
-                items={[...data.objectives].sort((a, b) => a.sortOrder - b.sortOrder).map((o) => o.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <ul className="space-y-2">
-                  {[...data.objectives]
-                    .sort((a, b) => a.sortOrder - b.sortOrder)
-                    .map((obj) => (
-                      <SortableObjective
-                        key={obj.id}
-                        obj={obj}
-                        onToggle={initiative.toggleObjective}
-                        onEdit={(o) => setEditObjective(o)}
-                        onDelete={initiative.deleteObjective}
-                      />
-                    ))}
-                </ul>
-              </SortableContext>
-            </DndContext>
+            {readonly ? (
+              <ul className="space-y-2">
+                {[...data.objectives]
+                  .sort((a, b) => a.sortOrder - b.sortOrder)
+                  .map((obj) => (
+                    <SortableObjective key={obj.id} obj={obj} />
+                  ))}
+              </ul>
+            ) : (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleObjectiveDragEnd}>
+                <SortableContext
+                  items={[...data.objectives].sort((a, b) => a.sortOrder - b.sortOrder).map((o) => o.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <ul className="space-y-2">
+                    {[...data.objectives]
+                      .sort((a, b) => a.sortOrder - b.sortOrder)
+                      .map((obj) => (
+                        <SortableObjective
+                          key={obj.id}
+                          obj={obj}
+                          onToggle={initiative.toggleObjective}
+                          onEdit={(o) => setEditObjective(o)}
+                          onDelete={initiative.deleteObjective}
+                        />
+                      ))}
+                  </ul>
+                </SortableContext>
+              </DndContext>
+            )}
           </div>
 
           {/* Tasks */}
@@ -270,9 +288,11 @@ export default function InitiativeDetailPage() {
                 <span className="text-[12px] text-text-3">
                   {tasksDone} of {data.tasks.length} done
                 </span>
-                <button onClick={() => setShowAddTask(!showAddTask)} className={btnPrimary}>
-                  + Add Task
-                </button>
+                {!readonly && (
+                  <button onClick={() => setShowAddTask(!showAddTask)} className={btnPrimary}>
+                    + Add Task
+                  </button>
+                )}
               </div>
             </div>
             {showAddTask && (
@@ -382,20 +402,22 @@ export default function InitiativeDetailPage() {
                         {task.updates.length}
                       </span>
                     )}
-                    <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
-                      <button
-                        onClick={() => initiative.openEditTask(task)}
-                        className="text-text-3 hover:text-text text-[13px]"
-                      >
-                        ✎
-                      </button>
-                      <button
-                        onClick={() => initiative.deleteTask(task.id)}
-                        className="text-text-3 hover:text-red text-[13px]"
-                      >
-                        ✕
-                      </button>
-                    </div>
+                    {!readonly && (
+                      <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+                        <button
+                          onClick={() => initiative.openEditTask(task)}
+                          className="text-text-3 hover:text-text text-[13px]"
+                        >
+                          ✎
+                        </button>
+                        <button
+                          onClick={() => initiative.deleteTask(task.id)}
+                          className="text-text-3 hover:text-red text-[13px]"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))}
             </ul>
@@ -412,9 +434,11 @@ export default function InitiativeDetailPage() {
                 {highImpactRisks > 0 && (
                   <span className="text-[12px] text-red font-semibold">{highImpactRisks} high</span>
                 )}
-                <button onClick={() => setShowAddRisk(!showAddRisk)} className={btnPrimary}>
-                  + Add
-                </button>
+                {!readonly && (
+                  <button onClick={() => setShowAddRisk(!showAddRisk)} className={btnPrimary}>
+                    + Add
+                  </button>
+                )}
               </div>
             </div>
             {showAddRisk && (
@@ -490,9 +514,11 @@ export default function InitiativeDetailPage() {
           <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-serif text-[15px] font-bold text-text">Decisions</h2>
-              <button onClick={() => setShowAddDecision(true)} className={btnPrimary}>
-                + Add
-              </button>
+              {!readonly && (
+                <button onClick={() => setShowAddDecision(true)} className={btnPrimary}>
+                  + Add
+                </button>
+              )}
             </div>
             <ul className="space-y-2.5">
               {data.decisions.map((d) => (
@@ -507,14 +533,22 @@ export default function InitiativeDetailPage() {
           {/* Notes */}
           <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
             <h2 className="font-serif text-[15px] font-bold text-text mb-3">Notes</h2>
-            <textarea
-              value={initiative.notesValue}
-              onChange={(e) => initiative.setNotesValue(e.target.value)}
-              onBlur={initiative.saveNotes}
-              rows={6}
-              className={`${inputCls} resize-y`}
-              placeholder="Add notes…"
-            />
+            {readonly ? (
+              initiative.notesValue ? (
+                <p className="text-[13px] text-text leading-relaxed whitespace-pre-line">{initiative.notesValue}</p>
+              ) : (
+                <p className="text-[13px] text-text-3 italic">No notes.</p>
+              )
+            ) : (
+              <textarea
+                value={initiative.notesValue}
+                onChange={(e) => initiative.setNotesValue(e.target.value)}
+                onBlur={initiative.saveNotes}
+                rows={6}
+                className={`${inputCls} resize-y`}
+                placeholder="Add notes…"
+              />
+            )}
           </div>
         </div>
       </div>

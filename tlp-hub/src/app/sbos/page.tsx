@@ -8,6 +8,7 @@ import { SortableSboRow } from "@/components/sbo/SortableSboRow";
 import { CalendarGrid } from "@/components/sbo/CalendarGrid";
 import { GanttChart } from "@/components/sbo/GanttChart";
 import { loadStaticState, mapSboFallbackData } from "@/lib/staticState";
+import { isReadOnly } from "@/lib/readOnly";
 import {
   DndContext,
   closestCenter,
@@ -74,6 +75,7 @@ const btnGhost = "rounded px-3 py-1.5 text-[12.5px] font-medium text-text-2 hove
 
 export default function SboHubPage() {
   const toast = useToast();
+  const readonly = isReadOnly();
   const [sbos, setSbos] = useState<SboSummary[]>([]);
   const [allTasks, setAllTasks] = useState<AllTask[]>([]);
   const [allMeetings, setAllMeetings] = useState<AllMeeting[]>([]);
@@ -219,12 +221,14 @@ export default function SboHubPage() {
           <span className="text-[12px] ml-1.5 opacity-70">Upcoming Meetings</span>
         </div>
         <div className="flex-1" />
-        <button
-          onClick={() => setShowAddSbo(true)}
-          className="rounded bg-white/15 px-4 py-1.5 text-[12.5px] font-semibold hover:bg-white/25 transition-colors"
-        >
-          + Add SBO
-        </button>
+        {!readonly && (
+          <button
+            onClick={() => setShowAddSbo(true)}
+            className="rounded bg-white/15 px-4 py-1.5 text-[12.5px] font-semibold hover:bg-white/25 transition-colors"
+          >
+            + Add SBO
+          </button>
+        )}
       </div>
 
       {/* View toggle */}
@@ -240,6 +244,12 @@ export default function SboHubPage() {
             <div className="text-center py-12 text-[14px] text-text-3">
               No SBOs yet. Click &ldquo;+ Add SBO&rdquo; to get started.
             </div>
+          ) : readonly ? (
+            <ul className="space-y-2">
+              {sbos.map((sbo) => (
+                <SortableSboRow key={sbo.id} sbo={sbo} />
+              ))}
+            </ul>
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSboDragEnd}>
               <SortableContext items={sbos.map((s) => s.id)} strategy={verticalListSortingStrategy}>

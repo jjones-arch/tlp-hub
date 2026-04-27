@@ -1,22 +1,4 @@
 {
-  "settings": {
-    "apiKey": "",
-    "model": "claude-sonnet-4-6"
-  },
-  "chat": {
-    "messages": []
-  },
-  "artifacts": [],
-  "transcripts": [],
-  "ui": {
-    "currentView": "sbo-tracker",
-    "focusContent": null,
-    "objectiveView": null,
-    "sboDetail": "t318jy5b",
-    "sboView": "list",
-    "sboCalYear": 2026,
-    "sboCalMonth": 3
-  },
   "initiatives": {
     "sbo": {
       "id": "sbo",
@@ -25,353 +7,157 @@
       "quarter": "Q2 2026",
       "status": "on-track",
       "progress": 30,
+      "description": "Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable — establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.",
       "owners": [
         "JoJo Jones",
         "Melissa Boud"
       ],
-      "description": "Q1 launched the SBO program with 95%+ vendor coverage across 14 accountable owners. Q2 is about making the program durable — establishing the Enterprise Software Committee, completing vendor mapping to 100%, documenting division-specific SBO processes, and defining how PIR integrates into the lifecycle.",
       "objectives": [
         {
-          "id": "o1",
+          "id": "1f597c37-45e5-4706-9c66-604abf18d894",
           "text": "Establish the Enterprise Software Committee with Dave Petersen as chair",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Prepare Enterprise Software Committee communications for Dave to use with C-suite",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "in-progress",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Dave to review SBO training draft",
-              "owner": "Dave Petersen",
-              "due": "",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t3",
-              "text": "Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Leadership Summit may be canceled",
-              "desc": "If summit is canceled, program loses its planned broad communication vehicle.",
-              "likelihood": "medium",
-              "impact": "medium",
-              "mitigation": "JoJo to follow up with Dave and identify alternative communication path."
-            },
-            {
-              "id": "r2",
-              "title": "Enterprise Software Committee scope creep",
-              "desc": "Risk that the committee takes on decisions outside enterprise-level scope.",
-              "likelihood": "low",
-              "impact": "medium",
-              "mitigation": "Document clear decision criteria before committee launches."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "Committee renamed to \"Enterprise Software Committee\" — better reflects function than \"Steering Committee\"",
-              "date": "2026-03-26"
-            },
-            {
-              "id": "d2",
-              "text": "Dave Petersen will chair the Enterprise Software Committee",
-              "date": "2026-03-26"
-            },
-            {
-              "id": "d3",
-              "text": "Committee representation varies by division; not all SBOs will serve",
-              "date": "2026-03-26"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o2",
+          "id": "704977f7-66f6-4fed-bed6-69f6f5d0df44",
           "text": "Complete vendor-to-SBO mapping from 95% to 100% (~15 orphan systems remaining)",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Identify remaining ~15 orphan software systems and assign SBO owners",
-              "owner": "JoJo Jones, Melissa Boud",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Share SBO reporting snapshot with leadership (Ryan Packer)",
-              "owner": "JoJo Jones, Melissa Boud, Dave Petersen",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win",
-              "date": "2026-04-09"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o3",
+          "id": "7230ac4e-1924-43a3-ab46-11fc3e12a9fb",
           "text": "Document SBO processes with division-level specificity (Revenue: monthly; Finance: case-by-case; BI: twice/year)",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Record SBO training video after Dave's feedback",
-              "owner": "Melissa Boud",
-              "due": "",
-              "status": "blocked",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": [],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o4",
+          "id": "4726d181-77d2-40a7-8649-aa778df121a9",
           "text": "Define and document PIR integration criteria with Fadi so SBO guidance can be finalized",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)",
-              "owner": "JoJo Jones",
-              "due": "2026-04-15",
-              "status": "in-progress",
-              "priority": "high",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "PIR/TLP boundaries still undefined",
-              "desc": "Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.",
-              "likelihood": "medium",
-              "impact": "high",
-              "mitigation": "Meeting with Fadi in progress. JoJo to document criteria after meeting."
-            }
-          ],
-          "decisions": [],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o5",
+          "id": "f6e69502-e1b5-44ac-b9c6-9adfbbd6e25d",
           "text": "Every SBO knows their budget and receives alerts when approaching or exceeding it",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Alan Roper to develop budget visibility approach for SBOs",
-              "owner": "Alan Roper",
-              "due": "",
-              "status": "in-progress",
-              "priority": "high",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "SBO budget visibility incomplete",
-              "desc": "SBOs held accountable for portfolio spend without knowing their true budget position.",
-              "likelihood": "high",
-              "impact": "medium",
-              "mitigation": "Alan Roper developing approach to surface budget and forecast numbers."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "TLP's budget role is visibility and accountability — not promising spend reduction targets",
-              "date": "2026-03-26"
-            }
-          ],
-          "description": ""
-        },
-        {
-          "id": "2xpf96aa",
-          "text": "[added scope] Determine process for integrations and Chrome extensions",
-          "description": "Josh from the help desk said that they are getting a lot of requests for integrations like integrating Claude with Slack and we need to determine the process so that the Help Desk can do their job.",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "dirsn1cd",
-              "text": "Reach out to Dave for direction",
-              "owner": "Jordan Jones",
-              "due": "2026-04-17",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": []
+          "complete": false
         }
       ],
       "tasks": [
         {
-          "id": "t1",
+          "id": "a74059b4-1f0a-48b3-9e73-c30ccaf52894",
           "text": "Prepare Enterprise Software Committee communications for Dave to use with C-suite",
           "owner": "JoJo Jones",
           "due": "",
           "status": "in-progress",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t2",
+          "id": "f352d2bf-2e38-4039-9248-3ad9683751d7",
           "text": "Document PIR touchpoints and clarify where TLP/SBO involvement begins (Fadi meeting)",
           "owner": "JoJo Jones",
           "due": "2026-04-15",
           "status": "in-progress",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t3",
+          "id": "aec17782-b725-4c00-bf85-e9d2932fbbed",
           "text": "Identify remaining ~15 orphan software systems and assign SBO owners",
           "owner": "JoJo Jones, Melissa Boud",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t4",
+          "id": "1672b734-be4a-4309-86b7-5dcc5ec222a9",
           "text": "Dave to review SBO training draft",
           "owner": "Dave Petersen",
           "due": "",
           "status": "not-started",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t5",
+          "id": "92f518e3-00dd-46eb-a5f9-a1ec35371d5f",
           "text": "Record SBO training video after Dave's feedback",
           "owner": "Melissa Boud",
           "due": "",
           "status": "blocked",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t6",
+          "id": "3bf33112-83c8-4ae9-a1e3-2f98b3a0a961",
           "text": "Alan Roper to develop budget visibility approach for SBOs",
           "owner": "Alan Roper",
           "due": "",
           "status": "in-progress",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t7",
+          "id": "c5e7a18c-9fc6-4464-969d-b82d411ad22e",
           "text": "Follow up with Dave on Leadership Summit status; pivot comms if summit is canceled",
           "owner": "JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t8",
+          "id": "e8ef9b9a-c15c-46a4-b126-03fb6af7735c",
           "text": "Share SBO reporting snapshot with leadership (Ryan Packer)",
           "owner": "JoJo Jones, Melissa Boud, Dave Petersen",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         }
       ],
       "risks": [
         {
-          "id": "r1",
+          "id": "03e8c828-5aea-4ccc-b4b1-d8d39a7ecadc",
           "title": "PIR/TLP boundaries still undefined",
-          "desc": "Exact handoff points and architect-review criteria not yet documented; can delay SBO guidance finalization.",
           "likelihood": "medium",
-          "impact": "high",
-          "mitigation": "Meeting with Fadi in progress. JoJo to document criteria after meeting."
+          "impact": "high"
         },
         {
-          "id": "r2",
+          "id": "997c5868-d28e-4944-a429-ccbc62101d67",
           "title": "SBO budget visibility incomplete",
-          "desc": "SBOs held accountable for portfolio spend without knowing their true budget position.",
           "likelihood": "high",
-          "impact": "medium",
-          "mitigation": "Alan Roper developing approach to surface budget and forecast numbers."
+          "impact": "medium"
         },
         {
-          "id": "r3",
+          "id": "fec040fa-6f00-44b9-9ef5-39a631e89e0c",
           "title": "Leadership Summit may be canceled",
-          "desc": "If summit is canceled, program loses its planned broad communication vehicle.",
           "likelihood": "medium",
-          "impact": "medium",
-          "mitigation": "JoJo to follow up with Dave and identify alternative communication path."
+          "impact": "medium"
         },
         {
-          "id": "r4",
+          "id": "7cbcaba3-2021-4161-ba3e-bebdd54b2017",
           "title": "Enterprise Software Committee scope creep",
-          "desc": "Risk that the committee takes on decisions outside enterprise-level scope.",
           "likelihood": "low",
-          "impact": "medium",
-          "mitigation": "Document clear decision criteria before committee launches."
+          "impact": "medium"
         }
       ],
       "decisions": [
         {
-          "id": "d1",
+          "id": "071b2d2f-b640-4e72-bf4e-4a6a75fe9fa1",
           "text": "Committee renamed to \"Enterprise Software Committee\" — better reflects function than \"Steering Committee\"",
           "date": "2026-03-26"
         },
         {
-          "id": "d2",
+          "id": "5e985b84-c65f-4edd-97d4-814d915857df",
           "text": "Dave Petersen will chair the Enterprise Software Committee",
           "date": "2026-03-26"
         },
         {
-          "id": "d3",
+          "id": "cd4fe1ba-d569-4458-a58c-ede40e9d57d1",
           "text": "Committee representation varies by division; not all SBOs will serve",
           "date": "2026-03-26"
         },
         {
-          "id": "d4",
+          "id": "ebd9b430-1ebf-40af-bb67-48ffc3afeddb",
           "text": "95%+ of ~300 vendors mapped to 14 accountable owners confirmed as Q1 win",
           "date": "2026-04-09"
         },
         {
-          "id": "d5",
+          "id": "b1116ee5-9fa1-4d44-92a5-9265bede61f2",
           "text": "TLP's budget role is visibility and accountability — not promising spend reduction targets",
           "date": "2026-03-26"
         }
-      ],
-      "notes": "Ryan Ostler's final SBO kickoff was March 30, 2026 — all SBO kickoffs are now complete.\n\nAlways use 'PIR' not 'PER' in meetings and documentation.\n\nEmbedded partners are managed by Todd Grierson in Finance (not JR) — coordinate with Todd for Q4 planning."
+      ]
     },
     "reporting": {
       "id": "reporting",
@@ -380,230 +166,109 @@
       "quarter": "Q2 2026",
       "status": "at-risk",
       "progress": 10,
+      "description": "Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now — even before automation — and build toward SLA tracking.",
       "owners": [
         "Jessi Duffin"
       ],
-      "description": "Reporting was a Q1 initiative that was not achieved. Q2 approach: Jessi will manually collect and track data while Zipped is being built. Goal is to establish data collection habits and accountability structures now — even before automation — and build toward SLA tracking.",
       "objectives": [
         {
-          "id": "o1",
+          "id": "781b243e-7589-43cc-bb00-54d60441fb1e",
           "text": "Establish consistent manual data collection habits by mid-Q2",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Manually collect and track technology request data throughout Q2",
-              "owner": "Jessi Duffin",
-              "due": "2026-06-30",
-              "status": "in-progress",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Document current manual data collection process so it can be automated in Zipped later",
-              "owner": "Jessi Duffin",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Q1 pattern may repeat",
-              "desc": "Reporting was not achieved in Q1; without structural change the same result is possible in Q2.",
-              "likelihood": "medium",
-              "impact": "high",
-              "mitigation": "Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system",
-              "date": "2026-04-09"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o2",
+          "id": "cceafa06-6d11-413e-a437-2ad047d7d210",
           "text": "Define and align on the Q2 metrics that matter most",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Align with JoJo and Dave on which Q2 metrics matter most",
-              "owner": "Jessi Duffin, JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "Moving away from one giant aggregate report; focus on concrete SBO program outcomes first",
-              "date": "2026-03-26"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o3",
+          "id": "834f95dd-925b-453c-90d0-387d30c87c64",
           "text": "Build toward SLA tracking and the ability to identify areas for improvement",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Continue routing tech requests through intake; send to SBOs for approval when needed",
-              "owner": "Jessi Duffin",
-              "due": "",
-              "status": "in-progress",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Jira lacks reporting capability",
-              "desc": "Jira does not provide the reporting quality needed to track SLAs or identify patterns.",
-              "likelihood": "high",
-              "impact": "high",
-              "mitigation": "Manual collection in Q2; Zipped will replace Jira for reporting in Q3+."
-            },
-            {
-              "id": "r2",
-              "title": "Jira and Coupa data not connected",
-              "desc": "Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.",
-              "likelihood": "high",
-              "impact": "medium",
-              "mitigation": "Zipped prototype will eventually bridge or replace both."
-            }
-          ],
-          "decisions": [],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o4",
+          "id": "b54fbb7d-c544-49a2-bf3e-9c86f00b0946",
           "text": "Establish accountability structures before automation exists",
-          "complete": false,
-          "tasks": [],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Accountability without data",
-              "desc": "Cannot meaningfully enforce SLAs until reliable, consistent data exists.",
-              "likelihood": "medium",
-              "impact": "high",
-              "mitigation": "Q2 focus is building the data foundation; enforcement follows in Q3."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "Reporting will not drive accountability until reliable, consistent data exists",
-              "date": "2026-04-09"
-            }
-          ],
-          "description": ""
+          "complete": false
         }
       ],
       "tasks": [
         {
-          "id": "t1",
+          "id": "389e3117-4411-43db-9eed-b87ad31e8052",
           "text": "Manually collect and track technology request data throughout Q2",
           "owner": "Jessi Duffin",
           "due": "2026-06-30",
           "status": "in-progress",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t2",
+          "id": "475b74f5-72ff-4702-85b7-637f473af446",
           "text": "Align with JoJo and Dave on which Q2 metrics matter most",
           "owner": "Jessi Duffin, JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t3",
+          "id": "e7772c89-519c-4406-a448-7e3e85e9019a",
           "text": "Continue routing tech requests through intake; send to SBOs for approval when needed",
           "owner": "Jessi Duffin",
           "due": "",
           "status": "in-progress",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t4",
+          "id": "cf414135-b0b4-40d5-bdb2-097c9fdc26c2",
           "text": "Document current manual data collection process so it can be automated in Zipped later",
           "owner": "Jessi Duffin",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         }
       ],
       "risks": [
         {
-          "id": "r1",
+          "id": "04314942-6928-4de1-88d5-90aeeaf6126a",
           "title": "Q1 pattern may repeat",
-          "desc": "Reporting was not achieved in Q1; without structural change the same result is possible in Q2.",
           "likelihood": "medium",
-          "impact": "high",
-          "mitigation": "Shifted strategy: manual collection first, Zipped automation later. Jessi owns this fully."
+          "impact": "high"
         },
         {
-          "id": "r2",
+          "id": "0205c71b-7929-49e6-89a1-f379cb527d9d",
           "title": "Jira lacks reporting capability",
-          "desc": "Jira does not provide the reporting quality needed to track SLAs or identify patterns.",
           "likelihood": "high",
-          "impact": "high",
-          "mitigation": "Manual collection in Q2; Zipped will replace Jira for reporting in Q3+."
+          "impact": "high"
         },
         {
-          "id": "r3",
+          "id": "14e2c8d7-7a9c-4917-babe-3d614c1f985e",
           "title": "Jira and Coupa data not connected",
-          "desc": "Request data in Jira and financial data in Coupa cannot be tied together for unified reporting.",
           "likelihood": "high",
-          "impact": "medium",
-          "mitigation": "Zipped prototype will eventually bridge or replace both."
+          "impact": "medium"
         },
         {
-          "id": "r4",
+          "id": "3045af68-3e86-45e3-a209-3a7fec83e117",
           "title": "Accountability without data",
-          "desc": "Cannot meaningfully enforce SLAs until reliable, consistent data exists.",
           "likelihood": "medium",
-          "impact": "high",
-          "mitigation": "Q2 focus is building the data foundation; enforcement follows in Q3."
+          "impact": "high"
         }
       ],
       "decisions": [
         {
-          "id": "d1",
+          "id": "3e0cc394-a6d5-4c11-aea2-c5f9b0b04dbb",
           "text": "Q2 approach: manual data collection by Jessi while Zipped is built — do not wait for a perfect system",
           "date": "2026-04-09"
         },
         {
-          "id": "d2",
+          "id": "b6ca02b9-031b-4291-a8ae-8a2038a93c7c",
           "text": "Reporting will not drive accountability until reliable, consistent data exists",
           "date": "2026-04-09"
         },
         {
-          "id": "d3",
+          "id": "eb1c072c-d96d-4580-89ee-e386ac758937",
           "text": "Moving away from one giant aggregate report; focus on concrete SBO program outcomes first",
           "date": "2026-03-26"
         }
-      ],
-      "notes": "The two biggest blockers are: (1) Jira's lack of reporting quality, and (2) inability to tie Jira data to Coupa data. Zipped is the long-term solution to both.\n\nJessi owns this initiative end-to-end in Q2."
+      ]
     },
     "zipped": {
       "id": "zipped",
@@ -612,313 +277,190 @@
       "quarter": "Q2 2026",
       "status": "on-track",
       "progress": 25,
+      "description": "The Jira rebuild was stalled by Ryan's departure. Zipped is an AI-built prototype for automation, reporting, and improved workflows. Q2 commitment: deliver a working prototype for document collection by end of Q2. If it proves valuable, it gets handed to engineering for production.",
       "owners": [
         "JoJo Jones",
         "Jessi Duffin"
       ],
-      "description": "The Jira rebuild was stalled by Ryan's departure. Zipped is an AI-built prototype for automation, reporting, and improved workflows. Q2 commitment: deliver a working prototype for document collection by end of Q2. If it proves valuable, it gets handed to engineering for production.",
       "objectives": [
         {
-          "id": "o1",
+          "id": "0571165e-a545-4bda-a8a5-2b2e1a042f75",
           "text": "Deliver working prototype for document collection by end of Q2",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Resolve database and hosting needs for the prototype",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Add MNDA / trust-center first step before deeper document collection",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "No production infrastructure defined",
-              "desc": "Database, hosting, email flow, and legal storage details are unresolved for the prototype.",
-              "likelihood": "high",
-              "impact": "high",
-              "mitigation": "Prioritize resolving database and hosting decisions early in Q2."
-            },
-            {
-              "id": "r2",
-              "title": "Scope could exceed Q2 capacity",
-              "desc": "Neither JoJo nor Jessi has built a production app before; scope risk is real.",
-              "likelihood": "medium",
-              "impact": "high",
-              "mitigation": "Commit to document collection prototype only for Q2; defer to Q3."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "Q2 commitment is document collection prototype only — not the full Zipped vision",
-              "date": "2026-04-09"
-            },
-            {
-              "id": "d2",
-              "text": "Prototype should capture MNDA / trust-center step before deeper document collection",
-              "date": "2026-03-26"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o2",
+          "id": "818b0131-d5df-46b6-85c6-7920ec80f7c8",
           "text": "Build basic intake process with vendor request portal",
-          "complete": true,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Continue building vendor request portal (current primary focus)",
-              "owner": "JoJo Jones, Jessi Duffin",
-              "due": "",
-              "status": "in-progress",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Restore business owner field in the intake form",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "medium",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "First build focus is vendor request portal (external-facing document collection)",
-              "date": "2026-03-26"
-            }
-          ],
-          "description": ""
+          "complete": true
         },
         {
-          "id": "o3",
+          "id": "470a004d-1000-4260-b857-e698d1fcd050",
           "text": "Automate workflows for security, privacy/AI, and legal review",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Build automated security, privacy/AI, and legal workflows",
-              "owner": "JoJo Jones, Jessi Duffin",
-              "due": "2026-06-30",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            },
-            {
-              "id": "t2",
-              "text": "Explore connection between Zipped and Melissa's AI workflow",
-              "owner": "Melissa Boud, JoJo Jones, Jessi Duffin",
-              "due": "",
-              "status": "not-started",
-              "priority": "low",
-              "updates": []
-            }
-          ],
-          "risks": [],
-          "decisions": [],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o4",
+          "id": "b31dc170-d4e0-40be-9247-565f8ec7e916",
           "text": "Build transition logic into Coupa for evaluation decisions",
-          "complete": false,
-          "tasks": [],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Engineering handoff path undefined",
-              "desc": "Path from prototype to production handoff not scoped or approved.",
-              "likelihood": "medium",
-              "impact": "medium",
-              "mitigation": "Frame Q2 as \"validate the concept\" — engineering conversation is Q3."
-            }
-          ],
-          "decisions": [
-            {
-              "id": "d1",
-              "text": "If prototype proves valuable, will be handed to engineering for production development",
-              "date": "2026-04-09"
-            }
-          ],
-          "description": ""
+          "complete": false
         },
         {
-          "id": "o5",
+          "id": "64c97aa0-386c-4fcf-82cc-4e26b3e790aa",
           "text": "Add timestamps for reporting and process-state tracking",
-          "complete": false,
-          "tasks": [
-            {
-              "id": "t1",
-              "text": "Add timestamps for reporting and activity tracking",
-              "owner": "JoJo Jones",
-              "due": "",
-              "status": "not-started",
-              "priority": "high",
-              "updates": []
-            }
-          ],
-          "risks": [
-            {
-              "id": "r1",
-              "title": "Prototype reporting incomplete",
-              "desc": "Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.",
-              "likelihood": "high",
-              "impact": "medium",
-              "mitigation": "Add timestamps before building more complex workflows."
-            }
-          ],
-          "decisions": [],
-          "description": ""
+          "complete": false
         }
       ],
       "tasks": [
         {
-          "id": "t1",
+          "id": "ce9338ee-6b5d-4eea-adae-ee86a204a15f",
           "text": "Continue building vendor request portal (current primary focus)",
           "owner": "JoJo Jones, Jessi Duffin",
           "due": "",
           "status": "in-progress",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t2",
+          "id": "84ccda1a-f6fe-4b17-a3de-4c96175b4685",
           "text": "Add timestamps for reporting and activity tracking",
           "owner": "JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t3",
+          "id": "21870ce8-e5a1-4e37-908f-7389e1ad07ea",
           "text": "Restore business owner field in the intake form",
           "owner": "JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t4",
+          "id": "a145e6b1-2d3f-41c0-9427-173d6b67e492",
           "text": "Resolve database and hosting needs for the prototype",
           "owner": "JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         },
         {
-          "id": "t5",
+          "id": "3b076aec-b1b2-4136-822a-547d7a0f5b1d",
           "text": "Explore connection between Zipped and Melissa's AI workflow",
           "owner": "Melissa Boud, JoJo Jones, Jessi Duffin",
           "due": "",
           "status": "not-started",
-          "priority": "low",
-          "updates": []
+          "priority": "low"
         },
         {
-          "id": "t6",
+          "id": "7fd3e5a0-0621-4ddc-bc6b-1971a7af6628",
           "text": "Add MNDA / trust-center first step before deeper document collection",
           "owner": "JoJo Jones",
           "due": "",
           "status": "not-started",
-          "priority": "medium",
-          "updates": []
+          "priority": "medium"
         },
         {
-          "id": "t7",
+          "id": "d2b76532-afce-4169-be8f-bb8d0d202f0e",
           "text": "Build automated security, privacy/AI, and legal workflows",
           "owner": "JoJo Jones, Jessi Duffin",
           "due": "2026-06-30",
           "status": "not-started",
-          "priority": "high",
-          "updates": []
+          "priority": "high"
         }
       ],
       "risks": [
         {
-          "id": "r1",
+          "id": "5e80a5d7-ea28-43eb-8b57-4810d7343f68",
           "title": "No production infrastructure defined",
-          "desc": "Database, hosting, email flow, and legal storage details are unresolved for the prototype.",
           "likelihood": "high",
-          "impact": "high",
-          "mitigation": "Prioritize resolving database and hosting decisions early in Q2."
+          "impact": "high"
         },
         {
-          "id": "r2",
+          "id": "c9aacc7d-7e67-43a7-a530-488e34288157",
           "title": "Prototype reporting incomplete",
-          "desc": "Timestamps and process-state tracking not yet in place; cannot generate reliable metrics.",
           "likelihood": "high",
-          "impact": "medium",
-          "mitigation": "Add timestamps before building more complex workflows."
+          "impact": "medium"
         },
         {
-          "id": "r3",
+          "id": "684a54f7-b7a0-4b79-9c65-bf910b5352d8",
           "title": "Scope could exceed Q2 capacity",
-          "desc": "Neither JoJo nor Jessi has built a production app before; scope risk is real.",
           "likelihood": "medium",
-          "impact": "high",
-          "mitigation": "Commit to document collection prototype only for Q2; defer to Q3."
+          "impact": "high"
         },
         {
-          "id": "r4",
+          "id": "e888e20d-c4f9-4d06-9973-37864c431906",
           "title": "Engineering handoff path undefined",
-          "desc": "Path from prototype to production handoff not scoped or approved.",
           "likelihood": "medium",
-          "impact": "medium",
-          "mitigation": "Frame Q2 as \"validate the concept\" — engineering conversation is Q3."
+          "impact": "medium"
         }
       ],
       "decisions": [
         {
-          "id": "d1",
+          "id": "c0a03720-e014-41a3-8b12-c6c04a230f29",
           "text": "Zipped replaces the Jira rebuild as the primary engineering initiative after Ryan's departure",
           "date": "2026-04-09"
         },
         {
-          "id": "d2",
+          "id": "7385d097-cc4b-4599-91c6-8c5b86e5f0ab",
           "text": "Q2 commitment is document collection prototype only — not the full Zipped vision",
           "date": "2026-04-09"
         },
         {
-          "id": "d3",
+          "id": "57de1b39-9174-4ea9-9146-ef2401365a6f",
           "text": "First build focus is vendor request portal (external-facing document collection)",
           "date": "2026-03-26"
         },
         {
-          "id": "d4",
+          "id": "88b1d9ec-aa0e-40f5-b91f-44f1f6a93bb3",
           "text": "Prototype should capture MNDA / trust-center step before deeper document collection",
           "date": "2026-03-26"
         },
         {
-          "id": "d5",
+          "id": "8eebcbe6-e46a-40d2-96ad-454b7757d3f4",
           "text": "If prototype proves valuable, will be handed to engineering for production development",
           "date": "2026-04-09"
         }
-      ],
-      "notes": "\"Zipped\" is the working title (previously called \"Zip-like experience\" or \"vibe-coded prototype\").\n\nTier 0 software (product-embedded) follows the same security/legal/privacy workflow as third-party vendors but is governed by separate Product/Engineering lifecycle policies — consider in Q3 scope.\n\nCoupa owner needs to be identified before Q5 planning begins."
+      ]
     }
   },
   "sbos": {
+    "t318jy5b": {
+      "id": "t318jy5b",
+      "name": "Marketing",
+      "owner": "Jeff Cullimore",
+      "division": "Marketing",
+      "status": "on-track",
+      "description": "",
+      "notes": "",
+      "sortOrder": 0,
+      "tasks": [
+        {
+          "id": "1ddgto4d",
+          "text": "Topics for meeting",
+          "description": "",
+          "owner": "Jordan Jones",
+          "due": "2026-04-17",
+          "endDate": "2026-04-17",
+          "status": "in-progress",
+          "priority": "low"
+        }
+      ],
+      "meetings": [
+        {
+          "id": "jz0qc29v",
+          "title": "SBO Software Portfolio Review",
+          "description": "",
+          "date": "2026-04-17",
+          "endDate": "2026-04-17",
+          "attendees": "",
+          "agenda": "",
+          "notes": "for meeting today",
+          "actionItems": "",
+          "transcript": "WEBVTT\r\n\r\n00:00:11.000 --> 00:00:12.000\r\nJordan \"JoJo\" Jones: Hey, Jerich.\r\n\r\n00:00:13.000 --> 00:00:14.000\r\nJRLopez: How's it going?\r\n\r\n00:00:14.000 --> 00:00:16.000\r\nJordan \"JoJo\" Jones: It's going great, man, how you doing?\r\n\r\n00:00:16.000 --> 00:00:20.000\r\nJRLopez: Not too bad, just got back from lunch, so…\r\n\r\n00:00:20.000 --> 00:00:23.000\r\nJRLopez: Feeling good? Yeah.\r\n\r\n00:00:20.000 --> 00:00:22.000\r\nJordan \"JoJo\" Jones: Dig it.\r\n\r\n00:00:23.000 --> 00:00:25.000\r\nJordan \"JoJo\" Jones: What was for lunch?\r\n\r\n00:00:25.000 --> 00:00:28.000\r\nJRLopez: Uh, I had just avocado toast that went out today.\r\n\r\n00:00:28.000 --> 00:00:30.000\r\nJordan \"JoJo\" Jones: Oh, nice.\r\n\r\n00:00:29.000 --> 00:00:32.000\r\nJRLopez: to, uh, Gormadies, and…\r\n\r\n00:00:32.000 --> 00:00:34.000\r\nJRLopez: Uh, Draper.\r\n\r\n00:00:35.000 --> 00:00:37.000\r\nJordan \"JoJo\" Jones: Uh, that place is great.\r\n\r\n00:00:37.000 --> 00:00:42.000\r\nJRLopez: Yeah, I had a good experience. I've been there a few different times, so it's really nice.\r\n\r\n00:00:46.000 --> 00:00:49.000\r\nJRLopez: Still gotta introduce you. Shambrea.\r\n\r\n00:00:46.000 --> 00:00:48.000\r\nJordan \"JoJo\" Jones: 1.\r\n\r\n00:00:49.000 --> 00:00:51.000\r\nJordan \"JoJo\" Jones: Shambrea, yeah.\r\n\r\n00:00:49.000 --> 00:00:51.000\r\nJRLopez: Oh.\r\n\r\n00:00:51.000 --> 00:00:58.000\r\nJordan \"JoJo\" Jones: Um, when you came over to my desk, um, I didn't have my Zoom up. That's why you didn't see it.\r\n\r\n00:00:57.000 --> 00:00:59.000\r\nJRLopez: Yeah.\r\n\r\n00:00:58.000 --> 00:01:04.000\r\nJordan \"JoJo\" Jones: Because I was… I was, like, I was trying to find something else while I was… I was, like, trying to multitask the call, so…\r\n\r\n00:01:02.000 --> 00:01:03.000\r\nJRLopez: Yeah.\r\n\r\n00:01:04.000 --> 00:01:11.000\r\nJRLopez: Oh, you're totally fine. Yeah, I… it's always… I always know it's like a risk, you know, in coming up to somebody with… without, like, an appointment or…\r\n\r\n00:01:11.000 --> 00:01:16.000\r\nJRLopez: So, I was like, are you… you busy? So, no worries at all. I came to you…\r\n\r\n00:01:17.000 --> 00:01:20.000\r\nJRLopez: Uh, without warning, so no worries.\r\n\r\n00:01:19.000 --> 00:01:21.000\r\nJordan \"JoJo\" Jones: Right on.\r\n\r\n00:01:21.000 --> 00:01:23.000\r\nJRLopez: Yeah.\r\n\r\n00:01:22.000 --> 00:01:23.000\r\nJordan \"JoJo\" Jones: Hey, Melissa, hey, Jesse.\r\n\r\n00:01:24.000 --> 00:01:26.000\r\nMelissa Boud: Okay.\r\n\r\n00:01:26.000 --> 00:01:28.000\r\nJordan \"JoJo\" Jones: Happy Friday.\r\n\r\n00:01:28.000 --> 00:01:30.000\r\nJRLopez: Yes.\r\n\r\n00:01:34.000 --> 00:01:37.000\r\nMelissa Boud: Chamber is really nice, though. Is that how you say your name?\r\n\r\n00:01:36.000 --> 00:01:38.000\r\nJRLopez: Chambria, yeah. Uh-huh.\r\n\r\n00:01:37.000 --> 00:01:39.000\r\nMelissa Boud: Yeah, she's really nice.\r\n\r\n00:01:39.000 --> 00:01:41.000\r\nJRLopez: Yeah, no, she's been great.\r\n\r\n00:01:42.000 --> 00:01:46.000\r\nJordan \"JoJo\" Jones: Right before Sarah went out, um… Hey, Jolyn.\r\n\r\n00:01:47.000 --> 00:01:53.000\r\nJordan \"JoJo\" Jones: Um, she was like, Jordan, do you still need your Coupa license? And I was like, man, you know, I have not used it in months.\r\n\r\n00:01:53.000 --> 00:01:58.000\r\nJordan \"JoJo\" Jones: I don't think I'll need it. And I was like, if I need it, you know, I can reach out to Jesse, and then…\r\n\r\n00:01:58.000 --> 00:02:02.000\r\nJordan \"JoJo\" Jones: I swear, like, the day after, I probably had…\r\n\r\n00:02:02.000 --> 00:02:06.000\r\nJordan \"JoJo\" Jones: Five different reasons to use it.\r\n\r\n00:02:05.000 --> 00:02:07.000\r\nJRLopez: Yeah, that's helpful.\r\n\r\n00:02:06.000 --> 00:02:08.000\r\nJordan \"JoJo\" Jones: Um…\r\n\r\n00:02:08.000 --> 00:02:13.000\r\nJordan \"JoJo\" Jones: But I still think it's… still think it's fine. I think I can deal with that, though.\r\n\r\n00:02:15.000 --> 00:02:18.000\r\nJordan \"JoJo\" Jones: Um… hey, Jeff, hey, Brandon.\r\n\r\n00:02:20.000 --> 00:02:22.000\r\nJeff Cullimore: Hello?\r\n\r\n00:02:24.000 --> 00:02:26.000\r\nJordan \"JoJo\" Jones: Um…\r\n\r\n00:02:27.000 --> 00:02:29.000\r\nJordan \"JoJo\" Jones: No worries.\r\n\r\n00:02:32.000 --> 00:02:37.000\r\nJordan \"JoJo\" Jones: Uh, Dave is the only person left, but we can get started. Um…\r\n\r\n00:02:38.000 --> 00:02:43.000\r\nJordan \"JoJo\" Jones: Meetings after lunch almost never start on time, so this is great.\r\n\r\n00:02:43.000 --> 00:02:48.000\r\nJordan \"JoJo\" Jones: Um… so, uh, I do have some…\r\n\r\n00:02:48.000 --> 00:02:53.000\r\nJordan \"JoJo\" Jones: I guess, items for discussion. Just things that…\r\n\r\n00:02:53.000 --> 00:02:59.000\r\nJordan \"JoJo\" Jones: Um, we're kind of left over from our last meeting, and then other things that have, uh, come up in our Slack channel.\r\n\r\n00:03:00.000 --> 00:03:09.000\r\nJordan \"JoJo\" Jones: Um, but I want to go ahead and turn the time over to Melissa, because we might kind of address those as we go through the portfolio review.\r\n\r\n00:03:09.000 --> 00:03:15.000\r\nJordan \"JoJo\" Jones: Um, and then if we don't, then I can, um, I can bring them up, and we can… we can handle it that way. Does that sound good?\r\n\r\n00:03:17.000 --> 00:03:19.000\r\nJeff Cullimore: Yeah, sounds good.\r\n\r\n00:03:17.000 --> 00:03:19.000\r\nMelissa Boud: Sounds good to me.\r\n\r\n00:03:17.000 --> 00:03:19.000\r\nJordan \"JoJo\" Jones: Sweet.\r\n\r\n00:03:22.000 --> 00:03:32.000\r\nMelissa Boud: So, we're gonna start in the lower section, because I feel like this is actually the information that's changing, um, quite a bit, and has stuff to talk about.\r\n\r\n00:03:32.000 --> 00:03:38.000\r\nMelissa Boud: This is our optimization opportunities right here. Um, these are the same as last time, those four applications.\r\n\r\n00:03:38.000 --> 00:03:45.000\r\nMelissa Boud: The optimizable licenses have changed plus or minus 5 to 10.\r\n\r\n00:03:45.000 --> 00:03:49.000\r\nMelissa Boud: Um, per application, so there's not, like, a big change in here.\r\n\r\n00:03:49.000 --> 00:03:57.000\r\nMelissa Boud: Um, I'm not too worried about this right now, especially since we're still optimizing our Okta instance, um, to improve.\r\n\r\n00:03:58.000 --> 00:04:01.000\r\nMelissa Boud: Um, this section of the analytics.\r\n\r\n00:04:01.000 --> 00:04:05.000\r\nMelissa Boud: I do want to talk and bring up renewals, though.\r\n\r\n00:04:05.000 --> 00:04:10.000\r\nMelissa Boud: Um, we do have a cancellation notice for Hotjar, um, coming up on May 8th.\r\n\r\n00:04:10.000 --> 00:04:14.000\r\nMelissa Boud: Um, the renewal's the next month in June.\r\n\r\n00:04:14.000 --> 00:04:17.000\r\nMelissa Boud: Are you guys planning on keeping Hotjar?\r\n\r\n00:04:18.000 --> 00:04:25.000\r\nJeff Cullimore: Uh, yes. Mm-hmm. In fact, uh, we may look at, uh, slightly increasing usage as well.\r\n\r\n00:04:29.000 --> 00:04:31.000\r\nMelissa Boud: Okay.\r\n\r\n00:04:31.000 --> 00:04:41.000\r\nMelissa Boud: Um, and then your renewals in the next 30 days, so, like, the next kind of priority is dovetail. It's already complete, so you guys are awesome already on top of that.\r\n\r\n00:04:42.000 --> 00:04:47.000\r\nMelissa Boud: This one doesn't have a contract, per se, which is why it's not generated on it, or it has…\r\n\r\n00:04:47.000 --> 00:04:55.000\r\nMelissa Boud: it's not on this list before, um, but we found that a virtual card was requested about this time last year for QR code generator.\r\n\r\n00:04:55.000 --> 00:05:06.000\r\nMelissa Boud: Um… and so, anticipate, kind of, this might be expiring soon or running out of funds, so you might want to put a request in for QR code generator again if you need it.\r\n\r\n00:05:06.000 --> 00:05:12.000\r\nMelissa Boud: I don't… someone reached out to me about it the other day, and so I think you guys have people looking into it.\r\n\r\n00:05:12.000 --> 00:05:17.000\r\nMelissa Boud: But that is a request that will, um, might be coming through JR for you.\r\n\r\n00:05:18.000 --> 00:05:24.000\r\nMelissa Boud: Um, so just look out for, but this is just a virtual credit card yearly subscription.\r\n\r\n00:05:24.000 --> 00:05:26.000\r\nJRLopez: Who submits that?\r\n\r\n00:05:27.000 --> 00:05:31.000\r\nMelissa Boud: Um, last year, Jeff, you submitted it.\r\n\r\n00:05:30.000 --> 00:05:32.000\r\nJRLopez: Oh, okay.\r\n\r\n00:05:31.000 --> 00:05:42.000\r\nMelissa Boud: And so… I don't know if you guys are gonna have someone else submit it, or Jeff, you just want to submit it again. This is for your QR code, or your dynamic QR codes, I believe.\r\n\r\n00:05:41.000 --> 00:05:49.000\r\nJeff Cullimore: Mm-hmm. Yeah, yep. Yeah, we'll have, uh, we'll have someone submit it, probably, uh, on Brandon's team, yep.\r\n\r\n00:05:50.000 --> 00:05:58.000\r\nMelissa Boud: So, those were the only two for this month that I saw that were remaining. You have a couple others that are pending or going through, um…\r\n\r\n00:05:58.000 --> 00:06:05.000\r\nMelissa Boud: Like, user gems just went through yesterday, or… which is good, because it expired yesterday.\r\n\r\n00:06:01.000 --> 00:06:03.000\r\nJeff Cullimore: Mm-hmm.\r\n\r\n00:06:05.000 --> 00:06:07.000\r\nMelissa Boud: Um…\r\n\r\n00:06:07.000 --> 00:06:14.000\r\nMelissa Boud: And so, I think, JR, correct me if I'm wrong, Sarah told me right before she left that, on average, it takes.\r\n\r\n00:06:14.000 --> 00:06:19.000\r\nMelissa Boud: It could take up to 2 weeks to get some requests through Coupa.\r\n\r\n00:06:19.000 --> 00:06:30.000\r\nMelissa Boud: Um, so just kind of keep that in mind as some of these are coming up, like, hey, you don't want to submit it a couple days before, you want to give it as much time as you can. Um, I know you guys are really good at that, but I just wanted to throw that in there.\r\n\r\n00:06:31.000 --> 00:06:36.000\r\nJRLopez: Yeah, um, for User Jim, we have been in communication, Jeff.\r\n\r\n00:06:36.000 --> 00:06:47.000\r\nJRLopez: chat and myself, and um… really pushing back on the vendor, and I believe, Jeff Wright, correct me, but it's a 6-month instead of a 12-month, because we're sort of putting them on notice.\r\n\r\n00:06:44.000 --> 00:06:46.000\r\nJeff Cullimore: Mhm.\r\n\r\n00:06:47.000 --> 00:06:49.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:06:47.000 --> 00:06:49.000\r\nJRLopez: And, uh, hopefully we can…\r\n\r\n00:06:49.000 --> 00:06:57.000\r\nJRLopez: They can, you know, improve some things that are… that we're experiencing, and if not, it's 6 months to transition to something else, so, um…\r\n\r\n00:06:59.000 --> 00:07:02.000\r\nJRLopez: I know we're close, but they also understand.\r\n\r\n00:07:02.000 --> 00:07:08.000\r\nJRLopez: kind of the position we're in, so… I don't anticipate, like, them shutting off services.\r\n\r\n00:07:04.000 --> 00:07:06.000\r\nJeff Cullimore: Mm-hmm.\r\n\r\n00:07:08.000 --> 00:07:15.000\r\nJRLopez: Uh, they're really trying to accommodate us, because we pretty much were like, we're moving on to something else, so… that's the status on that one.\r\n\r\n00:07:15.000 --> 00:07:17.000\r\nJeff Cullimore: Yep.\r\n\r\n00:07:16.000 --> 00:07:19.000\r\nMelissa Boud: Do you have a replacement for that one?\r\n\r\n00:07:20.000 --> 00:07:23.000\r\nMelissa Boud: Like, in, like, that you're investigating?\r\n\r\n00:07:20.000 --> 00:07:22.000\r\nJeff Cullimore: Um…\r\n\r\n00:07:23.000 --> 00:07:32.000\r\nJeff Cullimore: Yes, uh, and I believe I submitted a request through the new process, um, for a tool called Clay.\r\n\r\n00:07:32.000 --> 00:07:38.000\r\nMelissa Boud: Okay, yep, that's on the list, so… as long as there was something on the… on the runway for that.\r\n\r\n00:07:34.000 --> 00:07:36.000\r\nJeff Cullimore: Sure.\r\n\r\n00:07:37.000 --> 00:07:40.000\r\nJeff Cullimore: Yeah. Yep.\r\n\r\n00:07:40.000 --> 00:07:46.000\r\nMelissa Boud: Um, speaking of replacements, how is your Drift email replacement coming?\r\n\r\n00:07:47.000 --> 00:07:52.000\r\nMelissa Boud: Like, you guys were looking at an internal service to replace your email, how's that?\r\n\r\n00:07:49.000 --> 00:07:52.000\r\nBrandon Christensen: Yeah.\r\n\r\n00:07:50.000 --> 00:07:52.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:07:53.000 --> 00:07:59.000\r\nBrandon Christensen: We're… we're currently building it, but it looks like it's a valid solution, so we're just…\r\n\r\n00:07:59.000 --> 00:08:03.000\r\nBrandon Christensen: Uh, no… right now…\r\n\r\n00:08:05.000 --> 00:08:07.000\r\nMelissa Boud: Okay, awesome, and I think…\r\n\r\n00:08:07.000 --> 00:08:15.000\r\nMelissa Boud: I think I did hear from Fadi that this one was going well. Um, which is good, because I guess Drift email is being sunsetted.\r\n\r\n00:08:15.000 --> 00:08:17.000\r\nMelissa Boud: Anyway…\r\n\r\n00:08:16.000 --> 00:08:23.000\r\nBrandon Christensen: I… yeah, we're pacing well on that, like, no stress there. Plus, we can't renew it anyway, they're discontinuing it, so…\r\n\r\n00:08:23.000 --> 00:08:25.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:08:23.000 --> 00:08:25.000\r\nMelissa Boud: Yep.\r\n\r\n00:08:26.000 --> 00:08:30.000\r\nMelissa Boud: So, um, hot dryer keeping, and then…\r\n\r\n00:08:27.000 --> 00:08:35.000\r\nJolyn Metro: Sorry. Sorry, Brandon, you said that the internal solution is going well, meaning that they're…\r\n\r\n00:08:35.000 --> 00:08:43.000\r\nJolyn Metro: is not… like, we won't have a cost associated with it, we can… because I need to update this. Is that… am I understanding this right?\r\n\r\n00:08:41.000 --> 00:08:43.000\r\nBrandon Christensen: Yeah. Thank you.\r\n\r\n00:08:43.000 --> 00:08:48.000\r\nBrandon Christensen: Unless IT's gonna start charging you for our make usage, uh…\r\n\r\n00:08:48.000 --> 00:08:53.000\r\nBrandon Christensen: it would be… yeah, in theory, I think we can zero that out. It would just be…\r\n\r\n00:08:53.000 --> 00:08:56.000\r\nBrandon Christensen: We're using Make. That's the only cost.\r\n\r\n00:08:58.000 --> 00:09:04.000\r\nMelissa Boud: I think that was a great question, Jolyn, because some of the internal builds, um, do still have cost.\r\n\r\n00:09:04.000 --> 00:09:16.000\r\nMelissa Boud: Um, to it, just through other services, and so it's good to acknowledge that there's still costs associated with some of the internal builds, too. And so, it looks like it's going… if it's going through Make, there's probably going to be some…\r\n\r\n00:09:17.000 --> 00:09:22.000\r\nMelissa Boud: some arrangement that IT will work out if they feel like it's excessive and needs to be handled.\r\n\r\n00:09:24.000 --> 00:09:30.000\r\nMelissa Boud: Um, Sprout Social and Runway, are you guys intending to keep these as well? I know they're, like.\r\n\r\n00:09:30.000 --> 00:09:32.000\r\nMelissa Boud: Two months out still, but…\r\n\r\n00:09:33.000 --> 00:09:35.000\r\nJeff Cullimore: Yes.\r\n\r\n00:09:33.000 --> 00:09:35.000\r\nBrandon Christensen: Uh, Sprout, yeah.\r\n\r\n00:09:35.000 --> 00:09:37.000\r\nJeff Cullimore: Go ahead.\r\n\r\n00:09:37.000 --> 00:09:42.000\r\nBrandon Christensen: I was just gonna say, yeah. The short answer is yes. Um, Sprout Social, probably, for sure.\r\n\r\n00:09:42.000 --> 00:09:44.000\r\nBrandon Christensen: Uh, runway…\r\n\r\n00:09:53.000 --> 00:09:58.000\r\nJordan \"JoJo\" Jones: Do we have a cancellation notice period for Runway? In my notes.\r\n\r\n00:09:59.000 --> 00:10:04.000\r\nJordan \"JoJo\" Jones: Um, from the last time we spoke, I thought it was April 17th, just today.\r\n\r\n00:10:06.000 --> 00:10:08.000\r\nMelissa Boud: Uh, let me…\r\n\r\n00:10:07.000 --> 00:10:08.000\r\nJordan \"JoJo\" Jones: Yeah, that is…\r\n\r\n00:10:09.000 --> 00:10:11.000\r\nMelissa Boud: I can pull it up and let you know.\r\n\r\n00:10:09.000 --> 00:10:11.000\r\nJordan \"JoJo\" Jones: Doesn't seem right.\r\n\r\n00:10:11.000 --> 00:10:13.000\r\nJordan \"JoJo\" Jones: Okay.\r\n\r\n00:10:14.000 --> 00:10:16.000\r\nMelissa Boud: Um…\r\n\r\n00:10:19.000 --> 00:10:24.000\r\nMelissa Boud: Yep, there was a cancel by date for Renway on the 15th.\r\n\r\n00:10:25.000 --> 00:10:27.000\r\nJordan \"JoJo\" Jones: Um, yesterday.\r\n\r\n00:10:27.000 --> 00:10:29.000\r\nJordan \"JoJo\" Jones: Or the day before yesterday.\r\n\r\n00:10:28.000 --> 00:10:30.000\r\nMelissa Boud: Yeah, 2 days ago.\r\n\r\n00:10:33.000 --> 00:10:36.000\r\nMelissa Boud: So, you guys get to keep it for one more year.\r\n\r\n00:10:36.000 --> 00:10:38.000\r\nJeff Cullimore: Sounds good. Yeah, I think…\r\n\r\n00:10:38.000 --> 00:10:41.000\r\nJeff Cullimore: We hadn't heard anything about canceling, so…\r\n\r\n00:10:44.000 --> 00:10:52.000\r\nMelissa Boud: Perfect. So, this is kind of, like, my… that's how far I think we should investigate. These are some other ones that are coming up.\r\n\r\n00:10:52.000 --> 00:11:00.000\r\nMelissa Boud: So, start doing, like, your research, um, if you want to keep it, and we'll bring it up in our next meeting if there's any changes to the further list.\r\n\r\n00:11:01.000 --> 00:11:09.000\r\nMelissa Boud: I think this next section is probably where, um, Jordan, you have a lot of your questions or comments.\r\n\r\n00:11:09.000 --> 00:11:16.000\r\nMelissa Boud: Um, these are all the requests that I have in motion from a list that Jesse shared. Am I missing any?\r\n\r\n00:11:18.000 --> 00:11:20.000\r\nJeff Cullimore: Um, sorry.\r\n\r\n00:11:21.000 --> 00:11:26.000\r\nJeff Cullimore: Just one note before we jump into this, I'm just seeing, um, on row…\r\n\r\n00:11:26.000 --> 00:11:34.000\r\nJeff Cullimore: 118. Uh, Michael Alder is no longer at Bamboo, so if we need to update… I can't remember what the IT owner.\r\n\r\n00:11:35.000 --> 00:11:43.000\r\nMelissa Boud: Kind of the technical owner, person who may or may not, like, give out licenses, or just more knowledgeable about that.\r\n\r\n00:11:36.000 --> 00:11:38.000\r\nJeff Cullimore: Identifies.\r\n\r\n00:11:38.000 --> 00:11:40.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:11:43.000 --> 00:11:45.000\r\nJeff Cullimore: Yeah, um…\r\n\r\n00:11:45.000 --> 00:11:51.000\r\nJeff Cullimore: To the… if… to the extent that that's helpful, we can update that, probably to be…\r\n\r\n00:11:52.000 --> 00:11:54.000\r\nJeff Cullimore: Um…\r\n\r\n00:11:54.000 --> 00:11:56.000\r\nJeff Cullimore: Rachel Godfrey?\r\n\r\n00:11:54.000 --> 00:11:59.000\r\nBrandon Christensen: Uh, Brian. Brian's running on that one.\r\n\r\n00:12:00.000 --> 00:12:02.000\r\nJeff Cullimore: Brian Anderson. Yeah.\r\n\r\n00:12:00.000 --> 00:12:05.000\r\nBrandon Christensen: Or she's assigned it… yeah, she's assigned it to Brian. Maybe Rachel's the better one, but she's assigned it.\r\n\r\n00:12:09.000 --> 00:12:13.000\r\nMelissa Boud: Okay, I'll assign it to Brian. What was Brian's last name?\r\n\r\n00:12:13.000 --> 00:12:15.000\r\nJeff Cullimore: Anderson.\r\n\r\n00:12:14.000 --> 00:12:17.000\r\nMelissa Boud: Thanks. There's a couple Brians.\r\n\r\n00:12:16.000 --> 00:12:18.000\r\nJeff Cullimore: Yep.\r\n\r\n00:12:17.000 --> 00:12:19.000\r\nMelissa Boud: I'd hate to send it to the wrong one.\r\n\r\n00:12:20.000 --> 00:12:24.000\r\nMelissa Boud: Um, and if it is Rachel, just let me know, we can change that again.\r\n\r\n00:12:23.000 --> 00:12:27.000\r\nJeff Cullimore: Okay. Sorry, didn't mean to cut you off, just saw that there.\r\n\r\n00:12:27.000 --> 00:12:31.000\r\nMelissa Boud: No, that was great. Thank you. It's good to keep this information up to date.\r\n\r\n00:12:31.000 --> 00:12:36.000\r\nMelissa Boud: So… um, any other information changes you want to make up there, or…\r\n\r\n00:12:38.000 --> 00:12:41.000\r\nJeff Cullimore: Uh, no, the rest of them looked good.\r\n\r\n00:12:41.000 --> 00:12:48.000\r\nMelissa Boud: Okay. And then you have a few, um, POCs or questions, so…\r\n\r\n00:12:48.000 --> 00:12:52.000\r\nMelissa Boud: Hopefully these are going well, Jessi, you're on top of them.\r\n\r\n00:12:52.000 --> 00:12:54.000\r\nMelissa Boud: Jessi says we have them all.\r\n\r\n00:12:55.000 --> 00:12:57.000\r\nMelissa Boud: Right.\r\n\r\n00:12:56.000 --> 00:12:59.000\r\nJeff Cullimore: Um, are a couple of those…\r\n\r\n00:12:59.000 --> 00:13:04.000\r\nJeff Cullimore: The AWS Consulting Services and Marketing Strategy, are those tools?\r\n\r\n00:13:05.000 --> 00:13:13.000\r\nMelissa Boud: Um, no, that's what some websites says these apps are, like, this is the services that they provide.\r\n\r\n00:13:13.000 --> 00:13:18.000\r\nMelissa Boud: I wouldn't, like… I can go in and double check them, but these are manually, like…\r\n\r\n00:13:19.000 --> 00:13:27.000\r\nMelissa Boud: don't put a ton of stock into these right now. As it becomes more, like, built out, it will correct itself and put the right.\r\n\r\n00:13:28.000 --> 00:13:30.000\r\nMelissa Boud: Type of services that they provide.\r\n\r\n00:13:30.000 --> 00:13:35.000\r\nJeff Cullimore: Okay. Yeah, I think all 3 of those are probably gonna fall off.\r\n\r\n00:13:37.000 --> 00:13:40.000\r\nJeff Cullimore: As agencies or consultants, so…\r\n\r\n00:13:42.000 --> 00:13:48.000\r\nMelissa Boud: Um, are they actually tech, or are they, like, professional services? Just curiosities.\r\n\r\n00:13:48.000 --> 00:13:55.000\r\nJeff Cullimore: I believe they're all professional services. Sanity and Netlify are the two…\r\n\r\n00:13:56.000 --> 00:13:58.000\r\nJeff Cullimore: tools.\r\n\r\n00:14:01.000 --> 00:14:03.000\r\nMelissa Boud: Okay.\r\n\r\n00:14:10.000 --> 00:14:16.000\r\nMelissa Boud: Jolyn, does this change budgeting at all, if they're more professional services and not actual software?\r\n\r\n00:14:15.000 --> 00:14:21.000\r\nJolyn Metro: No, because the budget for those are in our non-tech budget, so…\r\n\r\n00:14:21.000 --> 00:14:24.000\r\nJolyn Metro: No. Yeah.\r\n\r\n00:14:22.000 --> 00:14:24.000\r\nMelissa Boud: Okay.\r\n\r\n00:14:23.000 --> 00:14:27.000\r\nJeff Cullimore: Wait… I'm… I don't understand.\r\n\r\n00:14:26.000 --> 00:14:32.000\r\nJolyn Metro: For the… for the agencies, we have that in our program spend, budget. So, yeah, yeah, so it doesn't change anything.\r\n\r\n00:14:29.000 --> 00:14:31.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:14:33.000 --> 00:14:38.000\r\nJolyn Metro: For me. Because we budgeted it outside of tech.\r\n\r\n00:14:33.000 --> 00:14:36.000\r\nJeff Cullimore: Oh, okay. They… they just won't…\r\n\r\n00:14:37.000 --> 00:14:40.000\r\nJeff Cullimore: Yeah, they won't be tech… in the tech budget, yeah, yeah, okay.\r\n\r\n00:14:41.000 --> 00:14:46.000\r\nMelissa Boud: Okay, so I may not include them in their portfolio, but I'll take note that we are watching them.\r\n\r\n00:14:46.000 --> 00:14:49.000\r\nMelissa Boud: Um, as non-tech.\r\n\r\n00:14:50.000 --> 00:14:52.000\r\nJRLopez: Um…\r\n\r\n00:14:50.000 --> 00:14:52.000\r\nJeff Cullimore: Sure.\r\n\r\n00:14:51.000 --> 00:14:55.000\r\nDave Petersen: On the Netlify, what's the…\r\n\r\n00:14:55.000 --> 00:14:57.000\r\nDave Petersen: But what is that for?\r\n\r\n00:14:58.000 --> 00:15:05.000\r\nJeff Cullimore: Um, so Sanity is the CMS, and Netlify, I think, is, uh, the delivery service.\r\n\r\n00:15:07.000 --> 00:15:12.000\r\nJeff Cullimore: So, it's the non-Adobe equivalent of Edge delivery services that we're using right now.\r\n\r\n00:15:16.000 --> 00:15:18.000\r\nMelissa Boud: Oh my goodness.\r\n\r\n00:15:23.000 --> 00:15:32.000\r\nJeff Cullimore: And that's probably the… that's the extent of the detail I have on that one. We can connect with Natalie. She and James Collier on the engineering team have been.\r\n\r\n00:15:32.000 --> 00:15:34.000\r\nJeff Cullimore: Leading those evaluations.\r\n\r\n00:15:35.000 --> 00:15:37.000\r\nJeff Cullimore: So they don't have…\r\n\r\n00:15:35.000 --> 00:15:39.000\r\nJRLopez: I can… I can… I can speak to some of it, too.\r\n\r\n00:15:36.000 --> 00:15:38.000\r\nDave Petersen: Yeah.\r\n\r\n00:15:39.000 --> 00:15:41.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:15:40.000 --> 00:15:45.000\r\nJRLopez: Um, Sanity… we're literally waiting for Brad.\r\n\r\n00:15:45.000 --> 00:15:47.000\r\nJRLopez: who… I guess Sanity is also, um…\r\n\r\n00:15:48.000 --> 00:15:52.000\r\nJRLopez: uh, part of Bamboo, what do you call that? Um…\r\n\r\n00:15:52.000 --> 00:15:54.000\r\nDave Petersen: The iconic suite.\r\n\r\n00:15:53.000 --> 00:16:00.000\r\nJRLopez: iconic brand, and so Brad wants to… Brad basically said they need to become a customer of ours, if we're gonna use them.\r\n\r\n00:16:00.000 --> 00:16:05.000\r\nJRLopez: And so he's supposed to talk to their CEO, Magnus, or whatever. Um…\r\n\r\n00:16:05.000 --> 00:16:14.000\r\nJRLopez: And so that's what that's waiting on. We're fine with everything else on it, as long as he'll give us a green light. Nullify, that one is good to go. I believe that's in the system, I think…\r\n\r\n00:16:14.000 --> 00:16:20.000\r\nJRLopez: correct me if I'm wrong, either Jeff or… Jessi submitted the new supplier request for that, maybe? Is that…\r\n\r\n00:16:20.000 --> 00:16:22.000\r\nJRLopez: Is that correct?\r\n\r\n00:16:22.000 --> 00:16:24.000\r\nJRLopez: Or somebody will.\r\n\r\n00:16:23.000 --> 00:16:26.000\r\nJeff Cullimore: I think… I think Jessi did, and I think I…\r\n\r\n00:16:27.000 --> 00:16:34.000\r\nJeff Cullimore: I think I saw an update on it today, but yeah, as soon as that's in, I've got the contract and the SOW, and I can get those in.\r\n\r\n00:16:34.000 --> 00:16:36.000\r\nJeff Cullimore: To Koopa for the request.\r\n\r\n00:16:36.000 --> 00:16:48.000\r\nJRLopez: Yeah, and then as of today, I believe the team is honed in on AppNovation as the choice between Coddle and AppNovation, so they were able… we were able to get them under our budget, so…\r\n\r\n00:16:48.000 --> 00:16:56.000\r\nJRLopez: I sent a notice to Cuddle today that, you know, thank you, but we've basically gone a different direction, so it sounds like AppNovation will be the…\r\n\r\n00:16:56.000 --> 00:16:58.000\r\nJRLopez: Consulting services.\r\n\r\n00:16:58.000 --> 00:17:04.000\r\nDave Petersen: And so, is Netlify, is that replacing, um, Adobe?\r\n\r\n00:17:05.000 --> 00:17:06.000\r\nDave Petersen: Or…\r\n\r\n00:17:06.000 --> 00:17:12.000\r\nJeff Cullimore: Yeah, yep, so we'll be moving off of… off of Adobe products for our website, yeah.\r\n\r\n00:17:07.000 --> 00:17:08.000\r\nDave Petersen: Okay.\r\n\r\n00:17:12.000 --> 00:17:20.000\r\nDave Petersen: So, I know they used to call it Franklin, I don't know what they… Experience, Adobe Experience something, I think is what they call it now. Okay.\r\n\r\n00:17:18.000 --> 00:17:22.000\r\nJeff Cullimore: Yeah. Experience Manager, yeah. Yep.\r\n\r\n00:17:20.000 --> 00:17:22.000\r\nDave Petersen: Alright, that…\r\n\r\n00:17:23.000 --> 00:17:27.000\r\nDave Petersen: Okay, that makes sense. And then Sanity would replace, um…\r\n\r\n00:17:27.000 --> 00:17:29.000\r\nDave Petersen: Contentful.\r\n\r\n00:17:30.000 --> 00:17:34.000\r\nDave Petersen: And… and or, I guess, the experience manager stuff.\r\n\r\n00:17:34.000 --> 00:17:42.000\r\nJeff Cullimore: Yeah, I… uh, the experience manager stuff, for sure, I don't… marketing isn't using Contentful anymore, but I think it is being used on the.\r\n\r\n00:17:43.000 --> 00:17:44.000\r\nJeff Cullimore: From the product team, I think?\r\n\r\n00:17:43.000 --> 00:17:45.000\r\nDave Petersen: product. Okay.\r\n\r\n00:17:45.000 --> 00:17:46.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:17:53.000 --> 00:17:55.000\r\nJeff Cullimore: Yeah, yeah.\r\n\r\n00:17:57.000 --> 00:18:05.000\r\nMelissa Boud: Any other comments, questions, concerns, complaints about the request? I think that was a good, like, summary of what's going on.\r\n\r\n00:18:10.000 --> 00:18:13.000\r\nMelissa Boud: Or any other future needs that you anticipate?\r\n\r\n00:18:13.000 --> 00:18:18.000\r\nJeff Cullimore: Yeah, so we… we will have a request, I would say, probably here in the next…\r\n\r\n00:18:18.000 --> 00:18:24.000\r\nJeff Cullimore: couple of weeks for a tool called Writer. Uh, we previously were a customer.\r\n\r\n00:18:25.000 --> 00:18:35.000\r\nJeff Cullimore: Um, when we rolled out ChatGPT company-wide, we moved away from it. They'd like to purchase a couple additional licenses, so it'll be quite a bit smaller of a contract compared to what we did previously, but…\r\n\r\n00:18:36.000 --> 00:18:38.000\r\nJeff Cullimore: Um…\r\n\r\n00:18:38.000 --> 00:18:44.000\r\nJeff Cullimore: I think we budgeted only $7,000 for the year for that anyways, so that'll be coming in, I would say, probably.\r\n\r\n00:18:44.000 --> 00:18:46.000\r\nJeff Cullimore: By the end of the month.\r\n\r\n00:18:48.000 --> 00:18:50.000\r\nMelissa Boud: Okay.\r\n\r\n00:18:53.000 --> 00:19:01.000\r\nJeff Cullimore: And JR, I don't… with that spend level, I don't know if you want to be involved, but we can facilitate an intro to the AE if that's helpful.\r\n\r\n00:19:02.000 --> 00:19:08.000\r\nJRLopez: Um, I mean, I'll leave it to you if you feel like there's room, or if it's not, sort of.\r\n\r\n00:19:08.000 --> 00:19:12.000\r\nJRLopez: Worth the time, but, uh, just… just know that.\r\n\r\n00:19:12.000 --> 00:19:19.000\r\nJRLopez: I'll kind of lean on you to basically let me know if you feel like I need to get involved. If not, then I think we're good.\r\n\r\n00:19:19.000 --> 00:19:21.000\r\nJeff Cullimore: Sure.\r\n\r\n00:19:21.000 --> 00:19:23.000\r\nJRLopez: Thanks.\r\n\r\n00:19:23.000 --> 00:19:27.000\r\nMelissa Boud: Is this gonna stay within your division and your department?\r\n\r\n00:19:28.000 --> 00:19:30.000\r\nJeff Cullimore: Yep.\r\n\r\n00:19:30.000 --> 00:19:36.000\r\nMelissa Boud: So probably a Tier 4, probably, even, just a small individual group.\r\n\r\n00:19:37.000 --> 00:19:40.000\r\nJeff Cullimore: Yeah, yeah, I would imagine…\r\n\r\n00:19:40.000 --> 00:19:45.000\r\nJeff Cullimore: Just a few licenses, I'll probably concentrated on the creative team, so, yeah.\r\n\r\n00:19:46.000 --> 00:19:47.000\r\nJeff Cullimore: That sounds right.\r\n\r\n00:19:47.000 --> 00:19:51.000\r\nMelissa Boud: Perfect. Any other, um, upcoming things that you know of?\r\n\r\n00:19:52.000 --> 00:19:54.000\r\nJeff Cullimore: Um…\r\n\r\n00:19:58.000 --> 00:19:59.000\r\nJeff Cullimore: No, I think that's it.\r\n\r\n00:20:03.000 --> 00:20:05.000\r\nMelissa Boud: No.\r\n\r\n00:20:05.000 --> 00:20:15.000\r\nMelissa Boud: Um… with all the stuff that we just talked about, I don't anticipate any other changes. Your portfolio did go down by one. You had 48 last month, so now you have 47.\r\n\r\n00:20:16.000 --> 00:20:24.000\r\nMelissa Boud: So, way to clean that up. Um, do you have anything else that you want to bring up about any other software in your portfolio?\r\n\r\n00:20:16.000 --> 00:20:18.000\r\nJeff Cullimore: Nice.\r\n\r\n00:20:30.000 --> 00:20:32.000\r\nJeff Cullimore: I don't think so. Brandon, is there anything…\r\n\r\n00:20:34.000 --> 00:20:37.000\r\nJeff Cullimore: Anything you're hearing in conversations?\r\n\r\n00:20:37.000 --> 00:20:44.000\r\nBrandon Christensen: Nothing… I mean, we have that score app, but I don't think that one's gonna go through, uh…\r\n\r\n00:20:45.000 --> 00:20:46.000\r\nJeff Cullimore: Right.\r\n\r\n00:20:45.000 --> 00:20:49.000\r\nBrandon Christensen: the business case doesn't make sense. Um…\r\n\r\n00:20:50.000 --> 00:20:55.000\r\nBrandon Christensen: That's, like, the only one I've heard recently, besides play and all the lead and everything.\r\n\r\n00:21:02.000 --> 00:21:10.000\r\nMelissa Boud: Awesome. That is it for, by way, review of your portfolio. It's still looking good, it's still looking healthy. Um, the spends are on track from what I saw.\r\n\r\n00:21:10.000 --> 00:21:17.000\r\nMelissa Boud: Um, so… doing great there. Jordan, you had some things that you wanted to talk about.\r\n\r\n00:21:15.000 --> 00:21:17.000\r\nJeff Cullimore: So…\r\n\r\n00:21:17.000 --> 00:21:20.000\r\nJeff Cullimore: Sorry, I did think of one thing.\r\n\r\n00:21:18.000 --> 00:21:20.000\r\nMelissa Boud: Oh, yeah.\r\n\r\n00:21:20.000 --> 00:21:24.000\r\nJeff Cullimore: Um, there is a rec in right now…\r\n\r\n00:21:24.000 --> 00:21:30.000\r\nJeff Cullimore: For additional service, uh, yeah, basically additional services with, um, qualified.\r\n\r\n00:21:31.000 --> 00:21:39.000\r\nJeff Cullimore: So the tool… one of their biggest pricing levers is number of web sessions. That was underscoped when we…\r\n\r\n00:21:39.000 --> 00:21:45.000\r\nJeff Cullimore: initially purchased it, and we've got a contract now to right-size that. I think it adds roughly…\r\n\r\n00:21:46.000 --> 00:21:51.000\r\nJeff Cullimore: 16K of spend between now and the end of our contract, which is…\r\n\r\n00:21:51.000 --> 00:21:54.000\r\nJeff Cullimore: I believe in September.\r\n\r\n00:21:57.000 --> 00:22:01.000\r\nMelissa Boud: Um, I see… this is qualified, right?\r\n\r\n00:22:00.000 --> 00:22:03.000\r\nJeff Cullimore: Yeah, yeah, October 1st, yeah, yeah.\r\n\r\n00:22:01.000 --> 00:22:03.000\r\nMelissa Boud: Yep.\r\n\r\n00:22:07.000 --> 00:22:09.000\r\nMelissa Boud: I think I did see that request in Coupa.\r\n\r\n00:22:07.000 --> 00:22:09.000\r\nJordan \"JoJo\" Jones: That was…\r\n\r\n00:22:10.000 --> 00:22:12.000\r\nJordan \"JoJo\" Jones: That was actually the only… the last…\r\n\r\n00:22:13.000 --> 00:22:17.000\r\nJordan \"JoJo\" Jones: Had on my list. Um, so, I'm curious, though, Jolyn.\r\n\r\n00:22:18.000 --> 00:22:24.000\r\nJordan \"JoJo\" Jones: like, how does that impact the budget when we have an increase in spend like that? Is it…\r\n\r\n00:22:24.000 --> 00:22:30.000\r\nJordan \"JoJo\" Jones: I mean, it wasn't forecasted, so does that just count as being over budget?\r\n\r\n00:22:30.000 --> 00:22:38.000\r\nJolyn Metro: So, uh, we are in the marketing is in the fortunate position of we, uh, have…\r\n\r\n00:22:38.000 --> 00:22:45.000\r\nJolyn Metro: A fair amount of money sitting in what we're calling a contingency line item, because we had budgeted and planned for some…\r\n\r\n00:22:46.000 --> 00:22:52.000\r\nJolyn Metro: uh, platforms that we did not bring on, like, we had thoughts about doing, I think it was, what, like.\r\n\r\n00:22:52.000 --> 00:23:00.000\r\nJolyn Metro: a community thing that saved us a bunch of money that we're not doing. And so, for those types of things, at least for this year, we're just able to pull.\r\n\r\n00:23:01.000 --> 00:23:06.000\r\nJolyn Metro: So, we're still quite a bit under budget, um, even with…\r\n\r\n00:23:06.000 --> 00:23:11.000\r\nJolyn Metro: some of those, like, smaller things that we're seeing like that. So we're good from an overall perspective.\r\n\r\n00:23:10.000 --> 00:23:12.000\r\nJordan \"JoJo\" Jones: Okay. Perfect.\r\n\r\n00:23:12.000 --> 00:23:18.000\r\nJordan \"JoJo\" Jones: Actually, there was one other thing. Um, Brandon, there was talk between you and Fadi about, uh…\r\n\r\n00:23:19.000 --> 00:23:26.000\r\nJordan \"JoJo\" Jones: a, like, session access scanners, or badge scanners for, um, SHRM.\r\n\r\n00:23:26.000 --> 00:23:28.000\r\nBrandon Christensen: Yeah.\r\n\r\n00:23:26.000 --> 00:23:28.000\r\nJordan \"JoJo\" Jones: And did that get it worked out?\r\n\r\n00:23:28.000 --> 00:23:33.000\r\nBrandon Christensen: Uh, it's in Coupa, um, the… and I recognize you guys.\r\n\r\n00:23:31.000 --> 00:23:33.000\r\nJordan \"JoJo\" Jones: Okay.\r\n\r\n00:23:33.000 --> 00:23:38.000\r\nBrandon Christensen: changed the form for the new technology request in Coupa, so that…\r\n\r\n00:23:38.000 --> 00:23:43.000\r\nBrandon Christensen: probably… I don't know, that was my first time going. There's, like, twice as many questions, but…\r\n\r\n00:23:43.000 --> 00:23:50.000\r\nBrandon Christensen: Uh, it's in Coupa. All we… I mean, we need the security legal review, but it's… we're not…\r\n\r\n00:23:50.000 --> 00:23:56.000\r\nBrandon Christensen: paying for anything. It's a… it's a one-time… SHRM is providing it for us, um, but…\r\n\r\n00:23:57.000 --> 00:24:06.000\r\nBrandon Christensen: We are going to… we are trying to integrate it. Um, there's an addendum, so we need some, like, legal signatures, but there's no cost associated with it.\r\n\r\n00:24:07.000 --> 00:24:13.000\r\nBrandon Christensen: Um, it's just the official badge scanner that SHRM was providing us, and since we're paying SHRM.\r\n\r\n00:24:13.000 --> 00:24:17.000\r\nBrandon Christensen: whatever millions of dollars we're paying them, they're giving it to us for free.\r\n\r\n00:24:19.000 --> 00:24:21.000\r\nJordan \"JoJo\" Jones: Great.\r\n\r\n00:24:20.000 --> 00:24:25.000\r\nMelissa Boud: Jordan, wasn't there a badge scanning software that went through?\r\n\r\n00:24:25.000 --> 00:24:27.000\r\nMelissa Boud: Request last year.\r\n\r\n00:24:28.000 --> 00:24:32.000\r\nMelissa Boud: Okay. Is it the same one, or is it different?\r\n\r\n00:24:28.000 --> 00:24:30.000\r\nBrandon Christensen: Um, that is…\r\n\r\n00:24:31.000 --> 00:24:35.000\r\nBrandon Christensen: Nope, different. Uh, yeah.\r\n\r\n00:24:33.000 --> 00:24:35.000\r\nMelissa Boud: That's unfortunate.\r\n\r\n00:24:35.000 --> 00:24:42.000\r\nBrandon Christensen: It's the life of events. Um, the… that badge scanning pool will be good for the majority of our events.\r\n\r\n00:24:42.000 --> 00:24:48.000\r\nBrandon Christensen: And as we kind of jump around on things, but in this case, we kind of got stuck with the one that they…\r\n\r\n00:24:49.000 --> 00:24:53.000\r\nBrandon Christensen: Uh, our… yeah, it's an integration thing, the one that they're…\r\n\r\n00:24:54.000 --> 00:24:55.000\r\nBrandon Christensen: Asking us to use.\r\n\r\n00:24:56.000 --> 00:24:58.000\r\nMelissa Boud: Okay.\r\n\r\n00:25:01.000 --> 00:25:06.000\r\nMelissa Boud: Would have probably helped with the vendor if it has already gone through before, but it's too bad it's a different one.\r\n\r\n00:25:01.000 --> 00:25:03.000\r\nJordan \"JoJo\" Jones: That's all I had.\r\n\r\n00:25:10.000 --> 00:25:14.000\r\nMelissa Boud: So, we'll… we'll help you watch it, and get it.\r\n\r\n00:25:14.000 --> 00:25:21.000\r\nBrandon Christensen: Yeah, it should… hopefully it's pretty simple, because it just… you know, we just need to make sure it's not a security or legal…\r\n\r\n00:25:14.000 --> 00:25:16.000\r\nMelissa Boud: Surf class.\r\n\r\n00:25:21.000 --> 00:25:28.000\r\nBrandon Christensen: issue, and then, like, from there, it's… we're just… like, there's no cost. Um, and it's a one-time thing for not…\r\n\r\n00:25:28.000 --> 00:25:30.000\r\nBrandon Christensen: Keeping them on board.\r\n\r\n00:25:32.000 --> 00:25:34.000\r\nMelissa Boud: So…\r\n\r\n00:25:35.000 --> 00:25:37.000\r\nJordan \"JoJo\" Jones: Great. Um…\r\n\r\n00:25:37.000 --> 00:25:43.000\r\nJordan \"JoJo\" Jones: The, uh, the last meeting ended within 30 minutes as well, so unless there's any objections, I'll…\r\n\r\n00:25:44.000 --> 00:25:49.000\r\nJordan \"JoJo\" Jones: Reduce, um, the cadence of the, uh, the length of this meeting down to 30 minutes.\r\n\r\n00:25:49.000 --> 00:25:55.000\r\nJordan \"JoJo\" Jones: Um, and with that, is there anything else that anybody would like to discuss?\r\n\r\n00:25:57.000 --> 00:26:03.000\r\nJeff Cullimore: I do have one question that I don't think will take much time. Dave, is this the…\r\n\r\n00:26:04.000 --> 00:26:07.000\r\nJeff Cullimore: Forum where, when we have…\r\n\r\n00:26:07.000 --> 00:26:14.000\r\nJeff Cullimore: Cloud licenses available, we'll talk through usage and budgeting and everything like that, or is… is that a different conversation?\r\n\r\n00:26:14.000 --> 00:26:16.000\r\nDave Petersen: Yeah, I… I, um…\r\n\r\n00:26:17.000 --> 00:26:19.000\r\nDave Petersen: I think it is, um…\r\n\r\n00:26:19.000 --> 00:26:21.000\r\nJeff Cullimore: Okay.\r\n\r\n00:26:19.000 --> 00:26:25.000\r\nDave Petersen: I'm assuming you're referring to the thing I sent out, I think it was last week, it's just…\r\n\r\n00:26:26.000 --> 00:26:28.000\r\nDave Petersen: This has been a long, um, but um…\r\n\r\n00:26:26.000 --> 00:26:28.000\r\nJeff Cullimore: Yeah.\r\n\r\n00:26:29.000 --> 00:26:31.000\r\nDave Petersen: Yeah, what I anticipate is, um…\r\n\r\n00:26:32.000 --> 00:26:35.000\r\nDave Petersen: We have to start tracking usage, um…\r\n\r\n00:26:36.000 --> 00:26:43.000\r\nDave Petersen: Because we're starting to see that creep up more and more with some of the software we're acquiring, and so…\r\n\r\n00:26:43.000 --> 00:26:50.000\r\nDave Petersen: Um, we'll… yeah, it belongs in this meeting. Um, and just to…\r\n\r\n00:26:50.000 --> 00:27:00.000\r\nDave Petersen: reiterate, it… this… Claude won't necessarily come out of your budget, it'll come out of my budget as a Tier 1 enterprise software, but I still think we need to…\r\n\r\n00:27:00.000 --> 00:27:05.000\r\nDave Petersen: get in the motion of tracking that usage and just talking about it through with all the SBOs.\r\n\r\n00:27:05.000 --> 00:27:08.000\r\nDave Petersen: Because someday there may…\r\n\r\n00:27:05.000 --> 00:27:07.000\r\nBrandon Christensen: Do we…\r\n\r\n00:27:09.000 --> 00:27:12.000\r\nDave Petersen: Be charges that come through your budget.\r\n\r\n00:27:13.000 --> 00:27:20.000\r\nJeff Cullimore: So I… I think if I'm remembering your message right, you had mentioned there was… it was $30 a month. It…\r\n\r\n00:27:20.000 --> 00:27:26.000\r\nJeff Cullimore: So we're… we're basically saying, hey, we want to spend $30 a month, but the $30 a month is going to come out of your budget.\r\n\r\n00:27:27.000 --> 00:27:29.000\r\nDave Petersen: Um…\r\n\r\n00:27:28.000 --> 00:27:30.000\r\nJeff Cullimore: Or no?\r\n\r\n00:27:29.000 --> 00:27:37.000\r\nDave Petersen: Well, yeah, it's… it's more just, um, to put a limit on it, um, so it'll still come out of my budget, um.\r\n\r\n00:27:34.000 --> 00:27:36.000\r\nJeff Cullimore: Hmm.\r\n\r\n00:27:37.000 --> 00:27:45.000\r\nDave Petersen: At least, um, for the foreseeable future, but there may be a time in the future where, yeah, we will do some type of chargeback for that.\r\n\r\n00:27:46.000 --> 00:27:54.000\r\nDave Petersen: But I figured we can at least get the visibility and the discussions going now, and not have to wait necessarily for that.\r\n\r\n00:27:54.000 --> 00:28:03.000\r\nJeff Cullimore: Yeah, okay. So it's more, kind of, be aware and stay on top of it, because maybe in 2027, we need a line item for cloud usage or something like that. Okay.\r\n\r\n00:28:03.000 --> 00:28:05.000\r\nDave Petersen: Yep. Yep.\r\n\r\n00:28:05.000 --> 00:28:08.000\r\nJeff Cullimore: Um, and then as far as timing goes, is that…\r\n\r\n00:28:09.000 --> 00:28:12.000\r\nJeff Cullimore: Something this month? Next month?\r\n\r\n00:28:12.000 --> 00:28:14.000\r\nDave Petersen: Um…\r\n\r\n00:28:15.000 --> 00:28:22.000\r\nDave Petersen: As far as getting Claude access, or… yeah, that's something you can request now through Nobi.\r\n\r\n00:28:19.000 --> 00:28:21.000\r\nJeff Cullimore: Mm-hmm.\r\n\r\n00:28:22.000 --> 00:28:24.000\r\nJeff Cullimore: Okay.\r\n\r\n00:28:22.000 --> 00:28:35.000\r\nDave Petersen: Um, right now, I'm just having all of the requests come to me for approval, and then I'll… and then I just reach out to SBOs, so if you want to, like, do a blanket approval now, Jeff, and say.\r\n\r\n00:28:27.000 --> 00:28:29.000\r\nJeff Cullimore: Sure.\r\n\r\n00:28:35.000 --> 00:28:41.000\r\nDave Petersen: Anybody under my organization that needs it, I approve, then I can…\r\n\r\n00:28:42.000 --> 00:28:48.000\r\nDave Petersen: do that. Or if we don't, because I know Brandon's pretty excited, he probably already has it, though.\r\n\r\n00:28:48.000 --> 00:28:50.000\r\nJeff Cullimore: Yeah, Brandon's been cranking.\r\n\r\n00:28:48.000 --> 00:28:50.000\r\nBrandon Christensen: I do.\r\n\r\n00:28:50.000 --> 00:28:52.000\r\nDave Petersen: Yeah, so, well…\r\n\r\n00:28:51.000 --> 00:28:56.000\r\nBrandon Christensen: Uh… I know we have a lot of people who are chomping at the bit.\r\n\r\n00:28:53.000 --> 00:28:55.000\r\nDave Petersen: I don't know if they're gonna…\r\n\r\n00:28:57.000 --> 00:29:00.000\r\nJeff Cullimore: Yeah, if anything, I think it'll be…\r\n\r\n00:29:00.000 --> 00:29:05.000\r\nJeff Cullimore: me and Brandon figuring out how we're gonna stay on top of making sure that people are…\r\n\r\n00:29:05.000 --> 00:29:07.000\r\nDave Petersen: Yeah.\r\n\r\n00:29:05.000 --> 00:29:13.000\r\nJeff Cullimore: Actually using it, if we're paying for it, and then actually using it efficiently, and we're not just blowing a bunch of credits on stuff that's never going to see the light of day.\r\n\r\n00:29:13.000 --> 00:29:19.000\r\nDave Petersen: Yep, and that's kind of the tricky part, is it's very easy to blow through.\r\n\r\n00:29:13.000 --> 00:29:15.000\r\nJeff Cullimore: Um…\r\n\r\n00:29:19.000 --> 00:29:22.000\r\nDave Petersen: Those tokens very quickly.\r\n\r\n00:29:20.000 --> 00:29:23.000\r\nBrandon Christensen: Yeah, does the 30…\r\n\r\n00:29:22.000 --> 00:29:25.000\r\nJolyn Metro: Oh, I got it, like, a day and a half ago, and I've used…\r\n\r\n00:29:25.000 --> 00:29:30.000\r\nJolyn Metro: $30 of my $300, so… it's crazy.\r\n\r\n00:29:28.000 --> 00:29:40.000\r\nBrandon Christensen: Okay, so the, the $30 license does come with that credit lot. It's not like what we were on before, where you had just the 4-hour usage windows, or 5-hour usage windows.\r\n\r\n00:29:40.000 --> 00:29:45.000\r\nDave Petersen: Yeah, that's correct. When we move to the Enterprise contract, it's all usage-based.\r\n\r\n00:29:45.000 --> 00:29:47.000\r\nBrandon Christensen: Okay. That's good to know.\r\n\r\n00:29:46.000 --> 00:29:51.000\r\nDave Petersen: That's it. And so, yeah, every time you use it, we…\r\n\r\n00:29:50.000 --> 00:29:52.000\r\nBrandon Christensen: Right.\r\n\r\n00:29:51.000 --> 00:29:56.000\r\nDave Petersen: It comes out of the committed amount that we paid for.\r\n\r\n00:29:54.000 --> 00:30:01.000\r\nBrandon Christensen: Gotcha. Do you… is there a centralized, or is this something we would want to throw together of…\r\n\r\n00:30:01.000 --> 00:30:06.000\r\nBrandon Christensen: Some of the best practices around that, like, to help warn people so that they don't…\r\n\r\n00:30:06.000 --> 00:30:11.000\r\nBrandon Christensen: point it at Figma and download all Figma and blow $300 in an hour.\r\n\r\n00:30:10.000 --> 00:30:18.000\r\nDave Petersen: Yeah, we definitely should have, um, best practices. Uh, Cal Evans is probably the best person to contact on…\r\n\r\n00:30:11.000 --> 00:30:13.000\r\nBrandon Christensen: Oh.\r\n\r\n00:30:18.000 --> 00:30:20.000\r\nJeff Cullimore: Hmm.\r\n\r\n00:30:18.000 --> 00:30:20.000\r\nBrandon Christensen: Right.\r\n\r\n00:30:19.000 --> 00:30:23.000\r\nDave Petersen: Uh, they've been doing some training, or Christina McCurdy as well.\r\n\r\n00:30:23.000 --> 00:30:25.000\r\nBrandon Christensen: Right.\r\n\r\n00:30:24.000 --> 00:30:25.000\r\nDave Petersen: Um…\r\n\r\n00:30:26.000 --> 00:30:28.000\r\nDave Petersen: Those would be the two people.\r\n\r\n00:30:26.000 --> 00:30:28.000\r\nBrandon Christensen: So the usual people.\r\n\r\n00:30:28.000 --> 00:30:30.000\r\nDave Petersen: The usual, yep.\r\n\r\n00:30:29.000 --> 00:30:31.000\r\nBrandon Christensen: Uh, okay.\r\n\r\n00:30:29.000 --> 00:30:31.000\r\nJeff Cullimore: Okay.\r\n\r\n00:30:31.000 --> 00:30:36.000\r\nMelissa Boud: The trainings have been pretty great, though, because I go over, like, security practices and how to, like.\r\n\r\n00:30:31.000 --> 00:30:33.000\r\nBrandon Christensen: Because on our side…\r\n\r\n00:30:33.000 --> 00:30:35.000\r\nDave Petersen: Yeah.\r\n\r\n00:30:36.000 --> 00:30:39.000\r\nMelissa Boud: Not expose the company, and…\r\n\r\n00:30:39.000 --> 00:30:42.000\r\nMelissa Boud: How to best use your credit, so…\r\n\r\n00:30:41.000 --> 00:30:50.000\r\nDave Petersen: Yeah. And we're probably, I think, maybe a week away of having something where we can start hosting applications.\r\n\r\n00:30:51.000 --> 00:30:57.000\r\nDave Petersen: Um, for people that are ready for moving off of, you know, local development type stuff, so…\r\n\r\n00:30:51.000 --> 00:30:53.000\r\nJeff Cullimore: Great.\r\n\r\n00:30:58.000 --> 00:31:00.000\r\nDave Petersen: We're really close on that as well.\r\n\r\n00:31:00.000 --> 00:31:03.000\r\nJeff Cullimore: Cool. Will there be a…\r\n\r\n00:31:03.000 --> 00:31:08.000\r\nJeff Cullimore: I guess in my mind, maybe this is Phase 2 or phase 3, I'm envisioning some kind of a similar.\r\n\r\n00:31:09.000 --> 00:31:14.000\r\nJeff Cullimore: Request process, like we're doing with tech today, so that it goes through all the right reviews and everything.\r\n\r\n00:31:15.000 --> 00:31:19.000\r\nDave Petersen: Um, well, this is maybe a spoiler, um…\r\n\r\n00:31:19.000 --> 00:31:29.000\r\nDave Petersen: Because it's still in process, but um… yes, there is a review process, but it's not going to be like it is now, um…\r\n\r\n00:31:29.000 --> 00:31:48.000\r\nDave Petersen: we're trying to move towards, um, approving… because right now, it's all use case based, right? Every single time you have a use case, we… you have to get it reviewed and approved, and so we want to move more towards reviewing the system and the security architecture and the system architecture.\r\n\r\n00:31:36.000 --> 00:31:38.000\r\nJeff Cullimore: Hmm.\r\n\r\n00:31:48.000 --> 00:31:53.000\r\nDave Petersen: And just making a decision. You know, given…\r\n\r\n00:31:53.000 --> 00:31:58.000\r\nDave Petersen: Given the security practices and how the system is architected, we're comfortable with.\r\n\r\n00:31:59.000 --> 00:32:03.000\r\nDave Petersen: Um, this application accessing all data.\r\n\r\n00:32:04.000 --> 00:32:15.000\r\nDave Petersen: Um, so you're good to use it for anything. Or maybe we're comfortable with it using confidential data, but not PII, you know, so giving it some kind of broad approval that way.\r\n\r\n00:32:15.000 --> 00:32:28.000\r\nDave Petersen: And then it becomes more of a monitoring, and so we'll continue to monitor what people are doing with it. Um, we're asking people to be super transparent, and if we see something that changes kind of that risk.\r\n\r\n00:32:15.000 --> 00:32:17.000\r\nJeff Cullimore: Okay.\r\n\r\n00:32:28.000 --> 00:32:32.000\r\nDave Petersen: threshold, then at that point, we may, you know.\r\n\r\n00:32:32.000 --> 00:32:37.000\r\nDave Petersen: Say, oh, you can't do that, or you have to do it differently, or go through a deeper review.\r\n\r\n00:32:37.000 --> 00:32:40.000\r\nDave Petersen: The idea is just to be much faster and efficient.\r\n\r\n00:32:37.000 --> 00:32:39.000\r\nJeff Cullimore: Okay.\r\n\r\n00:32:40.000 --> 00:32:46.000\r\nJeff Cullimore: Yeah, is that part of your… your getting to yes project? Cool.\r\n\r\n00:32:41.000 --> 00:32:43.000\r\nDave Petersen: So…\r\n\r\n00:32:46.000 --> 00:32:48.000\r\nDave Petersen: Yep. Yep.\r\n\r\n00:32:46.000 --> 00:32:48.000\r\nJeff Cullimore: That's awesome. That's exciting.\r\n\r\n00:32:49.000 --> 00:32:51.000\r\nJeff Cullimore: Okay.\r\n\r\n00:32:49.000 --> 00:32:54.000\r\nDave Petersen: So… and I think I have everybody on board from legal and security, so now it's just a matter of…\r\n\r\n00:32:55.000 --> 00:32:59.000\r\nDave Petersen: Kind of buttoning down the process, and then we'll move forward.\r\n\r\n00:32:59.000 --> 00:33:04.000\r\nJeff Cullimore: Yeah, okay, great. Well, we're eager to hear details as that gets finalized, and…\r\n\r\n00:33:04.000 --> 00:33:07.000\r\nJeff Cullimore: Um, yeah, Brandon and I will connect…\r\n\r\n00:33:07.000 --> 00:33:11.000\r\nJeff Cullimore: Probably early next week, and try and figure out, uh…\r\n\r\n00:33:11.000 --> 00:33:20.000\r\nJeff Cullimore: a lightweight vetting process on our side, so that we can… because like Brandon said, if we were to just broadly announce, hey, Claude's available, I'm sure he'd get 100 requests today, and…\r\n\r\n00:33:20.000 --> 00:33:29.000\r\nJeff Cullimore: half of those probably wouldn't even get activated, and then half of those people wouldn't even build anything worth using, so we'll kind of meter that out, but I imagine you'll start to see some come through in the next week or so.\r\n\r\n00:33:29.000 --> 00:33:32.000\r\nDave Petersen: Awesome. Sounds good.\r\n\r\n00:33:32.000 --> 00:33:34.000\r\nJeff Cullimore: Okay.\r\n\r\n00:33:33.000 --> 00:33:35.000\r\nJordan \"JoJo\" Jones: Great. Anything else?\r\n\r\n00:33:37.000 --> 00:33:39.000\r\nJeff Cullimore: Nope.\r\n\r\n00:33:39.000 --> 00:33:43.000\r\nJordan \"JoJo\" Jones: Awesome. Well, thanks everybody, appreciate the time, and have a great weekend.\r\n\r\n00:33:43.000 --> 00:33:45.000\r\nJeff Cullimore: Thanks, you too.\r\n\r\n00:33:43.000 --> 00:33:45.000\r\nMelissa Boud: I think…\r\n\r\n",
+          "recurrence": "monthly_nth_weekday",
+          "recurrenceEnd": ""
+        }
+      ]
+    },
     "10b7h5fa": {
       "id": "10b7h5fa",
       "name": "Business Technology",
@@ -1002,42 +544,6 @@
       "sortOrder": 7,
       "tasks": [],
       "meetings": []
-    },
-    "t318jy5b": {
-      "id": "t318jy5b",
-      "name": "Marketing",
-      "owner": "Jeff Cullimore",
-      "division": "Marketing",
-      "status": "on-track",
-      "description": "",
-      "notes": "",
-      "sortOrder": 0,
-      "tasks": [
-        {
-          "id": "1ddgto4d",
-          "text": "Topics for meeting",
-          "owner": "Jordan Jones",
-          "due": "2026-04-17",
-          "endDate": "2026-04-17",
-          "status": "in-progress",
-          "priority": "low"
-        }
-      ],
-      "meetings": [
-        {
-          "id": "jz0qc29v",
-          "title": "SBO Software Portfolio Review",
-          "date": "2026-04-17",
-          "endDate": "2026-04-17",
-          "attendees": "",
-          "description": "",
-          "agenda": "",
-          "recurrence": "monthly",
-          "recurrenceEnd": "",
-          "notes": "for meeting today \nShould ask about \"ScoreApp\" to see if they need to procure it.\nNetlify update\nIncrease in cost with Qualified\nSHR badge access management scanner\nWe need to talk about the upcoming renewals",
-          "actionItems": ""
-        }
-      ]
     },
     "q5yngwbw": {
       "id": "q5yngwbw",
