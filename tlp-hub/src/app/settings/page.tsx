@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { isReadOnly } from "@/lib/readOnly";
+
+const showPagesSnapshotButton =
+  process.env.NODE_ENV === "development" && !isReadOnly();
 
 export default function SettingsPage() {
   const toast = useToast();
@@ -51,6 +55,24 @@ export default function SettingsPage() {
       toast("Data exported.");
     } catch {
       toast("Failed to export data", "err");
+    }
+  }
+
+  const [pagesSnapshotBusy, setPagesSnapshotBusy] = useState(false);
+
+  async function writePagesSnapshotForGitHub() {
+    setPagesSnapshotBusy(true);
+    try {
+      const res = await fetch("/api/export-pages-state", { method: "POST" });
+      const body = (await res.json()) as { error?: string; initiativeCount?: number; sboCount?: number };
+      if (!res.ok) throw new Error(body.error || "Export failed");
+      toast(
+        `Saved snapshot (${body.initiativeCount} initiatives, ${body.sboCount} SBOs). Commit and push the repo so GitHub Pages picks it up.`,
+      );
+    } catch (e: unknown) {
+      toast(e instanceof Error ? e.message : "Failed to write snapshot", "err");
+    } finally {
+      setPagesSnapshotBusy(false);
     }
   }
 
@@ -131,6 +153,27 @@ export default function SettingsPage() {
           Export to back up your tasks, decisions, and artifacts.
         </p>
       </div>
+
+      {showPagesSnapshotButton && (
+        <div className="mb-7">
+          <h2 className="font-serif text-base font-semibold text-text mb-3.5 pb-2.5 border-b border-border">
+            GitHub Pages snapshot
+          </h2>
+          <p className="text-[13px] text-text-2 leading-relaxed mb-3">
+            Updates the read-only site by writing your current initiatives and SBOs from this machine into{" "}
+            <code className="text-[12px] bg-surface-2 px-1 py-0.5 rounded">data/state.json</code>. After that, commit
+            and push so the deploy workflow can publish the new data.
+          </p>
+          <button
+            type="button"
+            onClick={writePagesSnapshotForGitHub}
+            disabled={pagesSnapshotBusy}
+            className="px-3.5 py-2 text-[12.5px] font-medium bg-navy text-white rounded hover:bg-navy-h disabled:opacity-50"
+          >
+            {pagesSnapshotBusy ? "Saving…" : "Save snapshot for GitHub Pages"}
+          </button>
+        </div>
+      )}
 
       <div>
         <h2 className="font-serif text-base font-semibold text-text mb-3.5 pb-2.5 border-b border-border">About</h2>

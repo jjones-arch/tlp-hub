@@ -45,7 +45,7 @@
           "text": "Prepare Enterprise Software Committee communications for Dave to use with C-suite",
           "owner": "JoJo Jones",
           "due": "",
-          "status": "in-progress",
+          "status": "complete",
           "priority": "high"
         },
         {
@@ -61,7 +61,7 @@
           "text": "Identify remaining ~15 orphan software systems and assign SBO owners",
           "owner": "JoJo Jones, Melissa Boud",
           "due": "",
-          "status": "not-started",
+          "status": "in-progress",
           "priority": "medium"
         },
         {
