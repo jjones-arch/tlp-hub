@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -48,6 +48,8 @@ export default function InitiativeDetailPage() {
   const [showAddObjective, setShowAddObjective] = useState(false);
   const [newObjectiveText, setNewObjectiveText] = useState("");
   const [newObjectiveDesc, setNewObjectiveDesc] = useState("");
+  const [objectiveSaving, setObjectiveSaving] = useState(false);
+  const objectiveAddInFlight = useRef(false);
   const [editObjective, setEditObjective] = useState<Objective | null>(null);
 
   const [showAddTask, setShowAddTask] = useState(false);
@@ -85,12 +87,19 @@ export default function InitiativeDetailPage() {
   }
 
   async function handleAddObjective() {
-    if (!newObjectiveText.trim()) return;
-    const ok = await initiative.addObjective(newObjectiveText, newObjectiveDesc);
-    if (ok) {
-      setNewObjectiveText("");
-      setNewObjectiveDesc("");
-      setShowAddObjective(false);
+    if (!newObjectiveText.trim() || objectiveAddInFlight.current) return;
+    objectiveAddInFlight.current = true;
+    setObjectiveSaving(true);
+    try {
+      const ok = await initiative.addObjective(newObjectiveText, newObjectiveDesc);
+      if (ok) {
+        setNewObjectiveText("");
+        setNewObjectiveDesc("");
+        setShowAddObjective(false);
+      }
+    } finally {
+      objectiveAddInFlight.current = false;
+      setObjectiveSaving(false);
     }
   }
 
@@ -219,7 +228,10 @@ export default function InitiativeDetailPage() {
                   value={newObjectiveText}
                   onChange={(e) => setNewObjectiveText(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) handleAddObjective();
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      void handleAddObjective();
+                    }
                   }}
                   className={inputCls}
                   autoFocus
@@ -233,17 +245,24 @@ export default function InitiativeDetailPage() {
                 />
                 <div className="flex gap-2 justify-end pt-1">
                   <button
+                    type="button"
                     onClick={() => {
                       setShowAddObjective(false);
                       setNewObjectiveText("");
                       setNewObjectiveDesc("");
                     }}
                     className={btnGhost}
+                    disabled={objectiveSaving}
                   >
                     Cancel
                   </button>
-                  <button onClick={handleAddObjective} className={btnPrimary}>
-                    Save
+                  <button
+                    type="button"
+                    onClick={() => void handleAddObjective()}
+                    className={btnPrimary}
+                    disabled={objectiveSaving}
+                  >
+                    {objectiveSaving ? "Saving…" : "Save"}
                   </button>
                 </div>
               </div>
