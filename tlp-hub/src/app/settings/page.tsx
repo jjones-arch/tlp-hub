@@ -9,6 +9,7 @@ const showPagesSnapshotButton =
 export default function SettingsPage() {
   const toast = useToast();
   const [apiKey, setApiKey] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [hasKey, setHasKey] = useState(false);
 
@@ -20,6 +21,7 @@ export default function SettingsPage() {
       })
       .then((data) => {
         setHasKey(!!data.apiKey);
+        setDisplayName((data.displayName || "").trim());
       })
       .catch(() => toast("Failed to load settings", "err"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,7 +32,7 @@ export default function SettingsPage() {
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey }),
+        body: JSON.stringify({ apiKey, displayName: displayName.trim() }),
       });
       if (!res.ok) throw new Error("Failed to save settings");
       setHasKey(!!apiKey);
@@ -101,8 +103,21 @@ export default function SettingsPage() {
 
       <div className="mb-7">
         <h2 className="font-serif text-base font-semibold text-text mb-3.5 pb-2.5 border-b border-border">
-          Anthropic API Key
+          Profile & API Key
         </h2>
+        <div className="mb-3.5">
+          <label className="block text-[12px] font-semibold text-text-2 uppercase tracking-wide mb-1.5">Your Name</label>
+          <input
+            type="text"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            placeholder="Used as the author when posting task updates"
+            className="w-full border border-border rounded p-2.5 text-[13px] text-text bg-bg outline-none focus:border-navy"
+          />
+          <p className="text-[11.5px] text-text-3 mt-1 leading-snug">
+            This name is used to attribute new task updates and to control who can edit their own updates.
+          </p>
+        </div>
         <div className="mb-3.5">
           <label className="block text-[12px] font-semibold text-text-2 uppercase tracking-wide mb-1.5">API Key</label>
           <div className="relative">

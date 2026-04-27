@@ -2,7 +2,7 @@
 
 import { Modal } from "@/components/ui/Modal";
 import { taskStatusLabel } from "@/lib/utils";
-import type { Task } from "./types";
+import type { Task, TaskUpdate } from "./types";
 import { TASK_STATUSES, PRIORITIES, inputCls, selectCls, btnPrimary, btnGhost } from "./types";
 
 interface EditTaskModalProps {
@@ -14,6 +14,13 @@ interface EditTaskModalProps {
   pendingFiles: File[];
   setPendingFiles: (fn: (prev: File[]) => File[]) => void;
   submittingUpdate: boolean;
+  displayName: string;
+  editingUpdateId: string | null;
+  editingUpdateText: string;
+  setEditingUpdateText: (text: string) => void;
+  onStartUpdateEdit: (update: TaskUpdate) => void;
+  onCancelUpdateEdit: () => void;
+  onSaveUpdateEdit: () => void;
   onClose: () => void;
   onSave: () => void;
   onAddUpdate: () => void;
@@ -28,6 +35,13 @@ export function EditTaskModal({
   pendingFiles,
   setPendingFiles,
   submittingUpdate,
+  displayName,
+  editingUpdateId,
+  editingUpdateText,
+  setEditingUpdateText,
+  onStartUpdateEdit,
+  onCancelUpdateEdit,
+  onSaveUpdateEdit,
   onClose,
   onSave,
   onAddUpdate,
@@ -182,19 +196,49 @@ export function EditTaskModal({
               {editTask.updates.map((upd) => (
                 <div key={upd.id} className="relative pl-5 border-l-2 border-border pb-1">
                   <div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-navy" />
-                  <div className="flex items-baseline gap-2 mb-0.5">
-                    {upd.author && <span className="text-[12px] font-semibold text-text">{upd.author}</span>}
-                    <span className="text-[11px] text-text-3">
-                      {new Date(upd.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
-                    </span>
+                  <div className="flex items-baseline justify-between gap-2 mb-0.5">
+                    <div className="flex items-baseline gap-2">
+                      {upd.author && <span className="text-[12px] font-semibold text-text">{upd.author}</span>}
+                      <span className="text-[11px] text-text-3">
+                        {new Date(upd.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    {upd.author.trim().toLowerCase() === displayName.trim().toLowerCase() && (
+                      <button
+                        onClick={() => onStartUpdateEdit(upd)}
+                        className="text-[11px] text-text-3 hover:text-text"
+                        disabled={submittingUpdate}
+                      >
+                        Edit
+                      </button>
+                    )}
                   </div>
-                  <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{upd.text}</p>
+                  {editingUpdateId === upd.id ? (
+                    <div className="space-y-2">
+                      <textarea
+                        value={editingUpdateText}
+                        onChange={(e) => setEditingUpdateText(e.target.value)}
+                        rows={3}
+                        className={`${inputCls} resize-y`}
+                      />
+                      <div className="flex gap-2">
+                        <button onClick={onSaveUpdateEdit} className={btnPrimary} disabled={submittingUpdate}>
+                          {submittingUpdate ? "Saving..." : "Save"}
+                        </button>
+                        <button onClick={onCancelUpdateEdit} className={btnGhost} disabled={submittingUpdate}>
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{upd.text}</p>
+                  )}
                   {upd.attachments && upd.attachments.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
                       {upd.attachments.map((att) => {

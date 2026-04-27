@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useToast } from "@/components/ui/Toast";
 import { loadStaticState, mapInitiativeDetail } from "@/lib/staticState";
-import type { Initiative, Objective, Task } from "./types";
+import type { Initiative, Objective, Task, TaskUpdate } from "./types";
 
 export function useInitiativeData(id: string) {
   const toast = useToast();
@@ -17,14 +17,24 @@ export function useInitiativeData(id: string) {
   const [newUpdateText, setNewUpdateText] = useState("");
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [submittingUpdate, setSubmittingUpdate] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [editingUpdateId, setEditingUpdateId] = useState<string | null>(null);
+  const [editingUpdateText, setEditingUpdateText] = useState("");
+
+  const normalizedDisplayName = displayName.trim();
+  const updateAuthor = normalizedDisplayName || "Unknown user";
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch(`/api/initiatives/${id}`);
-      if (!res.ok) throw new Error("Failed to load initiative");
-      const json: Initiative = await res.json();
+      const [initiativeRes, settingsRes] = await Promise.all([fetch(`/api/initiatives/${id}`), fetch("/api/settings")]);
+      if (!initiativeRes.ok) throw new Error("Failed to load initiative");
+      const json: Initiative = await initiativeRes.json();
       setData(json);
       setNotesValue(json.notes || "");
+      if (settingsRes.ok) {
+        const settings = (await settingsRes.json()) as { displayName?: string };
+        setDisplayName((settings.displayName || "").trim());
+      }
     } catch {
       try {
         const state = await loadStaticState();
@@ -174,7 +184,7 @@ export function useInitiativeData(id: string) {
       const res = await fetch(`/api/initiatives/${id}/tasks/${editTask.id}/updates`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: newUpdateText, author: editTaskForm.owner }),
+        body: JSON.stringify({ text: newUpdateText, author: updateAuthor }),
       });
       if (!res.ok) throw new Error();
       const update = await res.json();
@@ -189,6 +199,8 @@ export function useInitiativeData(id: string) {
       toast("Update added.");
       setNewUpdateText("");
       setPendingFiles([]);
+      setEditingUpdateId(null);
+      setEditingUpdateText("");
 
       const refreshRes = await fetch(`/api/initiatives/${id}`);
       if (refreshRes.ok) {
@@ -202,6 +214,61 @@ export function useInitiativeData(id: string) {
     } finally {
       setSubmittingUpdate(false);
     }
+  }
+
+  async function saveTaskUpdateEdit() {
+    if (!editTask || !editingUpdateId) return;
+    const newText = editingUpdateText.trim();
+    if (!newText) return;
+
+    setSubmittingUpdate(true);
+    try {
+      const res = await fetch(`/api/initiatives/${id}/tasks/${editTask.id}/updates`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updateId: editingUpdateId, text: newText, author: updateAuthor }),
+      });
+      if (!res.ok) throw new Error();
+
+      const updated = (await res.json()) as TaskUpdate;
+      setEditTask((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          updates: prev.updates.map((upd) => (upd.id === updated.id ? updated : upd)),
+        };
+      });
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          tasks: prev.tasks.map((task) => {
+            if (task.id !== editTask.id) return task;
+            return {
+              ...task,
+              updates: task.updates.map((upd) => (upd.id === updated.id ? updated : upd)),
+            };
+          }),
+        };
+      });
+      setEditingUpdateId(null);
+      setEditingUpdateText("");
+      toast("Update edited.");
+    } catch {
+      toast("Failed to edit update", "err");
+    } finally {
+      setSubmittingUpdate(false);
+    }
+  }
+
+  function startTaskUpdateEdit(update: TaskUpdate) {
+    setEditingUpdateId(update.id);
+    setEditingUpdateText(update.text);
+  }
+
+  function cancelTaskUpdateEdit() {
+    setEditingUpdateId(null);
+    setEditingUpdateText("");
   }
 
   async function deleteTask(tid: string) {
@@ -275,6 +342,8 @@ export function useInitiativeData(id: string) {
     });
     setNewUpdateText("");
     setPendingFiles([]);
+    setEditingUpdateId(null);
+    setEditingUpdateText("");
   }
 
   return {
@@ -299,8 +368,15 @@ export function useInitiativeData(id: string) {
     pendingFiles,
     setPendingFiles,
     submittingUpdate,
+    displayName: updateAuthor,
+    editingUpdateId,
+    editingUpdateText,
+    setEditingUpdateText,
     saveEditTask,
     addTaskUpdate,
+    startTaskUpdateEdit,
+    cancelTaskUpdateEdit,
+    saveTaskUpdateEdit,
     deleteTask,
     openEditTask,
     addRisk,

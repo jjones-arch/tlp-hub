@@ -197,6 +197,9 @@ export default function SboDetailPage() {
   const [newUpdateText, setNewUpdateText] = useState("");
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [submittingUpdate, setSubmittingUpdate] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [editingUpdateId, setEditingUpdateId] = useState<string | null>(null);
+  const [editingUpdateText, setEditingUpdateText] = useState("");
 
   // Meeting state
   const [showAddMeeting, setShowAddMeeting] = useState(false);
@@ -216,13 +219,20 @@ export default function SboDetailPage() {
     return fallback;
   }
 
+  const normalizedDisplayName = displayName.trim();
+  const updateAuthor = normalizedDisplayName || "Unknown user";
+
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch(`/api/sbos/${sboId}`);
-      if (!res.ok) throw new Error();
-      const json: SboData = await res.json();
+      const [sboRes, settingsRes] = await Promise.all([fetch(`/api/sbos/${sboId}`), fetch("/api/settings")]);
+      if (!sboRes.ok) throw new Error();
+      const json: SboData = await sboRes.json();
       setData(json);
       setNotesValue(json.notes || "");
+      if (settingsRes.ok) {
+        const settings = (await settingsRes.json()) as { displayName?: string };
+        setDisplayName((settings.displayName || "").trim());
+      }
     } catch {
       try {
         const state = (await loadStaticState()) as StaticStateShape;
@@ -334,7 +344,7 @@ export default function SboDetailPage() {
       const res = await fetch(`/api/sbos/${sboId}/tasks/${editTask.id}/updates`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: newUpdateText, author: editTaskForm.owner }),
+        body: JSON.stringify({ text: newUpdateText, author: updateAuthor }),
       });
       if (!res.ok) throw new Error();
       const update = await res.json();
@@ -349,6 +359,8 @@ export default function SboDetailPage() {
       toast("Update added.");
       setNewUpdateText("");
       setPendingFiles([]);
+      setEditingUpdateId(null);
+      setEditingUpdateText("");
 
       const refreshRes = await fetch(`/api/sbos/${sboId}`);
       if (refreshRes.ok) {
@@ -359,6 +371,51 @@ export default function SboDetailPage() {
       }
     } catch {
       toast("Failed to add update", "err");
+    } finally {
+      setSubmittingUpdate(false);
+    }
+  }
+
+  async function saveTaskUpdateEdit() {
+    if (!editTask || !editingUpdateId) return;
+    const nextText = editingUpdateText.trim();
+    if (!nextText) return;
+
+    setSubmittingUpdate(true);
+    try {
+      const res = await fetch(`/api/sbos/${sboId}/tasks/${editTask.id}/updates`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updateId: editingUpdateId, text: nextText, author: updateAuthor }),
+      });
+      if (!res.ok) throw new Error();
+      const updated = (await res.json()) as SboTaskUpdate;
+
+      setEditTask((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          updates: prev.updates.map((upd) => (upd.id === updated.id ? updated : upd)),
+        };
+      });
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          tasks: prev.tasks.map((task) => {
+            if (task.id !== editTask.id) return task;
+            return {
+              ...task,
+              updates: task.updates.map((upd) => (upd.id === updated.id ? updated : upd)),
+            };
+          }),
+        };
+      });
+      setEditingUpdateId(null);
+      setEditingUpdateText("");
+      toast("Update edited.");
+    } catch {
+      toast("Failed to edit update", "err");
     } finally {
       setSubmittingUpdate(false);
     }
@@ -665,6 +722,8 @@ export default function SboDetailPage() {
                                 });
                                 setNewUpdateText("");
                                 setPendingFiles([]);
+                                setEditingUpdateId(null);
+                                setEditingUpdateText("");
                               }}
                               className="text-text-3 hover:text-text text-[13px]"
                             >
@@ -907,19 +966,59 @@ export default function SboDetailPage() {
                 {editTask.updates.map((upd) => (
                   <div key={upd.id} className="relative pl-5 border-l-2 border-border pb-1">
                     <div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-navy" />
-                    <div className="flex items-baseline gap-2 mb-0.5">
-                      {upd.author && <span className="text-[12px] font-semibold text-text">{upd.author}</span>}
-                      <span className="text-[11px] text-text-3">
-                        {new Date(upd.createdAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
-                      </span>
+                    <div className="flex items-baseline justify-between gap-2 mb-0.5">
+                      <div className="flex items-baseline gap-2">
+                        {upd.author && <span className="text-[12px] font-semibold text-text">{upd.author}</span>}
+                        <span className="text-[11px] text-text-3">
+                          {new Date(upd.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                      {upd.author.trim().toLowerCase() === displayName.trim().toLowerCase() && (
+                        <button
+                          onClick={() => {
+                            setEditingUpdateId(upd.id);
+                            setEditingUpdateText(upd.text);
+                          }}
+                          className="text-[11px] text-text-3 hover:text-text"
+                          disabled={submittingUpdate}
+                        >
+                          Edit
+                        </button>
+                      )}
                     </div>
-                    <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{upd.text}</p>
+                    {editingUpdateId === upd.id ? (
+                      <div className="space-y-2">
+                        <textarea
+                          value={editingUpdateText}
+                          onChange={(e) => setEditingUpdateText(e.target.value)}
+                          rows={3}
+                          className={`${inputCls} resize-y`}
+                        />
+                        <div className="flex gap-2">
+                          <button onClick={saveTaskUpdateEdit} className={btnPrimary} disabled={submittingUpdate}>
+                            {submittingUpdate ? "Saving..." : "Save"}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingUpdateId(null);
+                              setEditingUpdateText("");
+                            }}
+                            className={btnGhost}
+                            disabled={submittingUpdate}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-[13px] text-text leading-relaxed whitespace-pre-wrap">{upd.text}</p>
+                    )}
                     {upd.attachments && upd.attachments.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-2">
                         {upd.attachments.map((att) => {

@@ -563,6 +563,13 @@ export default function InitiativeDetailPage() {
         pendingFiles={initiative.pendingFiles}
         setPendingFiles={initiative.setPendingFiles}
         submittingUpdate={initiative.submittingUpdate}
+        displayName={initiative.displayName}
+        editingUpdateId={initiative.editingUpdateId}
+        editingUpdateText={initiative.editingUpdateText}
+        setEditingUpdateText={initiative.setEditingUpdateText}
+        onStartUpdateEdit={initiative.startTaskUpdateEdit}
+        onCancelUpdateEdit={initiative.cancelTaskUpdateEdit}
+        onSaveUpdateEdit={initiative.saveTaskUpdateEdit}
         onClose={() => initiative.setEditTask(null)}
         onSave={initiative.saveEditTask}
         onAddUpdate={initiative.addTaskUpdate}
